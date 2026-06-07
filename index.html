@@ -871,5 +871,14 @@ function atualizarBadge(){
 setInterval(atualizarBadge, 2000);
 atualizarBadge();
 </script>
+  <script>
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('./sw.js')
+      .then(() => console.log('Service Worker registrado'))
+      .catch(err => console.log('Erro SW:', err));
+  });
+}
+</script>
 </body>
 </html>
