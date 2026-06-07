@@ -1,0 +1,25 @@
+{
+  "name": "Controle de Produção e Etiquetas - Prime Ondulados",
+  "short_name": "Produção Prime",
+  "description": "Registro de paletes, exportação Excel e impressão de etiquetas Prime Ondulados",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#0f1e2e",
+  "theme_color": "#1a3a5c",
+  "icons": [
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ]
+}
