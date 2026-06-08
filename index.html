@@ -547,11 +547,13 @@ function registrarPalete(imprimirEtiqueta=false){
   regs.push(registro);
   salvarRegistros(regs);
 
-  mostrarMsg(`✔ OF ${o.of} · Palete ${registro.numPalete} · ${chapas} chapas registrado`, true);
+ mostrarMsg('✔ Palete registrado!', true);
 
-  if(imprimirEtiqueta){
+if(imprimirEtiqueta){
+  setTimeout(() => {
     imprimirEtiquetaRegistro(registro);
-  }
+  }, 500);
+}
 
   document.getElementById('numPalete').value=parseInt(numPalete)+1;
   document.getElementById('qtdePalete').value='';
