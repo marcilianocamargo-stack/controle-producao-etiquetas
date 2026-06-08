@@ -126,9 +126,25 @@ input.big{font-size:22px;font-weight:700;text-align:center;color:var(--ok)}
 .section.active{display:block}
 
 .footer{text-align:center;color:var(--muted);font-size:10px;padding:16px 0 20px;opacity:.5}
+  .toast-top{
+  position:fixed;
+  top:18px;
+  left:50%;
+  transform:translateX(-50%);
+  background:rgba(29,209,161,.95);
+  color:#062016;
+  padding:12px 18px;
+  border-radius:10px;
+  font-size:15px;
+  font-weight:800;
+  z-index:9999;
+  box-shadow:0 6px 18px rgba(0,0,0,.35);
+  display:none;
+}
 </style>
 </head>
 <body>
+  <div id="toastTop" class="toast-top"></div>
 <div class="wrap">
   <div class="header">
     <div class="logo-box">PRIME</div>
@@ -547,7 +563,7 @@ function registrarPalete(imprimirEtiqueta=false){
   regs.push(registro);
   salvarRegistros(regs);
 
- mostrarMsg('✔ Palete registrado!', true);
+mostrarToast('✔ Palete registrado!');
 
 if(imprimirEtiqueta){
   setTimeout(() => {
@@ -863,7 +879,17 @@ function mostrarMsg(txt,ok){
   el.style.display='block';
   if(ok) setTimeout(()=>{el.style.display='none';},4000);
 }
+function mostrarToast(txt){
+  const el=document.getElementById('toastTop');
+  el.textContent=txt;
+  el.style.display='block';
 
+  clearTimeout(window.toastTimer);
+
+  window.toastTimer=setTimeout(()=>{
+    el.style.display='none';
+  },500);
+}
 function atualizarBadge(){
   const n=getRegistros().length;
   document.querySelectorAll('.tab')[1].textContent='📋 Histórico'+(n?' ('+n+')':'');
