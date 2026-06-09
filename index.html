@@ -380,6 +380,22 @@ function carregarAba(){
 
 function popularOrdens(lista, aba){
   ordens=lista;
+  
+  // Atualiza qtdePedido nos registros salvos para refletir o arquivo atual
+  const regs = getRegistros();
+  let atualizado = false;
+  regs.forEach(r => {
+    const o = lista.find(x => x.of === r.of);
+    if (o && o.qtdePedido && r.qtdePedido !== o.qtdePedido) {
+      r.qtdePedido = o.qtdePedido;
+      r.medida = o.medida;
+      r.cliente = o.cliente;
+      r.papelao = o.papelao;
+      atualizado = true;
+    }
+  });
+  if (atualizado) salvarRegistros(regs);
+
   preencherSelect(ordens);
   document.getElementById('msgXlsx').textContent='✓ '+ordens.length+' OF(s) · aba: '+aba;
   document.getElementById('msgXlsx').style.display='block';
@@ -391,7 +407,6 @@ function popularOrdens(lista, aba){
   atualizarPreview();
   sugerirProximoPalete();
 }
-
 function preencherSelect(lista){
   const sel=document.getElementById('selOf');
   const atual=sel.value;
