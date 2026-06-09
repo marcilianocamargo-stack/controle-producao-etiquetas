@@ -36,7 +36,7 @@ body{font-family:'Segoe UI',Tahoma,sans-serif;background:var(--bg);color:var(--t
 .header h1{font-size:15px;font-weight:700;color:var(--text)}
 .header p{font-size:11px;color:var(--muted);margin-top:2px}
 
-.tabs{display:flex;background:var(--surface);border:1px solid var(--border);border-radius:10px;margin-bottom:12px;overflow:hidden}
+.tabs{display:grid;grid-template-columns:1fr 1fr 1fr;
 .tab{flex:1;padding:10px 6px;text-align:center;font-size:12px;font-weight:700;cursor:pointer;color:var(--muted);border:none;background:none;transition:.2s;text-transform:uppercase;letter-spacing:.5px}
 .tab.active{background:var(--accent);color:white}
 
@@ -155,8 +155,9 @@ input.big{font-size:22px;font-weight:700;text-align:center;color:var(--ok)}
   </div>
 
   <div class="tabs">
-    <button class="tab active" onclick="mudarTab('registro')">⚙ Registrar</button>
-    <button class="tab" onclick="mudarTab('historico')">📋 Histórico</button>
+<button class="tab active" onclick="mudarTab('registro')">⚙ Registrar</button>
+<button class="tab" onclick="mudarTab('historico')">📋 Histórico</button>
+<button class="tab" onclick="mudarTab('chapas')">🔢 Chapas</button>
   </div>
 
   <!-- TAB REGISTRO -->
@@ -272,6 +273,28 @@ input.big{font-size:22px;font-weight:700;text-align:center;color:var(--ok)}
   </div>
 
 </div>
+  <div id="tab-chapas" class="section">
+  <div class="card">
+    <div class="step">Múltiplo</div>
+    <div style="display:flex;gap:8px;margin-bottom:10px">
+      <button onclick="chSetAtalho(16)" id="cha16" class="btn-sec btn" style="display:block;flex:1;margin:0">×16</button>
+      <button onclick="chSetAtalho(26)" id="cha26" class="btn-sec btn" style="display:block;flex:1;margin:0">×26</button>
+      <button onclick="chSetAtalho(33)" id="cha33" class="btn-sec btn" style="display:block;flex:1;margin:0">×33</button>
+    </div>
+    <div class="step">Medida (cm)</div>
+    <input type="number" id="chCm" placeholder="ex: 66.9" oninput="chRender()" style="margin-bottom:10px">
+    <div class="step">Pilhas por palete</div>
+    <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin-bottom:4px" id="chPgrid"></div>
+  </div>
+  <div class="card" style="display:flex;justify-content:space-between;align-items:center;border-color:var(--ok)">
+    <div>
+      <div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:1px">Total por palete</div>
+      <div id="chFormula" style="font-size:11px;color:var(--muted);margin-top:2px">—</div>
+    </div>
+    <div style="font-size:36px;font-weight:900;color:var(--ok)" id="chTotal">—</div>
+  </div>
+  <button id="chUsarBtn" class="btn btn-ok" onclick="chUsar()">✔ Usar este valor no Registro</button>
+</div>
 <div class="footer">Prime Ondulados · Controle de Produção</div>
 
 <script>
@@ -293,7 +316,7 @@ document.getElementById('dataHoje').textContent = 'Prime Ondulados · ' + hoje()
 
 // ── TABS ───────────────────────────────────────────────────────
 function mudarTab(tab) {
-  document.querySelectorAll('.tab').forEach((t,i) => t.classList.toggle('active', ['registro','historico'][i] === tab));
+  document.querySelectorAll('.tab').forEach((t,i) => t.classList.toggle('active', ['registro','historico','chapas'][i] === tab));
   document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
   document.getElementById('tab-' + tab).classList.add('active');
   if (tab === 'historico') renderHistorico();
@@ -917,6 +940,52 @@ setInterval(atualizarBadge, 2000);
 atualizarBadge();
 </script>
   <script>
+    // ── CALCULADORA CHAPAS ─────────────────────────────────────────
+var chMult=null,chPilhas=null;
+(function(){
+  var pg=document.getElementById('chPgrid');
+  for(var i=1;i<=10;i++){(function(n){
+    var b=document.createElement('button');
+    b.id='chp'+n;b.textContent=n;
+    b.className='btn-sec btn';
+    b.style.cssText='display:block;padding:8px 0;margin:0;font-size:15px';
+    b.onclick=function(){chSetPilhas(n);};
+    pg.appendChild(b);
+  })(i);}
+})();
+function chSetAtalho(v){
+  chMult=v;
+  [16,26,33].forEach(function(x){
+    var b=document.getElementById('cha'+x);
+    if(b){b.style.borderColor=x===v?'var(--ok)':'var(--border)';b.style.color=x===v?'var(--ok)':'var(--muted)';}
+  });
+  chRender();
+}
+function chSetPilhas(n){
+  chPilhas=n;
+  for(var i=1;i<=10;i++){
+    var b=document.getElementById('chp'+i);
+    if(b){b.style.borderColor=i===n?'var(--accent2)':'var(--border)';b.style.color=i===n?'var(--accent2)':'var(--muted)';}
+  }
+  chRender();
+}
+function chRender(){
+  var cm=parseFloat(document.getElementById('chCm').value);
+  var fil=(chMult&&cm&&cm>0)?(cm/10)*chMult:null;
+  var tot=(fil!==null&&chPilhas)?Math.round(fil*chPilhas):null;
+  document.getElementById('chTotal').textContent=tot!==null?tot.toLocaleString('pt-BR'):'—';
+  document.getElementById('chFormula').textContent=tot!==null?(chPilhas+' pilhas × '+fil.toFixed(1)+' fil/pilha'):'configure múltiplo, medida e pilhas';
+  var btn=document.getElementById('chUsarBtn');
+  if(btn)btn.style.display=tot!==null?'block':'none';
+}
+function chUsar(){
+  var t=document.getElementById('chTotal').textContent.replace(/\./g,'').replace(',','.');
+  var tot=Math.round(parseFloat(t));
+  if(!tot||isNaN(tot))return;
+  document.getElementById('qtdePalete').value=tot;
+  mudarTab('registro');
+  mostrarToast('✔ '+tot.toLocaleString('pt-BR')+' chapas inserido!');
+}
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
     navigator.serviceWorker.register('./sw.js')
