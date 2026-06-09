@@ -362,7 +362,9 @@ document.getElementById('fileXlsx').addEventListener('change', function(e) {
       sel.innerHTML='';
       abas.forEach(a=>{const o=document.createElement('option');o.value=o.textContent=a;sel.appendChild(o);});
       let ok=false;
-      for(const aba of abas){const r=processarAba(workbook.Sheets[aba]);if(r&&r.length>0){sel.value=aba;popularOrdens(r,aba);ok=true;break;}}
+      let todasOrdens=[];let abaUsada='';
+      for(const aba of abas){const r=processarAba(workbook.Sheets[aba]);if(r&&r.length>0){todasOrdens=todasOrdens.concat(r.filter(o=>!todasOrdens.find(x=>x.of===o.of)));if(!abaUsada)abaUsada=aba;}}
+      if(todasOrdens.length>0){popularOrdens(todasOrdens,abaUsada||'todas');ok=true;}
       if(!ok){document.getElementById('cardAba').style.display='block';document.getElementById('msgXlsx').textContent='Selecione a aba abaixo.';document.getElementById('msgXlsx').style.display='block';}
     } catch(err){alert('Erro ao ler arquivo: '+err.message);}
   };
