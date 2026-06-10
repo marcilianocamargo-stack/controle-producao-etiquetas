@@ -972,7 +972,14 @@ function chSetPilhas(n){
 function chRender(){
   var cm=parseFloat(document.getElementById('chCm').value);
   var fil=(chMult&&cm&&cm>0)?(cm/10)*chMult:null;
-  var tot=(fil!==null&&chPilhas)?Math.round(fil*chPilhas):null;
+  var totExato=(fil!==null&&chPilhas)?fil*chPilhas:null;
+  var tot=null;
+  if(totExato!==null){
+    var base=Math.floor(totExato/5)*5;
+    if(totExato-base<10) base-=5;
+    if(totExato-base>15) base+=5;
+    tot=base;
+  }
   document.getElementById('chTotal').textContent=tot!==null?tot.toLocaleString('pt-BR'):'—';
   document.getElementById('chFormula').textContent=tot!==null?(chPilhas+' pilhas × '+fil.toFixed(1)+' fil/pilha'):'configure múltiplo, medida e pilhas';
   var btn=document.getElementById('chUsarBtn');
