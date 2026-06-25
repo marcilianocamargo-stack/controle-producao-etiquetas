@@ -278,7 +278,7 @@ input.big{font-size:22px;font-weight:700;text-align:center;color:var(--ok)}
     <div class="step">Múltiplo</div>
     <div style="display:flex;gap:8px;margin-bottom:10px">
       <button onclick="chSetAtalho(16)" id="cha16" class="btn-sec btn" style="display:block;flex:1;margin:0">×16</button>
-      <button onclick="chSetAtalho(26)" id="cha26" class="btn-sec btn" style="display:block;flex:1;margin:0">×26</button>
+      <button onclick="chSetAtalho(24)" id="cha24" class="btn-sec btn" style="display:block;flex:1;margin:0">×24</button>
       <button onclick="chSetAtalho(33)" id="cha33" class="btn-sec btn" style="display:block;flex:1;margin:0">×33</button>
     </div>
     <div class="step">Medida (cm)</div>
@@ -970,7 +970,7 @@ var chMult=null,chPilhas=null;
 })();
 function chSetAtalho(v){
   chMult=v;
-  [16,26,33].forEach(function(x){
+  [16,24,33].forEach(function(x){
     var b=document.getElementById('cha'+x);
     if(b){b.style.borderColor=x===v?'var(--ok)':'var(--border)';b.style.color=x===v?'var(--ok)':'var(--muted)';}
   });
