@@ -332,59 +332,70 @@ function numFmt(v) {
   if (isNaN(n)) return String(v);
   return n.toFixed(3).replace('.',',');
 }
-function findCol(headers, keys) {
-  return headers.find(h => h && keys.some(k => h.toLowerCase().includes(k))) || '';
-}
-// Detecção específica da coluna OC (Ordem de Compra) — evita falsos positivos
-function findColOc(headers) {
-  return headers.find(h => {
-    if(!h) return false;
-    const t = String(h).toLowerCase().trim();
-    return t === 'oc' || t.includes('ordem de compra') || t.includes('o.c');
-  }) || '';
-}
-function detectarCabecalho(ws) {
-  const range = XLSX.utils.decode_range(ws['!ref']||'A1:Z10');
-  for (let r=range.s.r; r<=Math.min(range.e.r,5); r++) {
-    const row=[];
-    for (let c=range.s.c; c<=range.e.c; c++) {
-      const cell=ws[XLSX.utils.encode_cell({r,c})];
-      row.push(cell?String(cell.v||''):'');
-    }
-    if (row.some(h=>h.toUpperCase()==='OF')) return r;
-  }
-  return 0;
-}
 function processarAba(ws) {
-  const hr=detectarCabecalho(ws);
-  const range=XLSX.utils.decode_range(ws['!ref']||'A1');
-  const nr=Object.assign({},range,{s:{r:hr,c:range.s.c}});
-  const wsC=Object.assign({},ws,{'!ref':XLSX.utils.encode_range(nr)});
-  const data=XLSX.utils.sheet_to_json(wsC,{defval:'',raw:true});
-  if (!data.length) return [];
-  const headers=Object.keys(data[0]);
-  const colOf=findCol(headers,['of']);
-  const colOc=findColOc(headers);
-  const colCli=findCol(headers,['cliente','client']);
-  const colPap=findCol(headers,['p.o.','p.o','papelao','papelão','papel']);
-  const colQtd=findCol(headers,['qtde pedido','quantidade pedido','t. pedido','t.pedido','total pedido']);
-  const colLarg=findCol(headers,['largura']);
-  const colComp=findCol(headers,['comprimento']);
-  const colRef=findCol(headers,['sliter','slitter','vincad','referencia','referência']);
-  if (!colOf) return null;
-  return data.filter(r=>r[colOf]&&!isNaN(parseFloat(r[colOf]))&&parseFloat(r[colOf])>100000).map(r=>{
-    let medida='';
-    if(colLarg&&colComp){const l=numFmt(r[colLarg]),c=numFmt(r[colComp]);if(l&&c)medida=l+' X '+c;}
-    return {
-      of: String(r[colOf]).trim().split('.')[0],
-      oc: colOc?String(r[colOc]).trim().split('.')[0]:'',
-      cliente: colCli?String(r[colCli]).trim():'',
-      papelao: colPap?String(r[colPap]).trim():'',
-      qtdePedido: colQtd?String(r[colQtd]).trim():'',
+  // Lê todas as linhas como arrays brutos — mais confiável que manipular !ref
+  const all = XLSX.utils.sheet_to_json(ws, {header:1, defval:''});
+  if (!all.length) return [];
+
+  // Localiza a linha de cabeçalho procurando célula com valor exato "OF"
+  let hr = -1, iOf = -1;
+  for (let r = 0; r < Math.min(all.length, 12); r++) {
+    for (let c = 0; c < all[r].length; c++) {
+      if (String(all[r][c]||'').trim().toUpperCase() === 'OF') {
+        hr = r; iOf = c; break;
+      }
+    }
+    if (hr >= 0) break;
+  }
+  if (hr < 0) return null; // coluna OF não encontrada
+
+  // Normaliza cabeçalhos para busca
+  const hdrs = all[hr].map(h => String(h||'').trim().toLowerCase());
+
+  function ci(termos) {
+    for (const t of termos) {
+      const i = hdrs.findIndex(h => h.includes(t));
+      if (i >= 0) return i;
+    }
+    return -1;
+  }
+
+  // OC: somente match exato para evitar falsos positivos
+  const iOc   = hdrs.findIndex(h => h === 'oc' || h === 'o.c.' || h.includes('ordem de compra'));
+  const iCli  = ci(['cliente','client']);
+  const iPap  = ci(['p.o.','p.o','papelao','papelão','papel']);
+  const iQtd  = ci(['qtde pedido','qtd pedido','quantidade pedido','t. pedido','total pedido']);
+  const iLarg = ci(['largura']);
+  const iComp = ci(['comprimento']);
+  const iRef  = ci(['sliter','slitter','vincad','referencia','referência']);
+
+  const result = [];
+  for (let i = hr + 1; i < all.length; i++) {
+    const row = all[i];
+    const ofRaw = row[iOf];
+    if (ofRaw === '' || ofRaw === null || ofRaw === undefined) continue;
+    const ofStr = String(ofRaw).trim();
+    // Aceita qualquer número >= 10 na coluna OF (exclui seq 1-9 mas aceita todos os formatos reais)
+    const ofNum = parseFloat(ofStr.replace(',', '.'));
+    if (isNaN(ofNum) || ofNum < 10) continue;
+
+    let medida = '';
+    if (iLarg >= 0 && iComp >= 0) {
+      const l = numFmt(row[iLarg]), c = numFmt(row[iComp]);
+      if (l && c) medida = l + ' X ' + c;
+    }
+
+    result.push({
+      of:         ofStr.split('.')[0],
+      oc:         iOc  >= 0 ? String(row[iOc]  || '').trim() : '',
+      cliente:    iCli >= 0 ? String(row[iCli] || '').trim() : '',
+      papelao:    iPap >= 0 ? String(row[iPap] || '').trim() : '',
+      qtdePedido: iQtd >= 0 ? String(row[iQtd] || '').trim() : '',
       medida,
-      referencia: colRef?String(r[colRef]).trim():'',
-    };
-  });
+      referencia: iRef >= 0 ? String(row[iRef] || '').trim() : '',
+    });
+  }
+  return result;
 }
 
 document.getElementById('fileXlsx').addEventListener('change', function(e) {
