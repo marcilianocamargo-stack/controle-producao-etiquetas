@@ -75,6 +75,8 @@ input.big{font-size:22px;font-weight:700;text-align:center;color:var(--ok)}
 .btn-export:disabled{opacity:.5;cursor:default}
 
 .btn-clear{background:transparent;color:var(--danger);border:1px solid var(--danger);padding:9px;border-radius:7px;width:100%;font-size:12px;cursor:pointer;margin-bottom:8px}
+.btn-voltar{background:transparent;color:var(--accent2);border:1.5px solid var(--accent);padding:10px;border-radius:7px;width:100%;font-size:13px;font-weight:700;cursor:pointer;margin-bottom:10px}
+.btn-voltar:active{background:rgba(46,134,222,.12)}
 
 .msg{margin-top:8px;border-radius:7px;padding:9px 12px;font-size:13px;font-weight:600;display:none}
 .ok-msg{background:rgba(29,209,161,.12);color:var(--ok);border:1px solid rgba(29,209,161,.3)}
@@ -298,6 +300,8 @@ input.big{font-size:22px;font-weight:700;text-align:center;color:var(--ok)}
   <!-- TAB HISTÓRICO -->
   <div id="tab-historico" class="section">
 
+    <button class="btn-voltar" onclick="mudarTab('registro')">← Voltar</button>
+
     <div id="historicoContent"></div>
 
     <!-- Botões exportar na aba Histórico -->
@@ -313,6 +317,7 @@ input.big{font-size:22px;font-weight:700;text-align:center;color:var(--ok)}
 
 </div>
   <div id="tab-chapas" class="section">
+  <button class="btn-voltar" onclick="mudarTab('registro')">← Voltar</button>
   <div class="card">
     <div class="step">Múltiplo</div>
     <div style="display:flex;gap:8px;margin-bottom:10px">
