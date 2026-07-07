@@ -203,13 +203,14 @@ input.big{font-size:22px;font-weight:700;text-align:center;color:var(--ok)}
     </div>
 
     <div class="card" id="cardAba" style="display:none">
-      <div class="step">1b · Selecionar aba</div>
-      <select id="selAba"></select>
-      <button onclick="carregarAba()" style="margin-top:8px;width:100%;padding:9px;border-radius:6px;border:none;background:var(--accent);color:white;font-weight:700;font-size:14px;cursor:pointer">Carregar aba</button>
+      <div class="step">2 · Selecionar Pedido</div>
+      <select id="selAba" onchange="carregarAba()">
+        <option value="">— toque para escolher o pedido —</option>
+      </select>
     </div>
 
     <div class="card" id="cardOf" style="display:none">
-      <div class="step">2 · Selecionar OF</div>
+      <div class="step">3 · Selecionar OF</div>
       <div class="busca-row">
         <input type="text" id="buscaOf" placeholder="Número da OF ou cliente..." oninput="filtrarOf()" inputmode="numeric">
         <button onclick="limparBusca()">✕</button>
@@ -224,7 +225,7 @@ input.big{font-size:22px;font-weight:700;text-align:center;color:var(--ok)}
     </div>
 
     <div class="card" id="cardPalete" style="display:none">
-      <div class="step">3 · Registrar palete</div>
+      <div class="step">4 · Registrar palete</div>
       <div class="grid2" style="margin-bottom:10px">
         <div>
           <label class="lbl">Nº do Palete</label>
@@ -436,20 +437,29 @@ function processarAba(ws) {
   return result;
 }
 
-// Processa o workbook baixado: combina as OFs de todas as abas (igual ao upload antigo)
+// Processa o workbook baixado: cada aba = 1 pedido. Só monta a lista de abas —
+// o operador escolhe o pedido e SÓ as OFs daquela aba carregam (igual ao Romaneio).
 function carregarWorkbookBuf(buf){
   workbook=XLSX.read(buf,{type:'array',cellDates:false});
-  const abas=workbook.SheetNames;
+  const abas=workbook.SheetNames.filter(a=>{
+    const r=processarAba(workbook.Sheets[a]);
+    return r && r.length>0;
+  });
+  if(!abas.length) return false;
+
   const sel=document.getElementById('selAba');
-  sel.innerHTML='';
-  abas.forEach(a=>{const o=document.createElement('option');o.value=o.textContent=a;sel.appendChild(o);});
-  let todasOrdens=[];let abaUsada='';
-  for(const aba of abas){const r=processarAba(workbook.Sheets[aba]);if(r&&r.length>0){todasOrdens=todasOrdens.concat(r.filter(o=>!todasOrdens.find(x=>x.of===o.of)));if(!abaUsada)abaUsada=aba;}}
-  if(todasOrdens.length>0){popularOrdens(todasOrdens,abaUsada||'todas');return true;}
+  sel.innerHTML='<option value="">— toque para escolher o pedido —</option>';
+  abas.forEach(a=>{
+    const o=document.createElement('option');
+    o.value=a;
+    o.textContent=a+'  ·  '+processarAba(workbook.Sheets[a]).length+' OF(s)';
+    sel.appendChild(o);
+  });
   document.getElementById('cardAba').style.display='block';
-  document.getElementById('msgXlsx').textContent='Selecione a aba abaixo.';
-  document.getElementById('msgXlsx').style.display='block';
-  return false;
+
+  // Se o arquivo tem só 1 pedido/aba, já seleciona automaticamente
+  if(abas.length===1){ sel.value=abas[0]; carregarAba(); }
+  return true;
 }
 
 // ── AUTO-CARREGAR DO GITHUB (mesma lógica do Romaneio) ─────────
@@ -513,9 +523,8 @@ function popularOrdens(lista, aba){
   if (atualizado) salvarRegistros(regs);
 
   preencherSelect(ordens);
-  document.getElementById('msgXlsx').textContent='✓ '+ordens.length+' OF(s) · aba: '+aba;
+  document.getElementById('msgXlsx').textContent='✓ '+ordens.length+' OF(s) · pedido: '+aba;
   document.getElementById('msgXlsx').style.display='block';
-  document.getElementById('cardAba').style.display='none';
   document.getElementById('cardOf').style.display='block';
   document.getElementById('cardPalete').style.display='block';
   document.getElementById('btnRegistrar').style.display='block';
