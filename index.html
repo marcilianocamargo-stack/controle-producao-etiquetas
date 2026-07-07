@@ -119,6 +119,38 @@ input.big{font-size:22px;font-weight:700;text-align:center;color:var(--ok)}
 .progress-bar-fill.warn{background:var(--warn)}
 .progress-bar-fill.over{background:var(--danger)}
 
+/* STATUS DO AUTO-CARREGAMENTO DA PROGRAMAÇÃO (mesma lógica do Romaneio) */
+.status-auto{border-radius:7px;padding:9px 12px;font-size:13px;font-weight:600;line-height:1.5}
+.status-auto.info{background:rgba(46,134,222,.12);color:var(--accent2);border:1px solid rgba(46,134,222,.35)}
+.status-auto.ok{background:rgba(29,209,161,.12);color:var(--ok);border:1px solid rgba(29,209,161,.3)}
+.status-auto.err{background:rgba(255,107,107,.12);color:var(--danger);border:1px solid rgba(255,107,107,.3)}
+
+/* OFs DO PEDIDO — chips coloridos (mesmo sistema de cores do Romaneio:
+   verde = falta bastante · amarelo = últimos 10% · azul = bateu exato · vermelho = ultrapassou) */
+.ofs-pedido-wrap{display:flex;flex-wrap:wrap;gap:8px}
+.of-chip{display:flex;flex-direction:column;gap:5px;flex:1 1 150px;min-width:140px;max-width:220px;padding:9px 12px;border-radius:12px;border:2px solid var(--border);background:var(--surface2);cursor:pointer;-webkit-tap-highlight-color:transparent;transition:transform .1s}
+.of-chip:active{transform:scale(.96)}
+.of-chip-top{display:flex;align-items:center;gap:6px;font-size:12.5px;font-weight:800;color:var(--muted)}
+.of-chip .dot{width:9px;height:9px;border-radius:50%;flex-shrink:0;background:#999}
+.of-chip-desc{font-size:10.5px;color:var(--muted);margin-left:15px;margin-top:-3px}
+.of-chip-bar{height:8px;border-radius:5px;background:rgba(0,0,0,.35);overflow:hidden}
+.of-chip-fill{height:100%;border-radius:5px;background:#999;transition:width .25s}
+.of-chip-qtd{font-size:11.5px;font-weight:800;text-align:right;color:var(--muted)}
+
+.of-chip.verde    { border-color:#4caf50; background:rgba(76,175,80,.12); }
+.of-chip.verde    .of-chip-top, .of-chip.verde    .of-chip-qtd { color:#81c784; }
+.of-chip.verde    .dot, .of-chip.verde    .of-chip-fill { background:#4caf50; }
+.of-chip.amarelo  { border-color:#f9a825; background:rgba(249,168,37,.12); }
+.of-chip.amarelo  .of-chip-top, .of-chip.amarelo  .of-chip-qtd { color:#ffd54f; }
+.of-chip.amarelo  .dot, .of-chip.amarelo  .of-chip-fill { background:#f9a825; }
+.of-chip.vermelho { border-color:#e53935; background:rgba(229,57,53,.14); }
+.of-chip.vermelho .of-chip-top, .of-chip.vermelho .of-chip-qtd { color:#ef9a9a; }
+.of-chip.vermelho .dot, .of-chip.vermelho .of-chip-fill { background:#e53935; }
+.of-chip.azul     { border-color:#42a5f5; background:rgba(66,165,245,.14); }
+.of-chip.azul     .of-chip-top, .of-chip.azul     .of-chip-qtd { color:#90caf9; }
+.of-chip.azul     .dot, .of-chip.azul     .of-chip-fill { background:#42a5f5; }
+.of-chip.selecionado{box-shadow:0 0 0 3px rgba(84,160,255,.45)}
+
 .empty{text-align:center;padding:30px 16px;color:var(--muted);font-size:13px}
 .empty .icon{font-size:32px;margin-bottom:8px}
 
@@ -164,9 +196,10 @@ input.big{font-size:22px;font-weight:700;text-align:center;color:var(--ok)}
   <div id="tab-registro" class="section active">
 
     <div class="card" id="cardArquivo">
-      <div class="step">1 · Programação (xlsx)</div>
-      <input type="file" id="fileXlsx" accept=".xlsx,.xls">
-      <div id="msgXlsx" style="font-size:12px;color:var(--ok);display:none;margin-top:4px"></div>
+      <div class="step">1 · Programação do dia</div>
+      <div id="statusAuto" class="status-auto info">⏳ Buscando a programação do dia...</div>
+      <div id="msgXlsx" style="font-size:12px;color:var(--ok);display:none;margin-top:6px"></div>
+      <button id="btnRecarregar" style="display:none;margin-top:8px;width:100%;padding:11px;border-radius:6px;border:none;background:var(--accent);color:white;font-weight:700;font-size:14px;cursor:pointer" onclick="autoCarregar()">↻&nbsp;&nbsp;Tentar novamente</button>
     </div>
 
     <div class="card" id="cardAba" style="display:none">
@@ -183,6 +216,11 @@ input.big{font-size:22px;font-weight:700;text-align:center;color:var(--ok)}
       </div>
       <select id="selOf" size="1"></select>
       <div class="preview-box" id="previewDados"></div>
+    </div>
+
+    <div class="card" id="cardOfsPedido" style="display:none">
+      <div class="step">OFs do pedido · toque para trocar rápido</div>
+      <div class="ofs-pedido-wrap" id="ofsPedidoWrap"></div>
     </div>
 
     <div class="card" id="cardPalete" style="display:none">
@@ -398,25 +436,53 @@ function processarAba(ws) {
   return result;
 }
 
-document.getElementById('fileXlsx').addEventListener('change', function(e) {
-  const file=e.target.files[0]; if(!file) return;
-  const reader=new FileReader();
-  reader.onload=function(ev){
-    try {
-      workbook=XLSX.read(ev.target.result,{type:'array',cellDates:false});
-      const abas=workbook.SheetNames;
-      const sel=document.getElementById('selAba');
-      sel.innerHTML='';
-      abas.forEach(a=>{const o=document.createElement('option');o.value=o.textContent=a;sel.appendChild(o);});
-      let ok=false;
-      let todasOrdens=[];let abaUsada='';
-      for(const aba of abas){const r=processarAba(workbook.Sheets[aba]);if(r&&r.length>0){todasOrdens=todasOrdens.concat(r.filter(o=>!todasOrdens.find(x=>x.of===o.of)));if(!abaUsada)abaUsada=aba;}}
-      if(todasOrdens.length>0){popularOrdens(todasOrdens,abaUsada||'todas');ok=true;}
-      if(!ok){document.getElementById('cardAba').style.display='block';document.getElementById('msgXlsx').textContent='Selecione a aba abaixo.';document.getElementById('msgXlsx').style.display='block';}
-    } catch(err){alert('Erro ao ler arquivo: '+err.message);}
-  };
-  reader.readAsArrayBuffer(file);
-});
+// Processa o workbook baixado: combina as OFs de todas as abas (igual ao upload antigo)
+function carregarWorkbookBuf(buf){
+  workbook=XLSX.read(buf,{type:'array',cellDates:false});
+  const abas=workbook.SheetNames;
+  const sel=document.getElementById('selAba');
+  sel.innerHTML='';
+  abas.forEach(a=>{const o=document.createElement('option');o.value=o.textContent=a;sel.appendChild(o);});
+  let todasOrdens=[];let abaUsada='';
+  for(const aba of abas){const r=processarAba(workbook.Sheets[aba]);if(r&&r.length>0){todasOrdens=todasOrdens.concat(r.filter(o=>!todasOrdens.find(x=>x.of===o.of)));if(!abaUsada)abaUsada=aba;}}
+  if(todasOrdens.length>0){popularOrdens(todasOrdens,abaUsada||'todas');return true;}
+  document.getElementById('cardAba').style.display='block';
+  document.getElementById('msgXlsx').textContent='Selecione a aba abaixo.';
+  document.getElementById('msgXlsx').style.display='block';
+  return false;
+}
+
+// ── AUTO-CARREGAR DO GITHUB (mesma lógica do Romaneio) ─────────
+// Busca a programação publicada no repositório (programacao-hoje.xlsx).
+// Cache-busting (?t=) + no-store para nunca pegar versão antiga em cache.
+// NÃO existe upload manual: se falhar, mostra aviso + "Tentar novamente".
+async function autoCarregar(){
+  const st=document.getElementById('statusAuto');
+  const btn=document.getElementById('btnRecarregar');
+  btn.style.display='none';
+  st.className='status-auto info';
+  st.textContent='⏳ Buscando a programação do dia...';
+  try{
+    const resp=await fetch('./programacao-hoje.xlsx?t='+Date.now(),{cache:'no-store'});
+    if(!resp.ok) throw new Error('sem arquivo');
+    const buf=await resp.arrayBuffer();
+    if(!carregarWorkbookBuf(buf)) throw new Error('sem OFs');
+    let quando='';
+    const lm=resp.headers.get('last-modified');
+    if(lm){
+      const d=new Date(lm);
+      if(!isNaN(d.getTime()))
+        quando=' · atualizada '+d.toLocaleDateString('pt-BR')+' '+
+               d.toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});
+    }
+    st.className='status-auto ok';
+    st.textContent='✓ Programação do dia carregada'+quando;
+  }catch(err){
+    st.className='status-auto err';
+    st.textContent='⚠ Nenhuma programação disponível ainda. Aguarde a publicação do dia e toque em "Tentar novamente".';
+    btn.style.display='block';
+  }
+}
 
 function carregarAba(){
   const aba=document.getElementById('selAba').value;
@@ -456,6 +522,51 @@ function popularOrdens(lista, aba){
   document.getElementById('btnRegistrarImprimir').style.display='block';
   atualizarPreview();
   sugerirProximoPalete();
+  atualizarOfsPedido();
+}
+
+// ── OFs DO PEDIDO (chips coloridos — mesma lógica do Romaneio) ──
+// verde = falta bastante · amarelo = últimos 10% · azul = bateu exato · vermelho = ultrapassou
+function statusPedido(total,pedido){
+  if(!pedido) return '';
+  if(total===pedido) return 'azul';
+  if(total>pedido) return 'vermelho';
+  if(total/pedido>=0.90) return 'amarelo';
+  return 'verde';
+}
+
+function atualizarOfsPedido(){
+  const card=document.getElementById('cardOfsPedido');
+  const wrap=document.getElementById('ofsPedidoWrap');
+  if(!ordens||!ordens.length){card.style.display='none';return;}
+  card.style.display='block';
+  const regs=getRegistros();
+  const ofSel=document.getElementById('selOf').value;
+  wrap.innerHTML=ordens.map(o=>{
+    const total=regs.filter(r=>r.of===o.of).reduce((s,r)=>s+Number(r.chapas),0);
+    const pedido=parseInt(o.qtdePedido)||0;
+    const st=statusPedido(total,pedido)||'verde';
+    const sel=ofSel===o.of?' selecionado':'';
+    const desc=[o.medida,o.papelao].filter(Boolean).join(' · ');
+    const pct=pedido>0?Math.min(100,(total/pedido)*100):0;
+    return '<div class="of-chip '+st+sel+'" onclick="selecionarOfChip(\''+o.of+'\')">'
+         + '<div class="of-chip-top"><span class="dot"></span>OF '+esc(o.of)+'</div>'
+         + (desc?'<div class="of-chip-desc">'+esc(desc)+'</div>':'')
+         + '<div class="of-chip-bar"><div class="of-chip-fill" style="width:'+pct+'%"></div></div>'
+         + '<div class="of-chip-qtd">'+total.toLocaleString('pt-BR')+' / '+pedido.toLocaleString('pt-BR')+'</div>'
+         + '</div>';
+  }).join('');
+}
+
+// Seleciona uma OF a partir de um chip (atalho, sem digitar)
+function selecionarOfChip(of){
+  document.getElementById('buscaOf').value='';
+  preencherSelect(ordens);
+  document.getElementById('selOf').value=of;
+  atualizarPreview();
+  sugerirProximoPalete();
+  atualizarOfsPedido();
+  setTimeout(()=>document.getElementById('cardPalete').scrollIntoView({behavior:'smooth',block:'nearest'}),80);
 }
 function preencherSelect(lista){
   const sel=document.getElementById('selOf');
@@ -474,6 +585,7 @@ function filtrarOf(){
   preencherSelect(f);
   if(f.length===1) document.getElementById('selOf').value=f[0].of;
   atualizarPreview();
+  atualizarOfsPedido();
 }
 
 function limparBusca(){
@@ -481,7 +593,7 @@ function limparBusca(){
   preencherSelect(ordens);
 }
 
-document.getElementById('selOf').addEventListener('change',()=>{atualizarPreview();sugerirProximoPalete();});
+document.getElementById('selOf').addEventListener('change',()=>{atualizarPreview();sugerirProximoPalete();atualizarOfsPedido();});
 
 function atualizarPreview(){
   const of=document.getElementById('selOf').value;
@@ -647,6 +759,7 @@ if(imprimirEtiqueta){
   fotosAtuais=[];
   renderFotosPreview();
   atualizarPreview();
+  atualizarOfsPedido();
   atualizarBadge();
 }
 
@@ -816,6 +929,7 @@ function deletarRegistro(idx){
   salvarRegistros(regs);
   renderHistorico();
   atualizarPreview();
+  atualizarOfsPedido();
   atualizarBadge();
 }
 
@@ -824,6 +938,7 @@ function limparDia(){
   localStorage.removeItem(STORAGE_KEY);
   renderHistorico();
   atualizarPreview();
+  atualizarOfsPedido();
   atualizarBadge();
 }
 
@@ -964,6 +1079,7 @@ function atualizarBadge(){
 }
 setInterval(atualizarBadge, 2000);
 atualizarBadge();
+autoCarregar();
 </script>
   <script>
     // ── CALCULADORA CHAPAS ─────────────────────────────────────────
