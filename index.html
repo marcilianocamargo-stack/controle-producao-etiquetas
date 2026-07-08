@@ -357,6 +357,11 @@ function hoje() {
 function agora() {
   return new Date().toLocaleTimeString('pt-BR', {hour:'2-digit',minute:'2-digit'});
 }
+// 07h-18h = turno dia · resto = turno noite
+function turnoAtual() {
+  const h = new Date().getHours();
+  return (h >= 7 && h < 18) ? 'Dia' : 'Noite';
+}
 document.getElementById('dataHoje').textContent = 'Prime Ondulados · ' + hoje();
 
 // ── TABS ───────────────────────────────────────────────────────
@@ -1039,21 +1044,42 @@ async function exportarExcel() {
   }
 
   // ABA RESUMO
-  const resumo=[['RESUMO DO DIA — '+hoje()],[''],
+  const turno=turnoAtual();
+  const resumo=[['PRODUÇÃO '+hoje()+' — TURNO '+turno.toUpperCase()],[''],
     ['OF','OC','CLIENTE','PAPEL','MEDIDA','QTDE PEDIDO','PRODUZIDO','PALETES','SALDO','%']
   ];
+  let totalChapasTurno=0;
+  const porCliente={};
   for(const of in grupos){
     const g=grupos[of];
     const total=g.reduce((s,r)=>s+Number(r.chapas),0);
     const ped=parseInt(g[0].qtdePedido)||0;
     const pct=ped?Math.round(total/ped*100):'-';
     resumo.push([of,g[0].oc||'',g[0].cliente,g[0].papelao,g[0].medida,ped,total,g.length,total-ped,pct+'%']);
+    totalChapasTurno+=total;
+    const cli=g[0].cliente||'—';
+    if(!porCliente[cli]) porCliente[cli]={produzido:0,pedido:0};
+    porCliente[cli].produzido+=total;
+    porCliente[cli].pedido+=ped;
   }
+
+  resumo.push(['']);
+  resumo.push(['','','','','','','TOTAL CHAPAS DO TURNO:',totalChapasTurno,'','']);
+
+  resumo.push(['']);
+  resumo.push(['RESUMO POR CLIENTE — % DO PEDIDO CONCLUÍDO']);
+  resumo.push(['CLIENTE','PEDIDO TOTAL','PRODUZIDO TOTAL','SALDO','% CONCLUÍDO']);
+  Object.keys(porCliente).forEach(cli=>{
+    const c=porCliente[cli];
+    const pct=c.pedido?Math.round(c.produzido/c.pedido*100):'-';
+    resumo.push([cli,c.pedido,c.produzido,c.produzido-c.pedido,pct+'%']);
+  });
+
   const wsResumo=XLSX.utils.aoa_to_sheet(resumo);
   wsResumo['!cols']=[{wch:10},{wch:8},{wch:22},{wch:18},{wch:14},{wch:12},{wch:10},{wch:8},{wch:8},{wch:6}];
   XLSX.utils.book_append_sheet(wb,wsResumo,'Resumo');
 
-  const nome='Producao_'+hoje().replace(/\//g,'-')+'.xlsx';
+  const nome='Producao_'+hoje().replace(/\//g,'-')+'_turno-'+turno+'.xlsx';
 
   // Gera o blob do xlsx
   const wbArray = XLSX.write(wb, {bookType:'xlsx', type:'array'});
