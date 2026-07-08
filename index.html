@@ -299,7 +299,7 @@ input.big{font-size:22px;font-weight:700;text-align:center;color:var(--ok)}
   <!-- TAB HISTÓRICO -->
   <div id="tab-historico" class="section">
 
-    <button class="btn-voltar" onclick="mudarTab('registro')">← Voltar</button>
+    <button class="btn-voltar" onclick="voltarRegistro()">← Voltar</button>
 
     <div id="historicoContent"></div>
 
@@ -316,7 +316,7 @@ input.big{font-size:22px;font-weight:700;text-align:center;color:var(--ok)}
 
 </div>
   <div id="tab-chapas" class="section">
-  <button class="btn-voltar" onclick="mudarTab('registro')">← Voltar</button>
+  <button class="btn-voltar" onclick="voltarRegistro()">← Voltar</button>
   <div class="card">
     <div class="step">Múltiplo</div>
     <div style="display:flex;gap:8px;margin-bottom:10px">
@@ -365,6 +365,16 @@ function mudarTab(tab) {
   document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
   document.getElementById('tab-' + tab).classList.add('active');
   if (tab === 'historico') renderHistorico();
+}
+
+// Voltar do Histórico/Chapas: sempre retorna para os campos a preencher (Registrar palete)
+function voltarRegistro(){
+  mudarTab('registro');
+  setTimeout(()=>{
+    const alvo=document.getElementById('cardPalete');
+    if(alvo && alvo.style.display!=='none') alvo.scrollIntoView({behavior:'smooth',block:'start'});
+    else window.scrollTo({top:0,behavior:'smooth'});
+  },80);
 }
 
 // ── LEITURA DO EXCEL ───────────────────────────────────────────
@@ -612,7 +622,7 @@ function atualizarPreview(){
   const o=ordens.find(x=>x.of===of); if(!o) return;
   let html='';
   if(o.cliente)    html+='<div><span>Cliente: </span><strong>'+esc(o.cliente)+'</strong></div>';
-  if(o.oc)         html+='<div><span>OC: </span><strong>'+esc(o.oc)+'</strong></div>';
+  if(o.of)         html+='<div><span>OF: </span><strong>'+esc(o.of)+'</strong></div>';
   if(o.papelao)    html+='<div><span>Papel: </span><strong>'+esc(o.papelao)+'</strong></div>';
   if(o.qtdePedido) html+='<div><span>Qtde pedido: </span><strong>'+esc(o.qtdePedido)+' chapas</strong></div>';
   if(o.medida)     html+='<div><span>Medida: </span><strong>'+esc(o.medida)+'</strong></div>';
@@ -1159,7 +1169,7 @@ function chUsar(){
   var tot=Math.round(parseFloat(t));
   if(!tot||isNaN(tot))return;
   document.getElementById('qtdePalete').value=tot;
-  mudarTab('registro');
+  voltarRegistro();
   mostrarToast('✔ '+tot.toLocaleString('pt-BR')+' chapas inserido!');
 }
 if ('serviceWorker' in navigator) {
