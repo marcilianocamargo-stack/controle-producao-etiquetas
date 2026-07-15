@@ -205,16 +205,16 @@ input.big{font-size:22px;font-weight:700;text-align:center;color:var(--ok)}
     </div>
 
     <div class="card" id="cardOf" style="display:none">
-      <div class="step">3 · Selecionar OF</div>
+      <div class="step">3 · Selecionar OP</div>
       <div class="busca-row">
-        <input type="text" id="buscaOf" placeholder="Número da OF ou cliente..." oninput="filtrarOf()" inputmode="numeric">
+        <input type="text" id="buscaOf" placeholder="Número da OP ou cliente..." oninput="filtrarOf()" inputmode="numeric">
         <button onclick="limparBusca()">✕</button>
       </div>
       <select id="selOf" size="1"></select>
     </div>
 
     <div class="card" id="cardOfsPedido" style="display:none">
-      <div class="step">OFs do pedido · toque para trocar rápido</div>
+      <div class="step">OPs do pedido · toque para trocar rápido</div>
       <div class="ofs-pedido-wrap" id="ofsPedidoWrap"></div>
     </div>
 
@@ -389,16 +389,28 @@ function numFmt(v) {
   if (isNaN(n)) return String(v);
   return n.toFixed(3).replace('.',',');
 }
+// OF central da programação (nº único por lote, exigência FSC/NF-e) — fica na
+// célula do título, acima do cabeçalho, no formato "OF: 000123".
+function extrairOfCentral(all, hr) {
+  for (let r = 0; r < hr; r++) {
+    for (const cel of (all[r] || [])) {
+      const m = /OF\s*:\s*0*(\d+)/i.exec(String(cel == null ? '' : cel));
+      if (m) return m[1];
+    }
+  }
+  return '';
+}
 function processarAba(ws) {
   // Lê todas as linhas como arrays brutos — mais confiável que manipular !ref
   const all = XLSX.utils.sheet_to_json(ws, {header:1, defval:''});
   if (!all.length) return [];
 
-  // Localiza a linha de cabeçalho procurando célula com valor exato "OF"
+  // Localiza a linha de cabeçalho procurando célula com valor exato "OP" (ou "OF", planilhas antigas)
   let hr = -1, iOf = -1;
   for (let r = 0; r < Math.min(all.length, 12); r++) {
     for (let c = 0; c < all[r].length; c++) {
-      if (String(all[r][c]||'').trim().toUpperCase() === 'OF') {
+      const cel = String(all[r][c]||'').trim().toUpperCase();
+      if (cel === 'OP' || cel === 'OF') {
         hr = r; iOf = c; break;
       }
     }
@@ -452,6 +464,7 @@ function processarAba(ws) {
       referencia: iRef >= 0 ? String(row[iRef] || '').trim() : '',
     });
   }
+  result.ofCentral = extrairOfCentral(all, hr);
   return result;
 }
 
@@ -470,7 +483,7 @@ function carregarWorkbookBuf(buf){
   abas.forEach(a=>{
     const o=document.createElement('option');
     o.value=a;
-    o.textContent=a+'  ·  '+processarAba(workbook.Sheets[a]).length+' OF(s)';
+    o.textContent=a+'  ·  '+processarAba(workbook.Sheets[a]).length+' OP(s)';
     sel.appendChild(o);
   });
   document.getElementById('cardAba').style.display='block';
@@ -518,8 +531,8 @@ function carregarAba(){
   const aba=document.getElementById('selAba').value;
   if(!workbook||!aba) return;
   const r=processarAba(workbook.Sheets[aba]);
-  if(!r){alert('Coluna OF não encontrada.');return;}
-  if(!r.length){alert('Nenhuma OF encontrada.');return;}
+  if(!r){alert('Coluna OP não encontrada.');return;}
+  if(!r.length){alert('Nenhuma OP encontrada.');return;}
   popularOrdens(r,aba);
 }
 
@@ -543,7 +556,7 @@ function popularOrdens(lista, aba){
   if (atualizado) salvarRegistros(regs);
 
   preencherSelect(ordens);
-  document.getElementById('msgXlsx').textContent='✓ '+ordens.length+' OF(s) · pedido: '+aba;
+  document.getElementById('msgXlsx').textContent='✓ '+ordens.length+' OP(s) · pedido: '+aba;
   document.getElementById('msgXlsx').style.display='block';
   document.getElementById('cardOf').style.display='block';
   document.getElementById('cardPalete').style.display='block';
@@ -579,7 +592,7 @@ function atualizarOfsPedido(){
     const desc=[o.medida,o.papelao].filter(Boolean).join(' · ');
     const pct=pedido>0?Math.min(100,(total/pedido)*100):0;
     return '<div class="of-chip '+st+sel+'" onclick="selecionarOfChip(\''+o.of+'\')">'
-         + '<div class="of-chip-top"><span class="dot"></span>OF '+esc(o.of)+'</div>'
+         + '<div class="of-chip-top"><span class="dot"></span>OP '+esc(o.of)+'</div>'
          + (desc?'<div class="of-chip-desc">'+esc(desc)+'</div>':'')
          + '<div class="of-chip-bar"><div class="of-chip-fill" style="width:'+pct+'%"></div></div>'
          + '<div class="of-chip-qtd">'+total.toLocaleString('pt-BR')+' / '+pedido.toLocaleString('pt-BR')+'</div>'
@@ -601,7 +614,7 @@ function preencherSelect(lista){
   const sel=document.getElementById('selOf');
   const atual=sel.value;
   sel.innerHTML='';
-  lista.forEach(o=>{const opt=document.createElement('option');opt.value=o.of;opt.textContent='OF '+o.of+(o.cliente?' · '+o.cliente:'');sel.appendChild(opt);});
+  lista.forEach(o=>{const opt=document.createElement('option');opt.value=o.of;opt.textContent='OP '+o.of+(o.cliente?' · '+o.cliente:'');sel.appendChild(opt);});
   if(atual && lista.find(o=>o.of===atual)) sel.value=atual;
   atualizarPreview();
   sugerirProximoPalete();
@@ -629,7 +642,7 @@ function atualizarPreview(){
   const o=ordens.find(x=>x.of===of); if(!o) return;
   let html='';
   if(o.cliente)    html+='<div><span>Cliente: </span><strong>'+esc(o.cliente)+'</strong></div>';
-  if(o.of)         html+='<div><span>OF: </span><strong>'+esc(o.of)+'</strong></div>';
+  if(o.of)         html+='<div><span>OP: </span><strong>'+esc(o.of)+'</strong></div>';
   if(o.papelao)    html+='<div><span>Papel: </span><strong>'+esc(o.papelao)+'</strong></div>';
   if(o.qtdePedido) html+='<div><span>Qtde pedido: </span><strong>'+esc(o.qtdePedido)+' chapas</strong></div>';
   if(o.medida)     html+='<div><span>Medida: </span><strong>'+esc(o.medida)+'</strong></div>';
@@ -743,7 +756,7 @@ function salvarRegistros(regs){
 function registrarPalete(imprimirEtiqueta=false){
   const of=document.getElementById('selOf').value;
   const o=ordens.find(x=>x.of===of);
-  if(!o){mostrarMsg('Selecione uma OF válida.',false);return;}
+  if(!o){mostrarMsg('Selecione uma OP válida.',false);return;}
   const numPalete=document.getElementById('numPalete').value;
   const chapas=document.getElementById('qtdePalete').value;
   if(!numPalete||!chapas){mostrarMsg('Preencha o nº do palete e a quantidade de chapas.',false);return;}
@@ -752,6 +765,7 @@ function registrarPalete(imprimirEtiqueta=false){
     data: hoje(),
     hora: agora(),
     of: o.of,
+    ofCentral: ordens.ofCentral || '',
     oc: o.oc || '',
     cliente: o.cliente,
     papelao: o.papelao,
@@ -859,8 +873,12 @@ function gerarPDF(dados) {
   const hoje = new Date();
   const dataFab = hoje.toLocaleDateString('pt-BR');
 
-  // Linha 1: OF | OC
-  celula(left,    y, HC, 24, 'ORDEM DE FABRICAÇÃO (OF)', dados.of, 36);
+  // Linha 0: OF central da programação (nº único por lote — Nota Fiscal/FSC)
+  celula(left, y, W, 24, 'ORDEM DE FABRICAÇÃO (OF)', dados.ofCentral||'—', 36);
+  y += 24;
+
+  // Linha 1: OP | OC
+  celula(left,    y, HC, 24, 'ORDEM DE PRODUÇÃO (OP)', dados.of, 36);
   celula(left+HC, y, HC, 24, 'ORDEM DE COMPRA (OC)', dados.oc||'', 36);
   y += 24;
 
@@ -886,6 +904,7 @@ function imprimirEtiquetaRegistro(registro) {
     cliente: registro.cliente || '',
     papelao: registro.papelao || '',
     of: registro.of || '',
+    ofCentral: registro.ofCentral || '',
     oc: registro.oc || '',
     medida: registro.medida || '',
     referencia: registro.referencia || '',
@@ -938,7 +957,7 @@ function renderHistorico(){
     html+=`<div class="of-grupo">
       <div class="of-header">
         <div>
-          <span class="of-num">OF ${of}</span>
+          <span class="of-num">OP ${of}</span>
           <div class="of-cli">${esc(g.info.cliente)} · ${esc(g.info.papelao)} · ${esc(g.info.medida)}</div>
         </div>
         <div class="of-total">${g.paletes.length} pal · ${totalProd.toLocaleString('pt-BR')} ch${pct!==null?' ('+pct+'%)':''}</div>
@@ -1002,7 +1021,7 @@ async function exportarExcel() {
     const g=grupos[of];
     detalhe.push(['','','','','','','','','','','','','','','']);
     detalhe.push([
-      'OF','OC','CLIENTE','PAPEL','MEDIDA','QTDE PEDIDO',
+      'OP','OC','CLIENTE','PAPEL','MEDIDA','QTDE PEDIDO',
       'PALETE Nº','CHAPAS','DATA','HORA',
       'GRAMATURA','COLUNA','RESULTADO','OBSERVAÇÕES','FOTOS'
     ]);
@@ -1032,7 +1051,7 @@ async function exportarExcel() {
   XLSX.utils.book_append_sheet(wb,wsDetalhe,'Produção');
 
   // ABA FOTOS — só nomes, sem base64 (evita limite de 32767 chars por célula)
-  const fotoRows=[['OF','PALETE','HORA','QTD FOTOS','NOMES DOS ARQUIVOS']];
+  const fotoRows=[['OP','PALETE','HORA','QTD FOTOS','NOMES DOS ARQUIVOS']];
   regs.forEach(r=>{
     if(r.fotos&&r.fotos.length){
       const nomes = r.fotos.map(f=>f.name).join(', ');
@@ -1048,7 +1067,7 @@ async function exportarExcel() {
   // ABA RESUMO
   const turno=turnoAtual();
   const resumo=[['PRODUÇÃO '+hoje()+' — TURNO '+turno.toUpperCase()],[''],
-    ['OF','OC','CLIENTE','PAPEL','MEDIDA','QTDE PEDIDO','PRODUZIDO','PALETES','SALDO','%']
+    ['OP','OC','CLIENTE','PAPEL','MEDIDA','QTDE PEDIDO','PRODUZIDO','PALETES','SALDO','%']
   ];
   let totalChapasTurno=0;
   const porCliente={};
