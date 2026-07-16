@@ -1019,15 +1019,15 @@ async function exportarExcel() {
 
   for(const of in grupos){
     const g=grupos[of];
-    detalhe.push(['','','','','','','','','','','','','','','']);
+    detalhe.push(['','','','','','','','','','','','','','','','']);
     detalhe.push([
-      'OP','OC','CLIENTE','PAPEL','MEDIDA','QTDE PEDIDO',
+      'OP','OC','OF','CLIENTE','PAPEL','MEDIDA','QTDE PEDIDO',
       'PALETE Nº','CHAPAS','DATA','HORA',
       'GRAMATURA','COLUNA','RESULTADO','OBSERVAÇÕES','FOTOS'
     ]);
     g.forEach(p=>{
       detalhe.push([
-        p.of, p.oc||'', p.cliente, p.papelao, p.medida, p.qtdePedido,
+        p.of, p.oc||'', p.ofCentral||'', p.cliente, p.papelao, p.medida, p.qtdePedido,
         p.numPalete, p.chapas, p.data, p.hora,
         p.gramatura||'', p.coluna||'', p.resultado||'OK',
         p.observacoes||'',
@@ -1037,14 +1037,14 @@ async function exportarExcel() {
     const totalProd=g.reduce((s,r)=>s+Number(r.chapas),0);
     const qtdePed=parseInt(g[0].qtdePedido)||0;
     detalhe.push([
-      '','','','','','TOTAL PRODUZIDO:',
+      '','','','','','','TOTAL PRODUZIDO:',
       g.length+' paletes', totalProd,'','','','','',
       'Saldo: '+(totalProd-qtdePed)+' chapas',''
     ]);
   }
   const wsDetalhe=XLSX.utils.aoa_to_sheet(detalhe);
   wsDetalhe['!cols']=[
-    {wch:10},{wch:8},{wch:22},{wch:18},{wch:14},{wch:12},
+    {wch:10},{wch:8},{wch:9},{wch:22},{wch:18},{wch:14},{wch:12},
     {wch:8},{wch:8},{wch:10},{wch:6},
     {wch:10},{wch:8},{wch:9},{wch:30},{wch:14}
   ];
@@ -1067,7 +1067,7 @@ async function exportarExcel() {
   // ABA RESUMO
   const turno=turnoAtual();
   const resumo=[['PRODUÇÃO '+hoje()+' — TURNO '+turno.toUpperCase()],[''],
-    ['OP','OC','CLIENTE','PAPEL','MEDIDA','QTDE PEDIDO','PRODUZIDO','PALETES','SALDO','%']
+    ['OP','OC','OF','CLIENTE','PAPEL','MEDIDA','QTDE PEDIDO','PRODUZIDO','PALETES','SALDO','%']
   ];
   let totalChapasTurno=0;
   const porCliente={};
@@ -1076,7 +1076,7 @@ async function exportarExcel() {
     const total=g.reduce((s,r)=>s+Number(r.chapas),0);
     const ped=parseInt(g[0].qtdePedido)||0;
     const pct=ped?Math.round(total/ped*100):'-';
-    resumo.push([of,g[0].oc||'',g[0].cliente,g[0].papelao,g[0].medida,ped,total,g.length,total-ped,pct+'%']);
+    resumo.push([of,g[0].oc||'',g[0].ofCentral||'',g[0].cliente,g[0].papelao,g[0].medida,ped,total,g.length,total-ped,pct+'%']);
     totalChapasTurno+=total;
     const cli=g[0].cliente||'—';
     if(!porCliente[cli]) porCliente[cli]={produzido:0,pedido:0};
@@ -1085,7 +1085,7 @@ async function exportarExcel() {
   }
 
   resumo.push(['']);
-  resumo.push(['','','','','','','TOTAL CHAPAS DO TURNO:',totalChapasTurno,'','']);
+  resumo.push(['','','','','','','','TOTAL CHAPAS DO TURNO:',totalChapasTurno,'','']);
 
   resumo.push(['']);
   resumo.push(['RESUMO POR CLIENTE — % DO PEDIDO CONCLUÍDO']);
@@ -1097,7 +1097,7 @@ async function exportarExcel() {
   });
 
   const wsResumo=XLSX.utils.aoa_to_sheet(resumo);
-  wsResumo['!cols']=[{wch:10},{wch:8},{wch:22},{wch:18},{wch:14},{wch:12},{wch:10},{wch:8},{wch:8},{wch:6}];
+  wsResumo['!cols']=[{wch:10},{wch:8},{wch:9},{wch:22},{wch:18},{wch:14},{wch:12},{wch:10},{wch:8},{wch:8},{wch:6}];
   XLSX.utils.book_append_sheet(wb,wsResumo,'Resumo');
 
   const nome='Producao_'+hoje().replace(/\//g,'-')+'_turno-'+turno+'.xlsx';
