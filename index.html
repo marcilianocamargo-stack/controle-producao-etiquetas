@@ -914,7 +914,11 @@ function imprimirEtiquetaRegistro(registro) {
   };
 
   const doc = gerarPDF(dados);
-  const fileName = 'etiqueta_OF' + dados.of + '_palete' + dados.numPalete + '.pdf';
+  const hojeArq = new Date();
+  const dataResumida = String(hojeArq.getDate()).padStart(2,'0') + '-' + String(hojeArq.getMonth()+1).padStart(2,'0');
+  const ofPart = dados.ofCentral ? ('OF' + dados.ofCentral + '_') : '';
+  const clientePart = dados.cliente ? (limparNomeArquivo(dados.cliente) + '_') : '';
+  const fileName = 'etiqueta_' + dataResumida + '_' + ofPart + clientePart + 'OP' + dados.of + '_palete' + dados.numPalete + '.pdf';
   const blob = doc.output('blob');
 
   if(navigator.share && navigator.canShare && navigator.canShare({files:[new File([blob], fileName, {type:'application/pdf'})]})) {
@@ -1100,7 +1104,11 @@ async function exportarExcel() {
   wsResumo['!cols']=[{wch:10},{wch:8},{wch:9},{wch:22},{wch:18},{wch:14},{wch:12},{wch:10},{wch:8},{wch:8},{wch:6}];
   XLSX.utils.book_append_sheet(wb,wsResumo,'Resumo');
 
-  const nome='Producao_'+hoje().replace(/\//g,'-')+'_turno-'+turno+'.xlsx';
+  const nomesClientes=Object.keys(porCliente).filter(c=>c&&c!=='—').map(limparNomeArquivo);
+  const clientesPart=nomesClientes.length
+    ? '_'+(nomesClientes.length>3 ? nomesClientes.slice(0,3).join('-')+'+'+(nomesClientes.length-3) : nomesClientes.join('-'))
+    : '';
+  const nome='Producao_'+hoje().replace(/\//g,'-')+'_turno-'+turno+clientesPart+'.xlsx';
 
   // Gera o blob do xlsx
   const wbArray = XLSX.write(wb, {bookType:'xlsx', type:'array'});
@@ -1137,6 +1145,7 @@ async function exportarExcel() {
 
 // ── UTILS ──────────────────────────────────────────────────────
 function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+function limparNomeArquivo(s){return String(s||'').trim().replace(/[\\/:*?"<>|]/g,'').replace(/\s+/g,'_');}
 function mostrarMsg(txt,ok){
   const el=document.getElementById('msgResult');
   el.textContent=txt;
