@@ -819,7 +819,7 @@ function gerarPDF(dados) {
   const logoH=W*0.364;
   const logoRatio=475/397; // largura/altura da imagem da logo
   const logoDrawW=logoH*logoRatio;
-  const logoX=left+(W-logoDrawW)/2;
+  const logoX=left;
   doc.addImage('data:image/jpeg;base64,'+LOGO_B64,'JPEG',logoX,topoFita,logoDrawW,logoH);
   let y = topoFita + logoH + 5;
 
