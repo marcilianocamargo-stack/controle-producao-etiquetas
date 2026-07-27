@@ -836,23 +836,21 @@ function gerarPDF(dados) {
   doc.text(dados.cliente, left+3, y+17);
   y += 28;
 
-  // Seção IDENTIFICAÇÃO DO PRODUTO (fundo verde Piquiri)
+  // Seção PAPELÃO (fundo verde Piquiri)
   doc.setFillColor(...GREEN);
-  doc.rect(left, y, W, 26, 'F');
+  doc.rect(left, y, W, 24, 'F');
   doc.setTextColor(255,255,255);
-  doc.setFont('helvetica','bold'); doc.setFontSize(9);
-  doc.text('IDENTIFICAÇÃO DO PRODUTO', left+3, y+5);
   doc.setFont('helvetica','bold'); doc.setFontSize(20);
   const lblPapelao = 'PAPELÃO: ';
-  doc.text(lblPapelao, left+3, y+22);
+  doc.text(lblPapelao, left+3, y+17);
   const lblPapelaoW = doc.getTextWidth(lblPapelao);
   const xValPapelao = left+3+lblPapelaoW;
   let szPap=36;
   doc.setFont('helvetica','bold'); doc.setFontSize(szPap);
   const maxWPap = (W-6)-lblPapelaoW;
   while(doc.getTextWidth(String(dados.papelao||'')) > maxWPap && szPap > 14) { szPap--; doc.setFontSize(szPap); }
-  doc.text(String(dados.papelao||''), xValPapelao, y+22);
-  y += 30;
+  doc.text(String(dados.papelao||''), xValPapelao, y+17);
+  y += 28;
 
   // Grade com bordas
   doc.setTextColor(0,0,0);
