@@ -823,10 +823,10 @@ function gerarPDF(dados) {
   doc.addImage('data:image/jpeg;base64,'+LOGO_B64,'JPEG',logoX,topoFita,logoDrawW,logoH);
   let y = topoFita + logoH + 5;
 
-  const BLUE=[14,114,188];
+  const GREEN=[32,115,70];
 
-  // Seção CLIENTE (fundo azul) - nome do cliente em destaque, sem rótulo "CLIENTE"
-  doc.setFillColor(...BLUE);
+  // Seção CLIENTE (fundo verde Piquiri) - nome do cliente em destaque, sem rótulo "CLIENTE"
+  doc.setFillColor(...GREEN);
   doc.rect(left, y, W, 24, 'F');
   doc.setTextColor(255,255,255);
   doc.setFont('helvetica','bold');
@@ -836,8 +836,8 @@ function gerarPDF(dados) {
   doc.text(dados.cliente, left+3, y+17);
   y += 28;
 
-  // Seção IDENTIFICAÇÃO DO PRODUTO (fundo azul)
-  doc.setFillColor(...BLUE);
+  // Seção IDENTIFICAÇÃO DO PRODUTO (fundo verde Piquiri)
+  doc.setFillColor(...GREEN);
   doc.rect(left, y, W, 26, 'F');
   doc.setTextColor(255,255,255);
   doc.setFont('helvetica','bold'); doc.setFontSize(9);
