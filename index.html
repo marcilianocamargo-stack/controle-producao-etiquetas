@@ -211,6 +211,7 @@ input.big{font-size:22px;font-weight:700;text-align:center;color:var(--ok)}
         <button onclick="limparBusca()">✕</button>
       </div>
       <select id="selOf" size="1"></select>
+      <div id="avisoDuplicOf" class="status-auto err" style="display:none;margin-top:8px;line-height:1.5"></div>
     </div>
 
     <div class="card" id="cardOfsPedido" style="display:none">
@@ -361,6 +362,22 @@ function agora() {
 function turnoAtual() {
   const h = new Date().getHours();
   return (h >= 7 && h < 18) ? 'Dia' : 'Noite';
+}
+// Identifica de forma única uma linha da programação (usado quando a mesma OP
+// aparece duplicada na planilha, cada linha sendo na verdade um pedido diferente)
+function chaveOrdem(o){
+  return o.of + '§' + (o.medida||'') + '§' + (o.cliente||'');
+}
+// Casa um registro salvo com uma linha da programação: prioriza a chave exata
+// (grava a partir desta correção); registros antigos (sem "chave") casam por OP+medida
+function regBateOrdem(r,o){
+  if(r.chave) return r.chave===chaveOrdem(o);
+  return r.of===o.of && r.medida===o.medida;
+}
+// Chave de agrupamento de um registro já salvo (Histórico/Excel) — registros
+// antigos sem "chave" agrupam por OP+medida, pra não misturar OPs duplicadas
+function chaveReg(r){
+  return r.chave || (r.of + '§' + (r.medida||'') + '§' + (r.cliente||''));
 }
 document.getElementById('dataHoje').textContent = 'Prime Ondulados · ' + hoje();
 
@@ -538,12 +555,19 @@ function carregarAba(){
 
 function popularOrdens(lista, aba){
   ordens=lista;
-  
+  ordens.forEach((o,i)=>o._i=i); // índice único da linha — usado pra distinguir OPs duplicadas
+
+  // Detecta números de OP que aparecem em mais de uma linha da planilha
+  const contagem={};
+  ordens.forEach(o=>{contagem[o.of]=(contagem[o.of]||0)+1;});
+  ordens.duplicadas=new Set(Object.keys(contagem).filter(k=>contagem[k]>1));
+
   // Atualiza qtdePedido nos registros salvos para refletir o arquivo atual
+  // (casa por OP + medida, não só por OP, pra não confundir OPs duplicadas)
   const regs = getRegistros();
   let atualizado = false;
   regs.forEach(r => {
-    const o = lista.find(x => x.of === r.of);
+    const o = lista.find(x => x.of === r.of && x.medida === r.medida) || lista.find(x => x.of === r.of);
     if (o && o.qtdePedido && r.qtdePedido !== o.qtdePedido) {
       r.qtdePedido = o.qtdePedido;
       r.medida = o.medida;
@@ -562,9 +586,24 @@ function popularOrdens(lista, aba){
   document.getElementById('cardPalete').style.display='block';
   document.getElementById('btnRegistrar').style.display='block';
   document.getElementById('btnRegistrarImprimir').style.display='block';
+  atualizarAvisoDuplicidade();
   atualizarPreview();
   sugerirProximoPalete();
   atualizarOfsPedido();
+}
+
+// Avisa o operador quando a planilha tem números de OP repetidos —
+// nesse caso cada linha pode ser um pedido diferente (cliente/medida distintos)
+function atualizarAvisoDuplicidade(){
+  const el=document.getElementById('avisoDuplicOf');
+  if(!el) return;
+  if(!ordens || !ordens.duplicadas || !ordens.duplicadas.size){
+    el.style.display='none';
+    return;
+  }
+  const lista=[...ordens.duplicadas].join(', ');
+  el.innerHTML='⚠ <strong>OP duplicada na planilha: '+esc(lista)+'</strong><br>Confira o cliente e a medida na lista/chips antes de registrar — pode ser um pedido diferente com o mesmo número de OP.';
+  el.style.display='block';
 }
 
 // ── OFs DO PEDIDO (chips coloridos — mesma lógica do Romaneio) ──
@@ -585,14 +624,15 @@ function atualizarOfsPedido(){
   const regs=getRegistros();
   const ofSel=document.getElementById('selOf').value;
   wrap.innerHTML=ordens.map(o=>{
-    const total=regs.filter(r=>r.of===o.of).reduce((s,r)=>s+Number(r.chapas),0);
+    const total=regs.filter(r=>regBateOrdem(r,o)).reduce((s,r)=>s+Number(r.chapas),0);
     const pedido=parseInt(o.qtdePedido)||0;
     const st=statusPedido(total,pedido)||'verde';
-    const sel=ofSel===o.of?' selecionado':'';
+    const sel=ofSel===String(o._i)?' selecionado':'';
+    const dup=ordens.duplicadas && ordens.duplicadas.has(o.of);
     const desc=[o.medida,o.papelao].filter(Boolean).join(' · ');
     const pct=pedido>0?Math.min(100,(total/pedido)*100):0;
-    return '<div class="of-chip '+st+sel+'" onclick="selecionarOfChip(\''+o.of+'\')">'
-         + '<div class="of-chip-top"><span class="dot"></span>OP '+esc(o.of)+'</div>'
+    return '<div class="of-chip '+st+sel+'" onclick="selecionarOfChip('+o._i+')">'
+         + '<div class="of-chip-top"><span class="dot"></span>OP '+esc(o.of)+(dup?' <span style="color:var(--danger)">⚠ duplicada</span>':'')+'</div>'
          + (desc?'<div class="of-chip-desc">'+esc(desc)+'</div>':'')
          + '<div class="of-chip-bar"><div class="of-chip-fill" style="width:'+pct+'%"></div></div>'
          + '<div class="of-chip-qtd">'+total.toLocaleString('pt-BR')+' / '+pedido.toLocaleString('pt-BR')+'</div>'
@@ -600,11 +640,12 @@ function atualizarOfsPedido(){
   }).join('');
 }
 
-// Seleciona uma OF a partir de um chip (atalho, sem digitar)
-function selecionarOfChip(of){
+// Seleciona uma OF a partir de um chip (atalho, sem digitar) — recebe o índice
+// único da linha, não o número da OP, pra funcionar certo com OPs duplicadas
+function selecionarOfChip(i){
   document.getElementById('buscaOf').value='';
   preencherSelect(ordens);
-  document.getElementById('selOf').value=of;
+  document.getElementById('selOf').value=String(i);
   atualizarPreview();
   sugerirProximoPalete();
   atualizarOfsPedido();
@@ -614,8 +655,15 @@ function preencherSelect(lista){
   const sel=document.getElementById('selOf');
   const atual=sel.value;
   sel.innerHTML='';
-  lista.forEach(o=>{const opt=document.createElement('option');opt.value=o.of;opt.textContent='OP '+o.of+(o.cliente?' · '+o.cliente:'');sel.appendChild(opt);});
-  if(atual && lista.find(o=>o.of===atual)) sel.value=atual;
+  lista.forEach(o=>{
+    const dup=ordens.duplicadas && ordens.duplicadas.has(o.of);
+    const opt=document.createElement('option');
+    opt.value=String(o._i);
+    opt.textContent='OP '+o.of+(o.cliente?' · '+o.cliente:'')+(dup&&o.medida?' · '+o.medida:'');
+    sel.appendChild(opt);
+  });
+  if(atual && lista.find(o=>String(o._i)===atual)) sel.value=atual;
+  atualizarAvisoDuplicidade();
   atualizarPreview();
   sugerirProximoPalete();
 }
@@ -625,7 +673,7 @@ function filtrarOf(){
   if(!busca){preencherSelect(ordens);return;}
   const f=ordens.filter(o=>o.of.includes(busca)||(o.cliente&&o.cliente.toLowerCase().includes(busca.toLowerCase())));
   preencherSelect(f);
-  if(f.length===1) document.getElementById('selOf').value=f[0].of;
+  if(f.length===1) document.getElementById('selOf').value=String(f[0]._i);
   atualizarPreview();
   atualizarOfsPedido();
 }
@@ -638,16 +686,19 @@ function limparBusca(){
 document.getElementById('selOf').addEventListener('change',()=>{atualizarPreview();sugerirProximoPalete();atualizarOfsPedido();});
 
 function atualizarPreview(){
-  const of=document.getElementById('selOf').value;
-  const o=ordens.find(x=>x.of===of); if(!o) return;
+  const i=document.getElementById('selOf').value;
+  const o=ordens[i]; if(!o) return;
   let html='';
+  if(ordens.duplicadas && ordens.duplicadas.has(o.of)){
+    html+='<div style="color:var(--danger);font-weight:800">⚠ OP duplicada na planilha — confira cliente/medida antes de registrar!</div>';
+  }
   if(o.cliente)    html+='<div><span>Cliente: </span><strong>'+esc(o.cliente)+'</strong></div>';
   if(o.of)         html+='<div><span>OP: </span><strong>'+esc(o.of)+'</strong></div>';
   if(o.papelao)    html+='<div><span>Papel: </span><strong>'+esc(o.papelao)+'</strong></div>';
   if(o.qtdePedido) html+='<div><span>Qtde pedido: </span><strong>'+esc(o.qtdePedido)+' chapas</strong></div>';
   if(o.medida)     html+='<div><span>Medida: </span><strong>'+esc(o.medida)+'</strong></div>';
   const regs = getRegistros();
-  const paletes = regs.filter(r=>r.of===of);
+  const paletes = regs.filter(r=>regBateOrdem(r,o));
   const total = paletes.reduce((s,r)=>s+Number(r.chapas),0);
   const pedido = parseInt(o.qtdePedido) || 0;
   if(pedido > 0) {
@@ -660,8 +711,9 @@ function atualizarPreview(){
 }
 
 function sugerirProximoPalete(){
-  const of=document.getElementById('selOf').value; if(!of) return;
-  const regs=getRegistros().filter(r=>r.of===of);
+  const i=document.getElementById('selOf').value; if(i==='') return;
+  const o=ordens[i]; if(!o) return;
+  const regs=getRegistros().filter(r=>regBateOrdem(r,o));
   const nums=regs.map(r=>parseInt(r.numPalete)||0);
   const proximo=nums.length?Math.max(...nums)+1:1;
   document.getElementById('numPalete').value=proximo;
@@ -754,8 +806,8 @@ function salvarRegistros(regs){
 
 // ── REGISTRAR PALETE ───────────────────────────────────────────
 function registrarPalete(imprimirEtiqueta=false){
-  const of=document.getElementById('selOf').value;
-  const o=ordens.find(x=>x.of===of);
+  const i=document.getElementById('selOf').value;
+  const o=ordens[i];
   if(!o){mostrarMsg('Selecione uma OP válida.',false);return;}
   const numPalete=document.getElementById('numPalete').value;
   const chapas=document.getElementById('qtdePalete').value;
@@ -765,6 +817,7 @@ function registrarPalete(imprimirEtiqueta=false){
     data: hoje(),
     hora: agora(),
     of: o.of,
+    chave: chaveOrdem(o),
     ofCentral: ordens.ofCentral || '',
     oc: o.oc || '',
     cliente: o.cliente,
@@ -949,20 +1002,21 @@ function renderHistorico(){
 
   const grupos={};
   regs.forEach(r=>{
-    if(!grupos[r.of]) grupos[r.of]={info:r,paletes:[]};
-    grupos[r.of].paletes.push(r);
+    const k=chaveReg(r);
+    if(!grupos[k]) grupos[k]={info:r,paletes:[]};
+    grupos[k].paletes.push(r);
   });
 
   let html='';
-  for(const of in grupos){
-    const g=grupos[of];
+  for(const k in grupos){
+    const g=grupos[k];
     const totalProd=g.paletes.reduce((s,p)=>s+Number(p.chapas),0);
     const qtdePed=parseInt(g.info.qtdePedido)||0;
     const pct=qtdePed?Math.min(100,Math.round(totalProd/qtdePed*100)):null;
     html+=`<div class="of-grupo">
       <div class="of-header">
         <div>
-          <span class="of-num">OP ${of}</span>
+          <span class="of-num">OP ${esc(g.info.of)}</span>
           <div class="of-cli">${esc(g.info.cliente)} · ${esc(g.info.papelao)} · ${esc(g.info.medida)}</div>
         </div>
         <div class="of-total">${g.paletes.length} pal · ${totalProd.toLocaleString('pt-BR')} ch${pct!==null?' ('+pct+'%)':''}</div>
@@ -1020,10 +1074,10 @@ async function exportarExcel() {
   // ABA DETALHE
   const detalhe=[];
   const grupos={};
-  regs.forEach(r=>{if(!grupos[r.of])grupos[r.of]=[];grupos[r.of].push(r);});
+  regs.forEach(r=>{const k=chaveReg(r);if(!grupos[k])grupos[k]=[];grupos[k].push(r);});
 
-  for(const of in grupos){
-    const g=grupos[of];
+  for(const k in grupos){
+    const g=grupos[k];
     detalhe.push(['','','','','','','','','','','','','','','','']);
     detalhe.push([
       'OP','OC','OF','CLIENTE','PAPEL','MEDIDA','QTDE PEDIDO',
@@ -1076,12 +1130,12 @@ async function exportarExcel() {
   ];
   let totalChapasTurno=0;
   const porCliente={};
-  for(const of in grupos){
-    const g=grupos[of];
+  for(const k in grupos){
+    const g=grupos[k];
     const total=g.reduce((s,r)=>s+Number(r.chapas),0);
     const ped=parseInt(g[0].qtdePedido)||0;
     const pct=ped?Math.round(total/ped*100):'-';
-    resumo.push([of,g[0].oc||'',g[0].ofCentral||'',g[0].cliente,g[0].papelao,g[0].medida,ped,total,g.length,total-ped,pct+'%']);
+    resumo.push([g[0].of,g[0].oc||'',g[0].ofCentral||'',g[0].cliente,g[0].papelao,g[0].medida,ped,total,g.length,total-ped,pct+'%']);
     totalChapasTurno+=total;
     const cli=g[0].cliente||'—';
     if(!porCliente[cli]) porCliente[cli]={produzido:0,pedido:0};

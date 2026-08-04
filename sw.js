@@ -1,4 +1,4 @@
-const CACHE_NAME = 'prime-producao-etiquetas-v7';
+const CACHE_NAME = 'prime-producao-etiquetas-v8';
 
 const FILES_TO_CACHE = [
   './index.html',
