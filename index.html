@@ -672,6 +672,24 @@ function filtrarOf(){
   const busca=document.getElementById('buscaOf').value.trim();
   if(!busca){preencherSelect(ordens);return;}
   const f=ordens.filter(o=>o.of.includes(busca)||(o.cliente&&o.cliente.toLowerCase().includes(busca.toLowerCase())));
+  // Não achou na aba (pedido) atual — procura a OP nas demais abas do arquivo
+  // do dia, já que a busca antes só enxergava o pedido selecionado no passo 2
+  if(!f.length && workbook){
+    const abaAtual=document.getElementById('selAba').value;
+    for(const aba of workbook.SheetNames){
+      if(aba===abaAtual) continue;
+      const lista=processarAba(workbook.Sheets[aba]);
+      if(!lista||!lista.length) continue;
+      const achou=lista.some(o=>o.of.includes(busca)||(o.cliente&&o.cliente.toLowerCase().includes(busca.toLowerCase())));
+      if(achou){
+        document.getElementById('selAba').value=aba;
+        carregarAba();
+        mostrarToast('↻ OP encontrada no pedido "'+aba+'" — pedido trocado automaticamente');
+        filtrarOf();
+        return;
+      }
+    }
+  }
   preencherSelect(f);
   if(f.length===1) document.getElementById('selOf').value=String(f[0]._i);
   atualizarPreview();
