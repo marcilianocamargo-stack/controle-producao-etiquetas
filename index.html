@@ -358,10 +358,34 @@ function hoje() {
 function agora() {
   return new Date().toLocaleTimeString('pt-BR', {hour:'2-digit',minute:'2-digit'});
 }
-// 07h-18h = turno dia · resto = turno noite
-function turnoAtual() {
-  const h = new Date().getHours();
-  return (h >= 7 && h < 18) ? 'Dia' : 'Noite';
+// Determina o turno/data de FABRICAÇÃO de um registro pelo horário em que o
+// palete foi produzido (não pelo horário em que o Excel é gerado) — evita
+// relatório saindo com turno/data errados quando o operador esquece de
+// exportar e só manda no dia seguinte. 08h-18h = Dia; resto = Noite. Madrugada
+// (00h-08h) pertence ao turno da Noite que começou no dia anterior.
+function turnoEDataRegistro(r){
+  const [dd,mm,yyyy] = String(r.data||'').split('/').map(Number);
+  const dt = new Date(yyyy||2000, (mm||1)-1, dd||1);
+  const h = parseInt(String(r.hora||'0').split(':')[0], 10) || 0;
+  const dia = h >= 8 && h < 18;
+  if (!dia && h < 8) dt.setDate(dt.getDate() - 1);
+  const dataStr = String(dt.getDate()).padStart(2,'0') + '/' + String(dt.getMonth()+1).padStart(2,'0') + '/' + dt.getFullYear();
+  return { turno: dia ? 'Dia' : 'Noite', data: dataStr };
+}
+// Dado um conjunto de registros, decide qual turno/data representa o lote
+// (o turno com mais chapas produzidas) — usado no relatório/nome do arquivo.
+// Se houver mais de um turno/dia misturado no lote, avisa no resumo.
+function turnoEDataDoLote(regs){
+  const porGrupo={};
+  regs.forEach(r=>{
+    const td=turnoEDataRegistro(r);
+    const k=td.data+'|'+td.turno;
+    porGrupo[k]=(porGrupo[k]||0)+(Number(r.chapas)||0);
+  });
+  let melhorK=null, melhorQtd=-1;
+  for(const k in porGrupo){ if(porGrupo[k]>melhorQtd){melhorQtd=porGrupo[k];melhorK=k;} }
+  const [data,turno]=melhorK.split('|');
+  return { data, turno, misto: Object.keys(porGrupo).length>1 };
 }
 // Identifica de forma única uma linha da programação (usado quando a mesma OP
 // aparece duplicada na planilha, cada linha sendo na verdade um pedido diferente)
@@ -942,8 +966,10 @@ function gerarPDF(dados) {
     }
   }
 
-  const hoje = new Date();
-  const dataFab = hoje.toLocaleDateString('pt-BR');
+  // Data/hora de fabricação = momento em que o palete foi registrado (não o
+  // momento em que a etiqueta é reimpressa), pra identificar o turno certo
+  // em caso de falha na produção.
+  const dataFab = (dados.data||'') + (dados.hora ? '  ' + dados.hora : '');
 
   // Linha 0: OF central da programação (nº único por lote — Nota Fiscal/FSC)
   celula(left, y, W, 24, 'ORDEM DE FABRICAÇÃO (OF)', dados.ofCentral||'—', 36);
@@ -959,8 +985,8 @@ function gerarPDF(dados) {
   celula(left+HC, y, HC, 24, 'REFERÊNCIA', dados.referencia, 26);
   y += 24;
 
-  // Linha 3: DATA DE FABRICAÇÃO | QUANT. PEDIDO
-  celula(left,    y, HC, 24, 'DATA DE FABRICAÇÃO', dataFab, 24);
+  // Linha 3: DATA/HORA DE FABRICAÇÃO | QUANT. PEDIDO
+  celula(left,    y, HC, 24, 'DATA/HORA DE FABRICAÇÃO', dataFab, 18);
   celula(left+HC, y, HC, 24, 'QUANT. PEDIDO', dados.qtdePedido, 36);
   y += 24;
 
@@ -982,7 +1008,9 @@ function imprimirEtiquetaRegistro(registro) {
     referencia: registro.referencia || '',
     qtdePedido: registro.qtdePedido || '',
     numPalete: registro.numPalete || '',
-    qtdePalete: String(registro.chapas || '')
+    qtdePalete: String(registro.chapas || ''),
+    data: registro.data || '',
+    hora: registro.hora || ''
   };
 
   const doc = gerarPDF(dados);
@@ -1141,11 +1169,17 @@ async function exportarExcel() {
     XLSX.utils.book_append_sheet(wb,wsFotos,'Fotos');
   }
 
-  // ABA RESUMO
-  const turno=turnoAtual();
-  const resumo=[['PRODUÇÃO '+hoje()+' — TURNO '+turno.toUpperCase()],[''],
+  // ABA RESUMO — data/turno vêm do horário real de fabricação dos registros
+  // (não do momento em que o Excel é gerado), pra não sair errado quando o
+  // operador esquece de exportar e só manda no dia seguinte.
+  const loteInfo=turnoEDataDoLote(regs);
+  const dataRelatorio=loteInfo.data, turno=loteInfo.turno;
+  const resumo=[['PRODUÇÃO '+dataRelatorio+' — TURNO '+turno.toUpperCase()],[''],
     ['OP','OC','OF','CLIENTE','PAPEL','MEDIDA','QTDE PEDIDO','PRODUZIDO','PALETES','SALDO','%']
   ];
+  if(loteInfo.misto){
+    resumo.splice(1,0,['⚠ Atenção: este lote contém registros de mais de um turno/dia — confira antes de enviar.']);
+  }
   let totalChapasTurno=0;
   const porCliente={};
   for(const k in grupos){
@@ -1181,7 +1215,7 @@ async function exportarExcel() {
   const clientesPart=nomesClientes.length
     ? '_'+(nomesClientes.length>3 ? nomesClientes.slice(0,3).join('-')+'+'+(nomesClientes.length-3) : nomesClientes.join('-'))
     : '';
-  const nome='Producao_'+hoje().replace(/\//g,'-')+'_turno-'+turno+clientesPart+'.xlsx';
+  const nome='Producao_'+dataRelatorio.replace(/\//g,'-')+'_turno-'+turno+clientesPart+'.xlsx';
 
   // Gera o blob do xlsx
   const wbArray = XLSX.write(wb, {bookType:'xlsx', type:'array'});
