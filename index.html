@@ -906,12 +906,15 @@ if(imprimirEtiqueta){
 // Página A4. Unidades em mm. Fonte Helvetica (= Arial). Tudo em negrito.
 function gerarPDF(dados) {
   const doc = new jsPDF({unit:'mm', format:'a4', orientation:'portrait'});
-  const PW=210, left=14, topoFita=40;
+  const PW=210, PH=297, left=14;
   const W=PW-28; // 182mm
   const HC=W/2;  // 91mm por coluna
 
   // Logo (Piquiri Papéis)
   const logoH=W*0.364;
+  // Centraliza o conteúdo verticalmente na página A4 (logo + cliente + papelão + 5 linhas da grade)
+  const contentH = logoH + 5 + 28 + 28 + 24*5;
+  const topoFita = (PH - contentH) / 2;
   const logoRatio=475/397; // largura/altura da imagem da logo
   const logoDrawW=logoH*logoRatio;
   const logoX=left;
