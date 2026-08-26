@@ -1,13 +1,13 @@
 {
   "data": "26/08/2026",
   "pesoHoje": 2622.62,
-  "chapasHoje": 4920,
-  "paletes": 10,
+  "chapasHoje": 4922,
+  "paletes": 11,
   "porTurno": {
     "dia": {
       "peso": 2622.62,
-      "chapas": 4920,
-      "paletes": 10
+      "chapas": 4922,
+      "paletes": 11
     },
     "noite": {
       "peso": 0.0,
@@ -15,5 +15,5 @@
       "paletes": 0
     }
   },
-  "atualizadoEm": "2026-08-26T16:06:58"
+  "atualizadoEm": "2026-08-26T16:07:32"
 }
