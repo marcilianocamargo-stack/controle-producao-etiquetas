@@ -3,17 +3,17 @@
   "pesoHoje": 2875.79,
   "chapasHoje": 5772,
   "paletes": 13,
-  "porTurno": {
-    "dia": {
-      "peso": 2875.79,
-      "chapas": 5772,
-      "paletes": 13
-    },
-    "noite": {
-      "peso": 0.0,
-      "chapas": 0,
-      "paletes": 0
-    }
+  "turnoDiaFechado": {
+    "data": "25/08/2026",
+    "peso": 0.0,
+    "chapas": 0,
+    "paletes": 0
   },
-  "atualizadoEm": "2026-08-26T16:08:36"
+  "turnoNoiteFechado": {
+    "data": "25/08/2026",
+    "peso": 0.0,
+    "chapas": 0,
+    "paletes": 0
+  },
+  "atualizadoEm": "2026-08-26T16:58:58"
 }
