@@ -15,5 +15,12 @@
     "chapas": 1550,
     "paletes": 2
   },
-  "atualizadoEm": "2026-08-26T19:35:20"
+  "turnoAtual": {
+    "tipo": "noite",
+    "data": "26/08/2026",
+    "peso": 1153.64,
+    "chapas": 5870,
+    "paletes": 8
+  },
+  "atualizadoEm": "2026-08-26T20:29:07"
 }
