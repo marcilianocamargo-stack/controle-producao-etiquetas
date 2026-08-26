@@ -346,6 +346,7 @@ input.big{font-size:22px;font-weight:700;text-align:center;color:var(--ok)}
 let ordens = [], workbook = null;
 let fotosAtuais = [];
 const STORAGE_KEY = 'prime_producao_v1';
+const N8N_WEBHOOK_URL = 'http://172.22.1.105:5678/webhook/producao-chapas';
 const { jsPDF } = window.jspdf;
 
 // Logo da etiqueta (mesmo layout do app Etiquetas-Prime)
@@ -846,6 +847,23 @@ function salvarRegistros(regs){
   localStorage.setItem(STORAGE_KEY, JSON.stringify(regs));
 }
 
+// ── ENVIO EM TEMPO REAL PARA O N8N (dashboard) ──────────────────
+// Melhor esforço: nunca bloqueia nem atrasa o registro/impressão da etiqueta.
+// Se falhar (wifi caiu, n8n fora do ar), guarda pra reenviar depois.
+function enviarParaN8n(registro){
+  const payload = {...registro, fotos: (registro.fotos||[]).length};
+  fetch(N8N_WEBHOOK_URL, {
+    method: 'POST',
+    headers: {'Content-Type':'application/json'},
+    body: JSON.stringify(payload),
+    keepalive: true
+  }).catch(()=>{
+    const pendentes = JSON.parse(localStorage.getItem('pendentes_n8n')||'[]');
+    pendentes.push(payload);
+    localStorage.setItem('pendentes_n8n', JSON.stringify(pendentes));
+  });
+}
+
 // ── REGISTRAR PALETE ───────────────────────────────────────────
 function registrarPalete(imprimirEtiqueta=false){
   const i=document.getElementById('selOf').value;
@@ -887,6 +905,8 @@ if(imprimirEtiqueta){
     imprimirEtiquetaRegistro(registro);
   }, 500);
 }
+
+try { enviarParaN8n(registro); } catch(e) { /* nunca interrompe o registro/impressao */ }
 
   document.getElementById('numPalete').value=parseInt(numPalete)+1;
   document.getElementById('qtdePalete').value='';
