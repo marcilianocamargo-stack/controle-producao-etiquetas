@@ -864,6 +864,44 @@ function enviarParaN8n(registro){
   });
 }
 
+// ── TABELA DE GRAMATURA (g/m²) — Tabela de especificação de produto Prime ──
+// Fonte: G:\Meu Drive\Prime\desenvolvimento\arquivos originais\
+//        Tabela de especificação de produto prime 1.xlsx
+// P40B e P50B usam o valor da "Linha papel Piquiri" (não o da tabela
+// principal) por decisão do usuário. P25C KRAFT não existe na planilha
+// como produto próprio — usa o mesmo valor de P25C por decisão do usuário.
+const GRAMATURA_TABELA = {
+  'P25B': 315, 'P25C': 324, 'P25C KRAFT': 324,
+  'P35B': 345, 'P35C': 354,
+  'P40B': 365, 'P40C': 365, // P40B = linha Piquiri
+  'P45B': 365, 'P45C': 375,
+  'P50B': 410, 'P50C': 399, // P50B = linha Piquiri
+  'P55B': 398, 'P55C': 409,
+  'P60B': 428, 'P60C': 440,
+  'P70B': 458, 'P70C': 470,
+  'P80B': 514, 'P80C': 528,
+  'P85B': 560, 'P85C': 576,
+  'PW40B': 365, 'PW40C': 375,
+  'PW50B': 388, 'PW50C': 399,
+  'PK40B': 345, 'PK45B': 378, 'PK50B': 408, 'PK70B': 448, 'PK80B': 504,
+  'P50D': 538, 'P55D': 568, 'P70D': 632, 'P80D': 662,
+};
+
+// peso(kg) = largura(m) x comprimento(m) x qtde de chapas x gramatura(g/m²) / 1000
+// Se o operador digitou gramatura manualmente no formulário, ela tem prioridade
+// sobre a tabela (pode refletir um lote com gramatura diferente da especificação padrão).
+function calcularPesoKg(papelao, medida, chapas, gramaturaManual){
+  const gramManual = parseFloat(String(gramaturaManual||'').replace(',','.'));
+  const gram = (gramManual > 0) ? gramManual : GRAMATURA_TABELA[String(papelao||'').trim().toUpperCase()];
+  if(!gram) return null;
+  const nums = String(medida||'').match(/\d+[.,]?\d*/g);
+  if(!nums || nums.length < 2) return null;
+  const largura = parseFloat(nums[0].replace(',','.'));
+  const comprimento = parseFloat(nums[1].replace(',','.'));
+  if(!largura || !comprimento || !chapas) return null;
+  return Math.round(largura * comprimento * chapas * gram / 1000 * 100) / 100;
+}
+
 // ── REGISTRAR PALETE ───────────────────────────────────────────
 function registrarPalete(imprimirEtiqueta=false){
   const i=document.getElementById('selOf').value;
@@ -888,6 +926,7 @@ function registrarPalete(imprimirEtiqueta=false){
     numPalete: String(parseInt(numPalete)).padStart(2,'0'),
     chapas: parseInt(chapas),
     gramatura: document.getElementById('gramatura').value.trim(),
+    peso: calcularPesoKg(o.papelao, o.medida, parseInt(chapas), document.getElementById('gramatura').value.trim()),
     coluna: document.getElementById('coluna').value.trim(),
     resultado: document.getElementById('resultado').value,
     observacoes: document.getElementById('observacoes').value.trim(),
