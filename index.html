@@ -293,6 +293,7 @@ input.big{font-size:22px;font-weight:700;text-align:center;color:var(--ok)}
     <!-- Botões exportar na aba Registro -->
     <div class="export-row" id="exportRowReg">
       <button class="btn-export" onclick="exportarExcel()">⬇ Baixar Excel</button>
+      <button class="btn-export" onclick="sincronizarComServidor(true)">🔄 Sincronizar com servidor</button>
     </div>
 
   </div>
@@ -307,6 +308,7 @@ input.big{font-size:22px;font-weight:700;text-align:center;color:var(--ok)}
     <!-- Botões exportar na aba Histórico -->
     <div class="export-row" id="exportRowHist">
       <button class="btn-export" onclick="exportarExcel()">⬇ Baixar Excel</button>
+      <button class="btn-export" onclick="sincronizarComServidor(true)">🔄 Sincronizar com servidor</button>
     </div>
 
     <button class="btn-clear" id="btnClear" onclick="limparDia()" style="display:none">
@@ -849,7 +851,9 @@ function salvarRegistros(regs){
 
 // ── ENVIO EM TEMPO REAL PARA O N8N (dashboard) ──────────────────
 // Melhor esforço: nunca bloqueia nem atrasa o registro/impressão da etiqueta.
-// Se falhar (wifi caiu, n8n fora do ar), guarda pra reenviar depois.
+// Se falhar (wifi caiu, n8n fora do ar, ou o túnel respondeu com erro tipo
+// 530), guarda pra reenviar depois. O servidor descarta duplicata sozinho
+// (chave OF+palete), então é seguro reenviar sem checar antes.
 function enviarParaN8n(registro){
   const payload = {...registro, fotos: (registro.fotos||[]).length};
   fetch(N8N_WEBHOOK_URL, {
@@ -857,11 +861,47 @@ function enviarParaN8n(registro){
     headers: {'Content-Type':'application/json'},
     body: JSON.stringify(payload),
     keepalive: true
+  }).then(resp => {
+    if (!resp.ok) guardarPendente(payload);
   }).catch(()=>{
-    const pendentes = JSON.parse(localStorage.getItem('pendentes_n8n')||'[]');
-    pendentes.push(payload);
-    localStorage.setItem('pendentes_n8n', JSON.stringify(pendentes));
+    guardarPendente(payload);
   });
+}
+
+function guardarPendente(payload){
+  const pendentes = JSON.parse(localStorage.getItem('pendentes_n8n')||'[]');
+  pendentes.push(payload);
+  localStorage.setItem('pendentes_n8n', JSON.stringify(pendentes));
+}
+
+// Tenta reenviar a fila de pendentes (falhas anteriores) e, opcionalmente,
+// TODOS os registros salvos localmente no aparelho — útil pra recuperar
+// paletes que "pareciam entregues" mas não chegaram por causa de uma
+// instabilidade no servidor (não só falha de rede).
+async function sincronizarComServidor(reenviarTudo){
+  const lista = reenviarTudo
+    ? getRegistros().map(r => ({...r, fotos:(r.fotos||[]).length}))
+    : JSON.parse(localStorage.getItem('pendentes_n8n')||'[]');
+
+  if (!lista.length){
+    mostrarToast(reenviarTudo ? 'Nada salvo neste aparelho.' : 'Nenhum pendente.');
+    return;
+  }
+
+  mostrarToast(`Sincronizando ${lista.length} registro(s)...`);
+  const aindaPendentes = [];
+  for (const payload of lista){
+    try{
+      const resp = await fetch(N8N_WEBHOOK_URL, {
+        method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(payload)
+      });
+      if (!resp.ok) aindaPendentes.push(payload);
+    }catch(e){
+      aindaPendentes.push(payload);
+    }
+  }
+  localStorage.setItem('pendentes_n8n', JSON.stringify(aindaPendentes));
+  mostrarToast(`Sincronizado: ${lista.length - aindaPendentes.length} ok, ${aindaPendentes.length} falharam.`);
 }
 
 // ── TABELA DE GRAMATURA (g/m²) — Tabela de especificação de produto Prime ──
@@ -1404,6 +1444,14 @@ if ('serviceWorker' in navigator) {
       .catch(err => console.log('Erro SW:', err));
   });
 }
+
+// Ao abrir o app, tenta silenciosamente reenviar qualquer coisa que ficou
+// pendente de uma sessão anterior (falha de rede ou instabilidade do
+// servidor). Não bloqueia nem avisa nada se não tiver pendente.
+window.addEventListener('load', () => {
+  const pendentes = JSON.parse(localStorage.getItem('pendentes_n8n')||'[]');
+  if (pendentes.length) sincronizarComServidor(false);
+});
 </script>
 </body>
 </html>
