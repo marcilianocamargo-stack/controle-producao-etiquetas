@@ -2,6 +2,28 @@
   "paletes": [
     {
       "data": "26/08/2026",
+      "hora": "11:03",
+      "of": "262277",
+      "chave": "262277§0,946 X 2,100§PCBOX EMBALAGENS LTDA",
+      "ofCentral": "1142",
+      "oc": "1649",
+      "cliente": "PCBOX EMBALAGENS LTDA",
+      "papelao": "P25B",
+      "medida": "0,946 X 2,100",
+      "qtdePedido": "2000",
+      "referencia": "212x154x214x154x212",
+      "numPalete": "03",
+      "chapas": 375,
+      "gramatura": "",
+      "coluna": "",
+      "resultado": "OK",
+      "observacoes": "",
+      "fotos": 0,
+      "recebidoEm": "2026-08-26T11:03:21",
+      "peso": 234.67
+    },
+    {
+      "data": "26/08/2026",
       "hora": "11:45",
       "of": "262277",
       "chave": "262277§0,946 X 2,100§PCBOX EMBALAGENS LTDA",
@@ -1141,5 +1163,5 @@
       "recebidoEm": "2026-08-27T13:38:17"
     }
   ],
-  "atualizadoEm": "2026-08-27T13:46:13"
+  "atualizadoEm": "2026-08-27T13:46:46"
 }
