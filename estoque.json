@@ -1359,7 +1359,29 @@
       "observacoes": "",
       "fotos": 0,
       "recebidoEm": "2026-08-27T14:48:58"
+    },
+    {
+      "data": "27/08/2026",
+      "hora": "15:19",
+      "of": "262288",
+      "chave": "262288§0,385 X 1,210§Favinco",
+      "ofCentral": "1141",
+      "oc": "060",
+      "cliente": "Favinco",
+      "papelao": "P55D",
+      "medida": "0,385 X 1,210",
+      "qtdePedido": "300",
+      "referencia": "135x115x135",
+      "numPalete": "01",
+      "chapas": 355,
+      "gramatura": "",
+      "peso": 93.93,
+      "coluna": "",
+      "resultado": "OK",
+      "observacoes": "",
+      "fotos": 0,
+      "recebidoEm": "2026-08-27T15:19:06"
     }
   ],
-  "atualizadoEm": "2026-08-27T15:15:09"
+  "atualizadoEm": "2026-08-27T15:19:10"
 }
