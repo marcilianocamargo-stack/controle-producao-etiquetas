@@ -951,6 +951,22 @@ function registrarPalete(imprimirEtiqueta=false){
   const chapas=document.getElementById('qtdePalete').value;
   if(!numPalete||!chapas){mostrarMsg('Preencha o nº do palete e a quantidade de chapas.',false);return;}
 
+  // Palete nunca deveria repetir número dentro da mesma OP (cada um é uma
+  // unidade física distinta) -- confere só o que já está salvo NESTE
+  // aparelho (checagem local, instantânea, não atrasa a impressão) e avisa
+  // se o número já foi usado, pra pegar erro de digitação antes de imprimir.
+  const numPaleteFmt = String(parseInt(numPalete)).padStart(2,'0');
+  const duplicado = getRegistros().find(r => r.of === o.of && r.numPalete === numPaleteFmt);
+  if (duplicado) {
+    const continuar = confirm(
+      `⚠ A OP ${o.of} já tem um Palete ${numPaleteFmt} registrado neste aparelho ` +
+      `(${duplicado.chapas} chapas, às ${duplicado.hora}).\n\n` +
+      `Isso normalmente é erro de digitação no número do palete.\n\n` +
+      `Quer continuar mesmo assim e registrar outro palete com o MESMO número?`
+    );
+    if (!continuar) { document.getElementById('numPalete').focus(); return; }
+  }
+
   const registro={
     data: hoje(),
     hora: agora(),
