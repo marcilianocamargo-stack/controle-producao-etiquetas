@@ -951,15 +951,17 @@ function registrarPalete(imprimirEtiqueta=false){
   const chapas=document.getElementById('qtdePalete').value;
   if(!numPalete||!chapas){mostrarMsg('Preencha o nº do palete e a quantidade de chapas.',false);return;}
 
-  // Palete nunca deveria repetir número dentro da mesma OP (cada um é uma
-  // unidade física distinta) -- confere só o que já está salvo NESTE
-  // aparelho (checagem local, instantânea, não atrasa a impressão) e avisa
-  // se o número já foi usado, pra pegar erro de digitação antes de imprimir.
+  // Palete nunca deveria repetir número dentro do MESMO pedido (OP + OC --
+  // uma OP pode ter mais de um OC dentro dela, e cada OC numera os paletes
+  // dele do 01 em diante, então "Palete 01" pode legitimamente repetir
+  // entre OCs diferentes da mesma OP; só é suspeito se repetir dentro do
+  // MESMO OC). Confere só o que já está salvo NESTE aparelho (checagem
+  // local, instantânea, não atrasa a impressão).
   const numPaleteFmt = String(parseInt(numPalete)).padStart(2,'0');
-  const duplicado = getRegistros().find(r => r.of === o.of && r.numPalete === numPaleteFmt);
+  const duplicado = getRegistros().find(r => r.of === o.of && (r.oc || '') === (o.oc || '') && r.numPalete === numPaleteFmt);
   if (duplicado) {
     const continuar = confirm(
-      `⚠ A OP ${o.of} já tem um Palete ${numPaleteFmt} registrado neste aparelho ` +
+      `⚠ A OP ${o.of}${o.oc ? ' (OC ' + o.oc + ')' : ''} já tem um Palete ${numPaleteFmt} registrado neste aparelho ` +
       `(${duplicado.chapas} chapas, às ${duplicado.hora}).\n\n` +
       `Isso normalmente é erro de digitação no número do palete.\n\n` +
       `Quer continuar mesmo assim e registrar outro palete com o MESMO número?`
