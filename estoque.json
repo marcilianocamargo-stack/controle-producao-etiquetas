@@ -812,28 +812,6 @@
     },
     {
       "data": "27/08/2026",
-      "hora": "08:42",
-      "of": "262274",
-      "chave": "262274§0,449 X 1,102§Favinco",
-      "ofCentral": "1141",
-      "oc": "058",
-      "cliente": "Favinco",
-      "papelao": "P25B",
-      "medida": "0,449 X 1,102",
-      "qtdePedido": "1050",
-      "referencia": "102x245x102",
-      "numPalete": "01",
-      "chapas": 1050,
-      "gramatura": "",
-      "peso": 163.65,
-      "coluna": "",
-      "resultado": "OK",
-      "observacoes": "",
-      "fotos": 0,
-      "recebidoEm": "2026-08-27T08:42:53"
-    },
-    {
-      "data": "27/08/2026",
       "hora": "09:22",
       "of": "262305",
       "chave": "262305§0,880 X 1,280§RM Embalagens",
@@ -853,28 +831,6 @@
       "observacoes": "",
       "fotos": 0,
       "recebidoEm": "2026-08-27T09:22:32"
-    },
-    {
-      "data": "27/08/2026",
-      "hora": "09:52",
-      "of": "262289",
-      "chave": "262289§0,411 X 1,090§Favinco",
-      "ofCentral": "1141",
-      "oc": "060",
-      "cliente": "Favinco",
-      "papelao": "P25B",
-      "medida": "0,411 X 1,090",
-      "qtdePedido": "1000",
-      "referencia": "103x205x103",
-      "numPalete": "01",
-      "chapas": 530,
-      "gramatura": "",
-      "peso": 74.79,
-      "coluna": "",
-      "resultado": "OK",
-      "observacoes": "",
-      "fotos": 0,
-      "recebidoEm": "2026-08-27T09:52:50"
     },
     {
       "data": "27/08/2026",
@@ -1427,5 +1383,5 @@
       "recebidoEm": "2026-08-27T17:22:17"
     }
   ],
-  "atualizadoEm": "2026-08-27T17:22:20"
+  "atualizadoEm": "2026-08-27T17:22:41"
 }
