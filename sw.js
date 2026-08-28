@@ -1,10 +1,8 @@
-const CACHE_NAME = 'prime-producao-etiquetas-v12';
+const CACHE_NAME = 'prime-producao-etiquetas-v13';
 
 const FILES_TO_CACHE = [
   './index.html',
   './manifest.json',
-  './estoque.html',
-  './manifest-estoque.json',
   './icon-192.png',
   './icon-512.png',
   'https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js',
@@ -35,23 +33,19 @@ self.addEventListener('fetch', event => {
     return; // deixa o fetch original (com no-store) buscar direto da rede
   }
 
-  // 2) Páginas (index.html, estoque.html) / navegação: REDE PRIMEIRO (app
-  //    sempre atualizado), cache só como reserva quando estiver offline.
-  //    Guarda pela própria requisição (não fixo em "./index.html"), senão
-  //    o cache de uma página pisava no da outra.
+  // 2) index.html / navegação: REDE PRIMEIRO (app sempre atualizado),
+  //    cache só como reserva quando estiver offline.
   if (event.request.mode === 'navigate' ||
       url.pathname.endsWith('/index.html') ||
-      url.pathname.endsWith('/estoque.html') ||
       url.pathname.endsWith('/')) {
-    const chaveCache = url.pathname.endsWith('/estoque.html') ? './estoque.html' : './index.html';
     event.respondWith(
       fetch(event.request)
         .then(resp => {
           const copy = resp.clone();
-          caches.open(CACHE_NAME).then(c => c.put(chaveCache, copy));
+          caches.open(CACHE_NAME).then(c => c.put('./index.html', copy));
           return resp;
         })
-        .catch(() => caches.match(chaveCache))
+        .catch(() => caches.match('./index.html'))
     );
     return;
   }
