@@ -178,50 +178,6 @@
     },
     {
       "data": "26/08/2026",
-      "hora": "15:55",
-      "of": "262279",
-      "chave": "262279§1,570 X 1,600§A4 Embalagens e E-Commerce LTDA",
-      "ofCentral": "1144",
-      "oc": "2408",
-      "cliente": "A4 Embalagens e E-Commerce LTDA",
-      "papelao": "P25B",
-      "medida": "1,570 X 1,600",
-      "qtdePedido": "2000",
-      "referencia": "x",
-      "numPalete": "02",
-      "chapas": 670,
-      "gramatura": "",
-      "peso": 530.16,
-      "coluna": "",
-      "resultado": "OK",
-      "observacoes": "",
-      "fotos": 0,
-      "recebidoEm": "2026-08-26T15:55:05"
-    },
-    {
-      "data": "26/08/2026",
-      "hora": "16:06",
-      "of": "262279",
-      "chave": "262279§1,570 X 1,600§A4 Embalagens e E-Commerce LTDA",
-      "ofCentral": "1144",
-      "oc": "2408",
-      "cliente": "A4 Embalagens e E-Commerce LTDA",
-      "papelao": "P25B",
-      "medida": "1,570 X 1,600",
-      "qtdePedido": "2000",
-      "referencia": "x",
-      "numPalete": "03",
-      "chapas": 685,
-      "gramatura": "",
-      "peso": 542.03,
-      "coluna": "",
-      "resultado": "OK",
-      "observacoes": "",
-      "fotos": 0,
-      "recebidoEm": "2026-08-26T16:06:58"
-    },
-    {
-      "data": "26/08/2026",
       "hora": "10:36",
       "of": "262321",
       "chave": "262321§1,537 X 1,314§AMPÉRE EMBALAGENS",
@@ -415,27 +371,6 @@
       "observacoes": "",
       "fotos": 0,
       "recebidoEm": "2026-08-26T18:03:33"
-    },
-    {
-      "data": "25/08/2026",
-      "hora": "18:06",
-      "of": "262312",
-      "chave": "262312§0,500 X 0,985§São Miguel",
-      "ofCentral": "1149",
-      "oc": "W55R",
-      "cliente": "São Miguel",
-      "papelao": "P25B",
-      "medida": "0,500 X 0,985",
-      "qtdePedido": "5000",
-      "referencia": "x",
-      "numPalete": "01",
-      "chapas": 775,
-      "gramatura": "",
-      "coluna": "",
-      "resultado": "OK",
-      "observacoes": "",
-      "fotos": 0,
-      "recebidoEm": "2026-08-26T18:09:18"
     },
     {
       "data": "25/08/2026",
@@ -1647,5 +1582,5 @@
       "recebidoEm": "2026-08-28T09:03:50"
     }
   ],
-  "atualizadoEm": "2026-08-28T09:10:08"
+  "atualizadoEm": "2026-08-28T09:13:57"
 }
