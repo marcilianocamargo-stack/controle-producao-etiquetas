@@ -1779,7 +1779,29 @@
       "observacoes": "",
       "fotos": 0,
       "recebidoEm": "2026-08-28T21:05:50"
+    },
+    {
+      "data": "28/08/2026",
+      "hora": "22:35",
+      "of": "262362",
+      "chave": "262362§0,554 X 2,204§Carpel",
+      "ofCentral": "1158",
+      "oc": "W55R28",
+      "cliente": "Carpel",
+      "papelao": "P35B",
+      "medida": "0,554 X 2,204",
+      "qtdePedido": "3000",
+      "referencia": "197x160x197",
+      "numPalete": "01",
+      "chapas": 775,
+      "gramatura": "",
+      "peso": 326.47,
+      "coluna": "",
+      "resultado": "OK",
+      "observacoes": "",
+      "fotos": 0,
+      "recebidoEm": "2026-08-28T22:35:52"
     }
   ],
-  "atualizadoEm": "2026-08-28T22:35:07"
+  "atualizadoEm": "2026-08-28T22:35:55"
 }
