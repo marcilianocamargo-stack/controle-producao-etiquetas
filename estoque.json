@@ -1955,7 +1955,29 @@
       "observacoes": "",
       "fotos": 0,
       "recebidoEm": "2026-08-31T09:54:02"
+    },
+    {
+      "data": "31/08/2026",
+      "hora": "09:54",
+      "of": "262320",
+      "chave": "262320§1,383 X 1,370§AMPÉRE EMBALAGENS",
+      "ofCentral": "1151",
+      "oc": "2368",
+      "cliente": "AMPÉRE EMBALAGENS",
+      "papelao": "P25B",
+      "medida": "1,383 X 1,370",
+      "qtdePedido": "600",
+      "referencia": "x",
+      "numPalete": "02",
+      "chapas": 465,
+      "gramatura": "",
+      "peso": 277.53,
+      "coluna": "",
+      "resultado": "OK",
+      "observacoes": "",
+      "fotos": 0,
+      "recebidoEm": "2026-08-31T09:54:26"
     }
   ],
-  "atualizadoEm": "2026-08-31T09:54:05"
+  "atualizadoEm": "2026-08-31T09:54:29"
 }
