@@ -1450,7 +1450,29 @@
       "observacoes": "",
       "fotos": 0,
       "recebidoEm": "2026-09-01T15:38:15"
+    },
+    {
+      "data": "01/09/2026",
+      "hora": "15:43",
+      "of": "262393",
+      "chave": "262393§0,622 X 1,809§Z4A EMBALAGENS LTDA",
+      "ofCentral": "1166",
+      "oc": "36086",
+      "cliente": "Z4A EMBALAGENS LTDA",
+      "papelao": "P60C",
+      "medida": "0,622 X 1,809",
+      "qtdePedido": "11000",
+      "referencia": "149x324x149",
+      "numPalete": "08",
+      "chapas": 285,
+      "gramatura": "",
+      "peso": 141.1,
+      "coluna": "",
+      "resultado": "OK",
+      "observacoes": "",
+      "fotos": 0,
+      "recebidoEm": "2026-09-01T15:43:27"
     }
   ],
-  "atualizadoEm": "2026-09-01T15:40:08"
+  "atualizadoEm": "2026-09-01T15:43:30"
 }
