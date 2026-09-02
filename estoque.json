@@ -1714,7 +1714,51 @@
       "observacoes": "",
       "fotos": 0,
       "recebidoEm": "2026-09-02T15:20:20"
+    },
+    {
+      "data": "02/09/2026",
+      "hora": "16:36",
+      "of": "262389",
+      "chave": "262389§0,279 X 1,260§RM Embalagens",
+      "ofCentral": "1165",
+      "oc": "507",
+      "cliente": "RM Embalagens",
+      "papelao": "P25B",
+      "medida": "0,279 X 1,260",
+      "qtdePedido": "2750",
+      "referencia": "62x155x62",
+      "numPalete": "01",
+      "chapas": 1375,
+      "gramatura": "",
+      "peso": 152.26,
+      "coluna": "",
+      "resultado": "OK",
+      "observacoes": "",
+      "fotos": 0,
+      "recebidoEm": "2026-09-02T16:36:08"
+    },
+    {
+      "data": "02/09/2026",
+      "hora": "16:46",
+      "of": "262389",
+      "chave": "262389§0,279 X 1,260§RM Embalagens",
+      "ofCentral": "1165",
+      "oc": "507",
+      "cliente": "RM Embalagens",
+      "papelao": "P25B",
+      "medida": "0,279 X 1,260",
+      "qtdePedido": "2750",
+      "referencia": "62x155x62",
+      "numPalete": "02",
+      "chapas": 1375,
+      "gramatura": "",
+      "peso": 152.26,
+      "coluna": "",
+      "resultado": "OK",
+      "observacoes": "",
+      "fotos": 0,
+      "recebidoEm": "2026-09-02T16:46:46"
     }
   ],
-  "atualizadoEm": "2026-09-02T16:26:09"
+  "atualizadoEm": "2026-09-02T16:50:15"
 }
