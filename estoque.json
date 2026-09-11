@@ -4817,7 +4817,29 @@
       "observacoes": "",
       "fotos": 0,
       "recebidoEm": "2026-09-11T14:55:16"
+    },
+    {
+      "data": "10/09/2026",
+      "hora": "18:48",
+      "of": "262423",
+      "chave": "262423§1,246 X 2,591§HARMONY EMBALAGENS",
+      "ofCentral": "1169",
+      "oc": "226082026",
+      "cliente": "HARMONY EMBALAGENS",
+      "papelao": "P70D",
+      "medida": "1,246 X 2,591",
+      "qtdePedido": "400",
+      "referencia": "283x680x283",
+      "numPalete": "03",
+      "chapas": 140,
+      "gramatura": "",
+      "peso": 285.65,
+      "coluna": "",
+      "resultado": "OK",
+      "observacoes": "",
+      "fotos": 0,
+      "recebidoEm": "2026-09-11T15:45:04"
     }
   ],
-  "atualizadoEm": "2026-09-11T15:40:08"
+  "atualizadoEm": "2026-09-11T15:45:10"
 }
