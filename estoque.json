@@ -4531,7 +4531,29 @@
       "observacoes": "",
       "fotos": 0,
       "recebidoEm": "2026-09-11T09:33:09"
+    },
+    {
+      "data": "11/09/2026",
+      "hora": "09:37",
+      "of": "262463",
+      "chave": "262463§0,616 X 1,560§FAVINCO EMBALAGENS",
+      "ofCentral": "1177",
+      "oc": "063",
+      "cliente": "FAVINCO EMBALAGENS",
+      "papelao": "P60C",
+      "medida": "0,616 X 1,560",
+      "qtdePedido": "750",
+      "referencia": "140x336x140",
+      "numPalete": "03",
+      "chapas": 250,
+      "gramatura": "",
+      "peso": 105.71,
+      "coluna": "",
+      "resultado": "OK",
+      "observacoes": "",
+      "fotos": 0,
+      "recebidoEm": "2026-09-11T09:37:45"
     }
   ],
-  "atualizadoEm": "2026-09-11T09:35:08"
+  "atualizadoEm": "2026-09-11T09:37:49"
 }
