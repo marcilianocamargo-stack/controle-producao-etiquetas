@@ -4707,7 +4707,29 @@
       "observacoes": "",
       "fotos": 0,
       "recebidoEm": "2026-09-11T14:07:51"
+    },
+    {
+      "data": "11/09/2026",
+      "hora": "14:22",
+      "of": "262462",
+      "chave": "262462§0,570 X 0,900§FAVINCO EMBALAGENS",
+      "ofCentral": "1177",
+      "oc": "062",
+      "cliente": "FAVINCO EMBALAGENS",
+      "papelao": "P55D",
+      "medida": "0,570 X 0,900",
+      "qtdePedido": "1400",
+      "referencia": "88x109x176x109x88",
+      "numPalete": "03",
+      "chapas": 360,
+      "gramatura": "",
+      "peso": 104.9,
+      "coluna": "",
+      "resultado": "OK",
+      "observacoes": "",
+      "fotos": 0,
+      "recebidoEm": "2026-09-11T14:22:29"
     }
   ],
-  "atualizadoEm": "2026-09-11T14:20:09"
+  "atualizadoEm": "2026-09-11T14:22:33"
 }
