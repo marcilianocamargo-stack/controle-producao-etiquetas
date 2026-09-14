@@ -5279,7 +5279,29 @@
       "observacoes": "",
       "fotos": 0,
       "recebidoEm": "2026-09-14T11:27:51"
+    },
+    {
+      "data": "14/09/2026",
+      "hora": "11:31",
+      "of": "262522",
+      "chave": "262522§0,460 X 0,920§DR Embalagens",
+      "ofCentral": "1189",
+      "oc": "10092026",
+      "cliente": "DR Embalagens",
+      "papelao": "P25B",
+      "medida": "0,460 X 0,920",
+      "qtdePedido": "8000",
+      "referencia": "x",
+      "numPalete": "05",
+      "chapas": 765,
+      "gramatura": "",
+      "peso": 101.98,
+      "coluna": "",
+      "resultado": "OK",
+      "observacoes": "",
+      "fotos": 0,
+      "recebidoEm": "2026-09-14T11:31:47"
     }
   ],
-  "atualizadoEm": "2026-09-14T11:30:08"
+  "atualizadoEm": "2026-09-14T11:31:50"
 }
