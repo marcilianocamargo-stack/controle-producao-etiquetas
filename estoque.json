@@ -5543,7 +5543,29 @@
       "observacoes": "",
       "fotos": 0,
       "recebidoEm": "2026-09-14T14:19:52"
+    },
+    {
+      "data": "14/09/2026",
+      "hora": "14:23",
+      "of": "262444",
+      "chave": "262444§0,446 X 1,230§ABAPEL COMERCIO DE EMBALAGENS LTDA",
+      "ofCentral": "1174",
+      "oc": "8207",
+      "cliente": "ABAPEL COMERCIO DE EMBALAGENS LTDA",
+      "papelao": "P25B",
+      "medida": "0,446 X 1,230",
+      "qtdePedido": "11000",
+      "referencia": "125x196x125",
+      "numPalete": "06",
+      "chapas": 1150,
+      "gramatura": "",
+      "peso": 198.72,
+      "coluna": "",
+      "resultado": "OK",
+      "observacoes": "",
+      "fotos": 0,
+      "recebidoEm": "2026-09-14T14:23:27"
     }
   ],
-  "atualizadoEm": "2026-09-14T14:20:08"
+  "atualizadoEm": "2026-09-14T14:23:31"
 }
