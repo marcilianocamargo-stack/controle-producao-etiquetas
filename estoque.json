@@ -6203,7 +6203,29 @@
       "observacoes": "",
       "fotos": 0,
       "recebidoEm": "2026-09-16T11:39:49"
+    },
+    {
+      "data": "16/09/2026",
+      "hora": "13:25",
+      "of": "262565",
+      "chave": "262565§0,460 X 0,900§CARPELL LTDA",
+      "ofCentral": "1195",
+      "oc": "1290",
+      "cliente": "CARPELL LTDA",
+      "papelao": "PW40B",
+      "medida": "0,460 X 0,900",
+      "qtdePedido": "500",
+      "referencia": "x",
+      "numPalete": "01",
+      "chapas": 600,
+      "gramatura": "",
+      "peso": 90.67,
+      "coluna": "",
+      "resultado": "OK",
+      "observacoes": "",
+      "fotos": 0,
+      "recebidoEm": "2026-09-16T13:25:13"
     }
   ],
-  "atualizadoEm": "2026-09-16T13:25:08"
+  "atualizadoEm": "2026-09-16T13:25:16"
 }
