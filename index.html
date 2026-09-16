@@ -878,17 +878,17 @@ function guardarPendente(payload){
 // TODOS os registros salvos localmente no aparelho — útil pra recuperar
 // paletes que "pareciam entregues" mas não chegaram por causa de uma
 // instabilidade no servidor (não só falha de rede).
-async function sincronizarComServidor(reenviarTudo){
+async function sincronizarComServidor(reenviarTudo, silencioso=false){
   const lista = reenviarTudo
     ? getRegistros().map(r => ({...r, fotos:(r.fotos||[]).length}))
     : JSON.parse(localStorage.getItem('pendentes_n8n')||'[]');
 
   if (!lista.length){
-    mostrarToast(reenviarTudo ? 'Nada salvo neste aparelho.' : 'Nenhum pendente.');
+    if(!silencioso) mostrarToast(reenviarTudo ? 'Nada salvo neste aparelho.' : 'Nenhum pendente.');
     return;
   }
 
-  mostrarToast(`Sincronizando ${lista.length} registro(s)...`);
+  if(!silencioso) mostrarToast(`Sincronizando ${lista.length} registro(s)...`);
   const aindaPendentes = [];
   for (const payload of lista){
     try{
@@ -901,7 +901,15 @@ async function sincronizarComServidor(reenviarTudo){
     }
   }
   localStorage.setItem('pendentes_n8n', JSON.stringify(aindaPendentes));
-  mostrarToast(`Sincronizado: ${lista.length - aindaPendentes.length} ok, ${aindaPendentes.length} falharam.`);
+  const sincronizados = lista.length - aindaPendentes.length;
+  if(!silencioso){
+    mostrarToast(`Sincronizado: ${sincronizados} ok, ${aindaPendentes.length} falharam.`);
+  } else if (sincronizados > 0){
+    // Reenvio automático (evento 'online' ou verificação periódica) só avisa
+    // quando realmente conseguiu mandar algo -- senão fica pipocando toast
+    // de falha toda hora enquanto o n8n estiver fora do ar.
+    mostrarToast(`✔ ${sincronizados} registro(s) pendente(s) sincronizado(s) com o servidor.`);
+  }
 }
 
 // ── TABELA DE GRAMATURA (g/m²) — Tabela de especificação de produto Prime ──
@@ -1470,6 +1478,22 @@ window.addEventListener('load', () => {
   const pendentes = JSON.parse(localStorage.getItem('pendentes_n8n')||'[]');
   if (pendentes.length) sincronizarComServidor(false);
 });
+
+// Antes, a fila de pendentes (madrugada com PC/n8n desligado, por exemplo)
+// só era reenviada quando o app era reaberto -- se o operador não abrisse o
+// app de novo depois que o servidor voltasse, os registros ficavam presos
+// no celular dele e o dashboard em tempo real ficava sem esses dados
+// (mesmo com o Excel do turno estando correto, já que ele lê direto do
+// histórico local, sem depender dessa fila). Os dois gatilhos abaixo cobrem
+// esse caso sem exigir reabrir o app.
+window.addEventListener('online', () => {
+  const pendentes = JSON.parse(localStorage.getItem('pendentes_n8n')||'[]');
+  if (pendentes.length) sincronizarComServidor(false, true);
+});
+setInterval(() => {
+  const pendentes = JSON.parse(localStorage.getItem('pendentes_n8n')||'[]');
+  if (pendentes.length) sincronizarComServidor(false, true);
+}, 5 * 60 * 1000);
 </script>
 </body>
 </html>
