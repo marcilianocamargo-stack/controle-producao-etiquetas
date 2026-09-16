@@ -6335,7 +6335,29 @@
       "observacoes": "",
       "fotos": 0,
       "recebidoEm": "2026-09-16T15:00:56"
+    },
+    {
+      "data": "16/09/2026",
+      "hora": "15:13",
+      "of": "262609",
+      "chave": "262609§0,284 X 1,800§CARPELL LTDA",
+      "ofCentral": "1195",
+      "oc": "W55R15",
+      "cliente": "CARPELL LTDA",
+      "papelao": "P35B",
+      "medida": "0,284 X 1,800",
+      "qtdePedido": "1000",
+      "referencia": "X",
+      "numPalete": "02",
+      "chapas": 580,
+      "gramatura": "",
+      "peso": 102.29,
+      "coluna": "",
+      "resultado": "OK",
+      "observacoes": "",
+      "fotos": 0,
+      "recebidoEm": "2026-09-16T15:13:13"
     }
   ],
-  "atualizadoEm": "2026-09-16T15:10:08"
+  "atualizadoEm": "2026-09-16T15:13:16"
 }
