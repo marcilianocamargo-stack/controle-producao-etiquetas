@@ -8381,7 +8381,29 @@
       "observacoes": "",
       "fotos": 0,
       "recebidoEm": "2026-09-17T16:43:22"
+    },
+    {
+      "data": "17/09/2026",
+      "hora": "16:48",
+      "of": "262440",
+      "chave": "262440§0,920 X 1,220§ABAPEL COMERCIO DE EMBALAGENS LTDA",
+      "ofCentral": "1174",
+      "oc": "8207",
+      "cliente": "ABAPEL COMERCIO DE EMBALAGENS LTDA",
+      "papelao": "P50D",
+      "medida": "0,920 X 1,220",
+      "qtdePedido": "3500",
+      "referencia": "x",
+      "numPalete": "01",
+      "chapas": 180,
+      "gramatura": "",
+      "peso": 108.69,
+      "coluna": "",
+      "resultado": "OK",
+      "observacoes": "",
+      "fotos": 0,
+      "recebidoEm": "2026-09-17T16:48:50"
     }
   ],
-  "atualizadoEm": "2026-09-17T16:45:08"
+  "atualizadoEm": "2026-09-17T16:48:53"
 }
