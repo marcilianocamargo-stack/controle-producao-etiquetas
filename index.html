@@ -35,8 +35,8 @@ body{font-family:'Segoe UI',Tahoma,sans-serif;background:var(--bg);color:var(--t
 .header h1{font-size:15px;font-weight:700;color:#fff}
 .header p{font-size:11px;color:#bcd6f2;margin-top:2px}
 
-.tabs{display:grid;grid-template-columns:1fr 1fr 1fr;background:var(--surface);border:1px solid var(--border);border-radius:10px;margin-bottom:12px;overflow:hidden}
-.tab{flex:1;padding:10px 6px;text-align:center;font-size:12px;font-weight:700;cursor:pointer;color:var(--muted);border:none;background:none;transition:.2s;text-transform:uppercase;letter-spacing:.5px}
+.tabs{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;background:var(--surface);border:1px solid var(--border);border-radius:10px;margin-bottom:12px;overflow:hidden}
+.tab{flex:1;padding:10px 4px;text-align:center;font-size:10.5px;font-weight:700;cursor:pointer;color:var(--muted);border:none;background:none;transition:.2s;text-transform:uppercase;letter-spacing:.3px}
 .tab.active{background:var(--accent);color:white}
 
 .card{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:14px;margin-bottom:10px}
@@ -223,6 +223,7 @@ input.big{font-size:22px;font-weight:700;text-align:center;color:var(--ok)}
       <button class="tab active" onclick="mudarTab('registro')">⚙ Registrar</button>
       <button class="tab" onclick="mudarTab('historico')">📋 Histórico</button>
       <button class="tab" onclick="mudarTab('chapas')">🔢 Chapas</button>
+      <button class="tab" onclick="mudarTab('expedicao')">📦 Expedição</button>
     </div>
 
     <div class="card" id="cardPalete" style="display:none">
@@ -341,6 +342,36 @@ input.big{font-size:22px;font-weight:700;text-align:center;color:var(--ok)}
   </div>
   <button id="chUsarBtn" class="btn btn-ok" onclick="chUsar()">✔ Usar este valor no Registro</button>
 </div>
+
+<!-- TAB EXPEDIÇÃO — gera o romaneio de expedição (pronto p/ imprimir) a partir dos -->
+<!-- paletes JÁ registrados na produção (estoque.json), buscando por Nº da OF -->
+<div id="tab-expedicao" class="section">
+  <button class="btn-voltar" onclick="voltarRegistro()">← Voltar</button>
+
+  <div class="card">
+    <div class="step">Romaneio de Expedição · buscar por OF</div>
+    <div class="busca-row">
+      <input type="text" id="expOfInput" placeholder="Nº da OF (ex: 1158)" inputmode="numeric" onkeydown="if(event.key==='Enter'){event.preventDefault();buscarRomaneio();}">
+      <button onclick="buscarRomaneio()">🔎 Buscar</button>
+    </div>
+    <div id="expStatus" class="status-auto info" style="display:none;margin-top:8px"></div>
+  </div>
+
+  <div id="expResultado" style="display:none">
+    <div class="card">
+      <div class="resumo-linha" style="border-radius:8px">
+        <span>Paletes encontrados</span><strong id="expTotalPaletes">0</strong>
+      </div>
+      <div class="resumo-linha" style="border-radius:8px;margin-top:6px">
+        <span>Total de chapas produzidas</span><strong id="expTotalChapas">0</strong>
+      </div>
+      <div id="expAvisoNok" class="status-auto err" style="display:none;margin-top:8px;line-height:1.5"></div>
+    </div>
+    <div id="expGrupos"></div>
+    <button class="btn btn-primary" id="btnGerarRomaneio" style="display:block" onclick="gerarRomaneioPDF()">📄 Gerar PDF do Romaneio</button>
+  </div>
+</div>
+
 <div class="footer">Prime Ondulados · Controle de Produção</div>
 
 <script>
@@ -410,7 +441,7 @@ document.getElementById('dataHoje').textContent = 'Prime Ondulados · ' + hoje()
 
 // ── TABS ───────────────────────────────────────────────────────
 function mudarTab(tab) {
-  document.querySelectorAll('.tab').forEach((t,i) => t.classList.toggle('active', ['registro','historico','chapas'][i] === tab));
+  document.querySelectorAll('.tab').forEach((t,i) => t.classList.toggle('active', ['registro','historico','chapas','expedicao'][i] === tab));
   document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
   document.getElementById('tab-' + tab).classList.add('active');
   if (tab === 'historico') renderHistorico();
@@ -543,6 +574,9 @@ function carregarWorkbookBuf(buf){
 // Cache-busting (?t=) + no-store para nunca pegar versão antiga em cache.
 // NÃO existe upload manual: se falhar, mostra aviso + "Tentar novamente".
 const XLSX_FONTE_URL='https://raw.githubusercontent.com/marcilianocamargo-stack/controle-producao-etiquetas/main/programacao-hoje.xlsx';
+// Estoque publicado (agrega os paletes registrados por TODOS os aparelhos/dias) —
+// é a "memória" usada pra montar o romaneio de expedição sem digitar nada de novo.
+const ESTOQUE_URL='https://raw.githubusercontent.com/marcilianocamargo-stack/controle-producao-etiquetas/main/estoque.json';
 async function autoCarregar(){
   const st=document.getElementById('statusAuto');
   const btn=document.getElementById('btnRecarregar');
@@ -1158,6 +1192,191 @@ function imprimirEtiquetaRegistro(registro) {
     const url = URL.createObjectURL(blob);
     window.open(url, '_blank');
     mostrarMsg('✔ Registro salvo. PDF da etiqueta aberto para imprimir.', true);
+  }
+}
+
+// ── ROMANEIO DE EXPEDIÇÃO (por OF) ───────────────────────────────
+// Busca no estoque publicado (todos os paletes já registrados, de qualquer
+// aparelho/dia — é a "memória" que alimenta a planilha de produção) os
+// paletes da OF digitada e monta o romaneio pronto pra imprimir, sem o
+// operador digitar nada: ele só marca um X em cada palete carregado.
+let romaneioGrupos = [];   // [{chave, of, oc, papelao, medida, qtdePedido, cliente, paletes:[{numPalete,chapas}]}]
+let romaneioOfBusca = '';
+
+function normalizaOf(v){ return String(v||'').trim().replace(/^0+(?=\d)/,''); }
+
+async function buscarRomaneio(){
+  const ofInput = document.getElementById('expOfInput').value.trim();
+  const status = document.getElementById('expStatus');
+  document.getElementById('expResultado').style.display = 'none';
+  if(!ofInput){
+    status.className = 'status-auto err';
+    status.textContent = '⚠ Digite o número da OF.';
+    status.style.display = 'block';
+    return;
+  }
+  status.className = 'status-auto info';
+  status.textContent = '⏳ Buscando paletes da OF ' + ofInput + '...';
+  status.style.display = 'block';
+
+  const ofNorm = normalizaOf(ofInput);
+  try{
+    const resp = await fetch(ESTOQUE_URL + '?t=' + Date.now(), {cache:'no-store'});
+    if(!resp.ok) throw new Error('sem arquivo');
+    const dados = await resp.json();
+    const todos = (dados && dados.paletes) || [];
+    const daOf = todos.filter(p => normalizaOf(p.ofCentral) === ofNorm);
+
+    if(!daOf.length){
+      status.className = 'status-auto err';
+      status.textContent = '⚠ Nenhum palete encontrado para a OF ' + ofInput + '. Confira o número ou aguarde a sincronização dos aparelhos.';
+      status.style.display = 'block';
+      romaneioGrupos = [];
+      return;
+    }
+
+    const nokExcluidos = daOf.filter(p => String(p.resultado||'').toUpperCase() === 'NOK').length;
+    const validos = daOf.filter(p => String(p.resultado||'').toUpperCase() !== 'NOK');
+
+    const mapa = new Map();
+    validos.forEach(p => {
+      const chave = p.chave || (p.of + '§' + (p.medida||'') + '§' + (p.cliente||''));
+      if(!mapa.has(chave)){
+        mapa.set(chave, {
+          chave, of:p.of||'', oc:p.oc||'', papelao:p.papelao||'', medida:p.medida||'',
+          cliente:p.cliente||'', qtdePedido:p.qtdePedido||'', paletes:[]
+        });
+      }
+      mapa.get(chave).paletes.push({numPalete:p.numPalete||'', chapas:Number(p.chapas)||0});
+    });
+    romaneioGrupos = [...mapa.values()].sort((a,b)=> String(a.of).localeCompare(String(b.of),'pt-BR',{numeric:true}));
+    romaneioGrupos.forEach(g => g.paletes.sort((a,b)=> String(a.numPalete).localeCompare(String(b.numPalete),'pt-BR',{numeric:true})));
+    romaneioOfBusca = ofInput;
+
+    status.style.display = 'none';
+    renderRomaneioPreview(nokExcluidos);
+  }catch(err){
+    status.className = 'status-auto err';
+    status.textContent = '⚠ Não foi possível buscar os dados publicados agora. Confira a conexão e tente novamente.';
+    status.style.display = 'block';
+    romaneioGrupos = [];
+  }
+}
+
+function renderRomaneioPreview(nokExcluidos){
+  const totalPaletes = romaneioGrupos.reduce((s,g)=>s+g.paletes.length,0);
+  const totalChapas = romaneioGrupos.reduce((s,g)=>s+g.paletes.reduce((s2,p)=>s2+p.chapas,0),0);
+  document.getElementById('expTotalPaletes').textContent = totalPaletes;
+  document.getElementById('expTotalChapas').textContent = totalChapas.toLocaleString('pt-BR');
+
+  const avisoNok = document.getElementById('expAvisoNok');
+  if(nokExcluidos > 0){
+    avisoNok.textContent = '⚠ ' + nokExcluidos + ' palete(s) marcado(s) como NOK foram excluídos do romaneio.';
+    avisoNok.style.display = 'block';
+  } else {
+    avisoNok.style.display = 'none';
+  }
+
+  document.getElementById('expGrupos').innerHTML = romaneioGrupos.map(g => {
+    const total = g.paletes.reduce((s,p)=>s+p.chapas,0);
+    const desc = [g.oc?('OC '+g.oc):'', g.papelao, g.medida].filter(Boolean).join(' · ');
+    return '<div class="of-grupo">'
+      + '<div class="of-header"><div><div class="of-num">OP '+esc(g.of)+(g.cliente?' · '+esc(g.cliente):'')+'</div>'
+      + (desc?'<div class="of-cli">'+esc(desc)+'</div>':'')+'</div>'
+      + '<div class="of-total">'+g.paletes.length+' pal. · '+total.toLocaleString('pt-BR')+'</div></div>'
+      + g.paletes.map(p => '<div class="palete-row"><span class="p-num">'+esc(p.numPalete)+'</span><span class="p-chapas">'+p.chapas.toLocaleString('pt-BR')+' chapas</span></div>').join('')
+      + '</div>';
+  }).join('');
+
+  document.getElementById('expResultado').style.display = 'block';
+}
+
+// ── ROMANEIO PDF (pronto pra imprimir — grade OP/OC/PAPEL/MEDIDA/PALETE/QTD/X) ──
+function gerarRomaneioPDF(){
+  if(!romaneioGrupos.length) return;
+
+  const doc = new jsPDF({unit:'mm', format:'a4', orientation:'portrait'});
+  const PW=210, PH=297, left=10, top=14, right=10, bottom=14;
+  const W = PW-left-right;
+  const cols = [
+    {t:'OP',              w:20},
+    {t:'OC',              w:24},
+    {t:'PAPEL',           w:20},
+    {t:'MEDIDA',          w:34},
+    {t:'PALETE',          w:18},
+    {t:'QTD. PRODUZIDA',  w:26},
+    {t:'QTD. PEDIDO',     w:26},
+    {t:'X',               w:W-(20+24+20+34+18+26+26)}
+  ];
+  const rowH = 8, headH = 10;
+  let y = top;
+
+  function desenharCabecalhoTabela(){
+    let x = left;
+    doc.setFont('helvetica','bold'); doc.setFontSize(8.5);
+    doc.setFillColor(230,230,230);
+    doc.rect(left, y, W, headH, 'F');
+    doc.setTextColor(0,0,0);
+    cols.forEach(c => {
+      doc.rect(x, y, c.w, headH);
+      const linhas = doc.splitTextToSize(c.t, c.w-2);
+      doc.text(linhas, x+c.w/2, y+headH/2 - (linhas.length-1)*1.4, {align:'center'});
+      x += c.w;
+    });
+    y += headH;
+  }
+
+  function desenharCabecalhoPagina(){
+    doc.setFont('helvetica','bold'); doc.setFontSize(13);
+    doc.setTextColor(0,0,0);
+    doc.text('ROMANEIO DE EXPEDIÇÃO', left, y);
+    doc.setFontSize(9); doc.setFont('helvetica','normal');
+    doc.text('OF ' + romaneioOfBusca + '   ·   Gerado em ' + new Date().toLocaleString('pt-BR'), left, y+5.5);
+    y += 11;
+    desenharCabecalhoTabela();
+  }
+
+  function novaPagina(){
+    doc.addPage();
+    y = top;
+    desenharCabecalhoPagina();
+  }
+
+  desenharCabecalhoPagina();
+
+  romaneioGrupos.forEach(g => {
+    g.paletes.forEach(p => {
+      if(y + rowH > PH - bottom) novaPagina();
+      let x = left;
+      const valores = [g.of, g.oc, g.papelao, g.medida, p.numPalete, String(p.chapas), String(g.qtdePedido||''), ''];
+      doc.setFont('helvetica','normal');
+      valores.forEach((v,i) => {
+        const c = cols[i];
+        doc.rect(x, y, c.w, rowH);
+        if(v){
+          let sz = 9.5;
+          doc.setFontSize(sz);
+          const maxW = c.w-2;
+          while(doc.getTextWidth(String(v)) > maxW && sz > 6){ sz--; doc.setFontSize(sz); }
+          doc.text(String(v), x+c.w/2, y+rowH/2+1.2, {align:'center'});
+        }
+        x += c.w;
+      });
+      y += rowH;
+    });
+  });
+
+  const hojeArq = new Date();
+  const dataArq = String(hojeArq.getDate()).padStart(2,'0')+'-'+String(hojeArq.getMonth()+1).padStart(2,'0');
+  const fileName = 'romaneio_OF' + romaneioOfBusca + '_' + dataArq + '.pdf';
+  const blob = doc.output('blob');
+
+  if(navigator.share && navigator.canShare && navigator.canShare({files:[new File([blob], fileName, {type:'application/pdf'})]})){
+    const file = new File([blob], fileName, {type:'application/pdf'});
+    navigator.share({files:[file], title:fileName}).catch(()=>{});
+  } else {
+    const url = URL.createObjectURL(blob);
+    window.open(url, '_blank');
   }
 }
 
