@@ -1299,15 +1299,16 @@ function gerarRomaneioPDF(){
   const PW=210, PH=297, left=10, top=14, right=10, bottom=14;
   const W = PW-left-right;
   const cols = [
-    {t:'OP',              w:16},
-    {t:'CLIENTE',         w:28},
-    {t:'OC',              w:20},
-    {t:'PAPEL',           w:16},
-    {t:'MEDIDA',          w:30},
-    {t:'PALETE',          w:16},
-    {t:'QTD. PRODUZIDA',  w:22},
-    {t:'QTD. PEDIDO',     w:22},
-    {t:'X',               w:W-(16+28+20+16+30+16+22+22)}
+    {t:'OP',                    w:14},
+    {t:'CLIENTE',               w:24},
+    {t:'OC',                    w:18},
+    {t:'PAPEL',                 w:14},
+    {t:'MEDIDA',                w:26},
+    {t:'PALETE',                w:14},
+    {t:'QTD. PRODUZIDA PALETE', w:20},
+    {t:'TOTAL PRODUZIDO OP',    w:20},
+    {t:'QTD. PEDIDO',           w:20},
+    {t:'X',                     w:W-(14+24+18+14+26+14+20+20+20)}
   ];
   const rowH = 8, headH = 10;
   let y = top;
@@ -1346,10 +1347,11 @@ function gerarRomaneioPDF(){
   desenharCabecalhoPagina();
 
   romaneioGrupos.forEach(g => {
+    const totalGrupo = g.paletes.reduce((s,pp)=>s+pp.chapas,0);
     g.paletes.forEach(p => {
       if(y + rowH > PH - bottom) novaPagina();
       let x = left;
-      const valores = [g.of, g.cliente, g.oc, g.papelao, g.medida, p.numPalete, String(p.chapas), String(g.qtdePedido||''), ''];
+      const valores = [g.of, g.cliente, g.oc, g.papelao, g.medida, p.numPalete, String(p.chapas), String(totalGrupo), String(g.qtdePedido||''), ''];
       doc.setFont('helvetica','normal');
       valores.forEach((v,i) => {
         const c = cols[i];
