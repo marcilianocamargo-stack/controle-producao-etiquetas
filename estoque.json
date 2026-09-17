@@ -7061,7 +7061,29 @@
       "observacoes": "",
       "fotos": 0,
       "recebidoEm": "2026-09-16T21:08:06"
+    },
+    {
+      "data": "16/09/2026",
+      "hora": "21:10",
+      "of": "262515",
+      "chave": "262515§0,559 X 1,389§IPE EMBALAGENS LTDA",
+      "ofCentral": "1187",
+      "oc": "1713",
+      "cliente": "IPE EMBALAGENS LTDA",
+      "papelao": "P55D",
+      "medida": "0,559 X 1,389",
+      "qtdePedido": "5000",
+      "referencia": "147x265x147",
+      "numPalete": "13",
+      "chapas": 360,
+      "gramatura": "",
+      "peso": 158.77,
+      "coluna": "",
+      "resultado": "OK",
+      "observacoes": "",
+      "fotos": 0,
+      "recebidoEm": "2026-09-16T21:10:58"
     }
   ],
-  "atualizadoEm": "2026-09-16T21:10:07"
+  "atualizadoEm": "2026-09-16T21:11:01"
 }
