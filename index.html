@@ -1300,15 +1300,15 @@ function gerarRomaneioPDF(){
   const W = PW-left-right;
   const cols = [
     {t:'OP',                    w:14},
-    {t:'CLIENTE',               w:24},
-    {t:'OC',                    w:18},
-    {t:'PAPEL',                 w:14},
-    {t:'MEDIDA',                w:26},
-    {t:'PALETE',                w:14},
+    {t:'CLIENTE',               w:32},
+    {t:'OC',                    w:16},
+    {t:'PAPEL',                 w:12},
+    {t:'MEDIDA',                w:24},
+    {t:'PALETE',                w:12},
     {t:'QTD. PRODUZIDA PALETE', w:20},
     {t:'TOTAL PRODUZIDO OP',    w:20},
     {t:'QTD. PEDIDO',           w:20},
-    {t:'X',                     w:W-(14+24+18+14+26+14+20+20+20)}
+    {t:'X',                     w:W-(14+32+16+12+24+12+20+20+20)}
   ];
   const rowH = 8, headH = 10;
   let y = top;
@@ -1360,8 +1360,21 @@ function gerarRomaneioPDF(){
           let sz = 9.5;
           doc.setFontSize(sz);
           const maxW = c.w-2;
-          while(doc.getTextWidth(String(v)) > maxW && sz > 6){ sz--; doc.setFontSize(sz); }
-          doc.text(String(v), x+c.w/2, y+rowH/2+1.2, {align:'center'});
+          let texto = String(v);
+          while(doc.getTextWidth(texto) > maxW && sz > 6){ sz--; doc.setFontSize(sz); }
+          // Ainda não coube nem no menor tamanho: corta com reticências em
+          // vez de deixar o texto invadir a coluna vizinha (nome de cliente
+          // comprido, por exemplo).
+          while(doc.getTextWidth(texto) > maxW && texto.length > 1){
+            texto = texto.slice(0, -1);
+          }
+          if(texto.length < String(v).length){
+            texto = texto.slice(0, -3).trimEnd() + '...';
+            while(doc.getTextWidth(texto) > maxW && texto.length > 3){
+              texto = texto.slice(0, -4).trimEnd() + '...';
+            }
+          }
+          doc.text(texto, x+c.w/2, y+rowH/2+1.2, {align:'center'});
         }
         x += c.w;
       });
