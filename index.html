@@ -1252,6 +1252,7 @@ async function buscarRomaneio(){
     romaneioGrupos = [...mapa.values()].sort((a,b)=> String(a.of).localeCompare(String(b.of),'pt-BR',{numeric:true}));
     romaneioGrupos.forEach(g => g.paletes.sort((a,b)=> String(a.numPalete).localeCompare(String(b.numPalete),'pt-BR',{numeric:true})));
     romaneioOfBusca = ofInput;
+    calcularLinhasVazias(romaneioGrupos);
 
     status.style.display = 'none';
     renderRomaneioPreview(nokExcluidos);
@@ -1261,6 +1262,40 @@ async function buscarRomaneio(){
     status.style.display = 'block';
     romaneioGrupos = [];
   }
+}
+
+// Estima quantas linhas em branco deixar no romaneio pros paletes que ainda
+// faltam produzir de cada OP (pedido - já produzido), pra caber na folha
+// impressa e o operador só completar à mão conforme for produzindo.
+// Usa o tamanho médio de palete já produzido NAQUELE OP; se o OP ainda não
+// tem nenhum palete, usa a média de outro OP da mesma OF com o mesmo
+// papel+medida. Sem nenhum dado pra estimar, deixa 1 linha de aviso.
+function calcularLinhasVazias(grupos){
+  grupos.forEach(g => { g.produzido = g.paletes.reduce((s,p)=>s+p.chapas,0); });
+  grupos.forEach(g => {
+    const pedido = parseInt(g.qtdePedido)||0;
+    const restante = pedido - g.produzido;
+    g.restante = restante;
+    g.linhasVazias = 0;
+    g.avisoSemDados = false;
+    if(restante <= 0) return;
+
+    let media = null;
+    if(g.paletes.length > 0){
+      media = g.produzido / g.paletes.length;
+    } else {
+      const irmao = grupos.find(o => o !== g && o.paletes.length > 0
+        && String(o.papelao).trim().toUpperCase() === String(g.papelao).trim().toUpperCase()
+        && String(o.medida).trim() === String(g.medida).trim());
+      if(irmao) media = irmao.produzido / irmao.paletes.length;
+    }
+
+    if(media && media > 0){
+      g.linhasVazias = Math.ceil(restante / media);
+    } else {
+      g.avisoSemDados = true;
+    }
+  });
 }
 
 function renderRomaneioPreview(nokExcluidos){
@@ -1278,13 +1313,20 @@ function renderRomaneioPreview(nokExcluidos){
   }
 
   document.getElementById('expGrupos').innerHTML = romaneioGrupos.map(g => {
-    const total = g.paletes.reduce((s,p)=>s+p.chapas,0);
+    const total = g.produzido;
     const desc = [g.oc?('OC '+g.oc):'', g.papelao, g.medida].filter(Boolean).join(' · ');
+    let avisoLinha = '';
+    if(g.linhasVazias > 0){
+      avisoLinha = '<div class="palete-row" style="border-left-color:var(--warn)"><span class="p-chapas">+ '+g.linhasVazias+' linha(s) em branco pro operador preencher (faltam ~'+g.restante.toLocaleString('pt-BR')+' chapas)</span></div>';
+    } else if(g.avisoSemDados){
+      avisoLinha = '<div class="palete-row" style="border-left-color:var(--danger)"><span class="p-chapas">⚠ Faltam '+g.restante.toLocaleString('pt-BR')+' chapas, mas sem paletes registrados (aqui ou em OP igual) pra estimar quantas linhas — vai 1 linha de aviso</span></div>';
+    }
     return '<div class="of-grupo">'
       + '<div class="of-header"><div><div class="of-num">OP '+esc(g.of)+(g.cliente?' · '+esc(g.cliente):'')+'</div>'
       + (desc?'<div class="of-cli">'+esc(desc)+'</div>':'')+'</div>'
       + '<div class="of-total">'+g.paletes.length+' pal. · '+total.toLocaleString('pt-BR')+'</div></div>'
       + g.paletes.map(p => '<div class="palete-row"><span class="p-num">'+esc(p.numPalete)+'</span><span class="p-chapas">'+p.chapas.toLocaleString('pt-BR')+' chapas</span></div>').join('')
+      + avisoLinha
       + '</div>';
   }).join('');
 
@@ -1344,42 +1386,57 @@ function gerarRomaneioPDF(){
     desenharCabecalhoPagina();
   }
 
+  function desenharLinha(valores){
+    if(y + rowH > PH - bottom) novaPagina();
+    let x = left;
+    doc.setFont('helvetica','normal');
+    valores.forEach((v,i) => {
+      const c = cols[i];
+      doc.rect(x, y, c.w, rowH);
+      if(v){
+        let sz = 9.5;
+        doc.setFontSize(sz);
+        const maxW = c.w-2;
+        let texto = String(v);
+        while(doc.getTextWidth(texto) > maxW && sz > 6){ sz--; doc.setFontSize(sz); }
+        // Ainda não coube nem no menor tamanho: corta com reticências em
+        // vez de deixar o texto invadir a coluna vizinha (nome de cliente
+        // comprido, por exemplo).
+        while(doc.getTextWidth(texto) > maxW && texto.length > 1){
+          texto = texto.slice(0, -1);
+        }
+        if(texto.length < String(v).length){
+          texto = texto.slice(0, -3).trimEnd() + '...';
+          while(doc.getTextWidth(texto) > maxW && texto.length > 3){
+            texto = texto.slice(0, -4).trimEnd() + '...';
+          }
+        }
+        doc.text(texto, x+c.w/2, y+rowH/2+1.2, {align:'center'});
+      }
+      x += c.w;
+    });
+    y += rowH;
+  }
+
   desenharCabecalhoPagina();
 
   romaneioGrupos.forEach(g => {
-    const totalGrupo = g.paletes.reduce((s,pp)=>s+pp.chapas,0);
+    const totalGrupo = g.produzido != null ? g.produzido : g.paletes.reduce((s,pp)=>s+pp.chapas,0);
+
     g.paletes.forEach(p => {
-      if(y + rowH > PH - bottom) novaPagina();
-      let x = left;
-      const valores = [g.of, g.cliente, g.oc, g.papelao, g.medida, p.numPalete, String(p.chapas), String(totalGrupo), String(g.qtdePedido||''), ''];
-      doc.setFont('helvetica','normal');
-      valores.forEach((v,i) => {
-        const c = cols[i];
-        doc.rect(x, y, c.w, rowH);
-        if(v){
-          let sz = 9.5;
-          doc.setFontSize(sz);
-          const maxW = c.w-2;
-          let texto = String(v);
-          while(doc.getTextWidth(texto) > maxW && sz > 6){ sz--; doc.setFontSize(sz); }
-          // Ainda não coube nem no menor tamanho: corta com reticências em
-          // vez de deixar o texto invadir a coluna vizinha (nome de cliente
-          // comprido, por exemplo).
-          while(doc.getTextWidth(texto) > maxW && texto.length > 1){
-            texto = texto.slice(0, -1);
-          }
-          if(texto.length < String(v).length){
-            texto = texto.slice(0, -3).trimEnd() + '...';
-            while(doc.getTextWidth(texto) > maxW && texto.length > 3){
-              texto = texto.slice(0, -4).trimEnd() + '...';
-            }
-          }
-          doc.text(texto, x+c.w/2, y+rowH/2+1.2, {align:'center'});
-        }
-        x += c.w;
-      });
-      y += rowH;
+      desenharLinha([g.of, g.cliente, g.oc, g.papelao, g.medida, p.numPalete, String(p.chapas), String(totalGrupo), String(g.qtdePedido||''), '']);
     });
+
+    // Paletes que ainda faltam produzir: linhas em branco pro operador
+    // completar à mão (nº do palete, chapas e total ficam em branco de
+    // propósito — só se sabe depois que produzir).
+    if(g.linhasVazias > 0){
+      for(let k=0; k<g.linhasVazias; k++){
+        desenharLinha([g.of, g.cliente, g.oc, g.papelao, g.medida, '', '', '', String(g.qtdePedido||''), '']);
+      }
+    } else if(g.avisoSemDados){
+      desenharLinha([g.of, g.cliente, g.oc, g.papelao, g.medida, 'a definir', 'faltam ' + (g.restante||0), '', String(g.qtdePedido||''), '']);
+    }
   });
 
   const hojeArq = new Date();
