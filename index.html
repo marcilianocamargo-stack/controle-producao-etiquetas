@@ -1299,14 +1299,15 @@ function gerarRomaneioPDF(){
   const PW=210, PH=297, left=10, top=14, right=10, bottom=14;
   const W = PW-left-right;
   const cols = [
-    {t:'OP',              w:20},
-    {t:'OC',              w:24},
-    {t:'PAPEL',           w:20},
-    {t:'MEDIDA',          w:34},
-    {t:'PALETE',          w:18},
-    {t:'QTD. PRODUZIDA',  w:26},
-    {t:'QTD. PEDIDO',     w:26},
-    {t:'X',               w:W-(20+24+20+34+18+26+26)}
+    {t:'OP',              w:16},
+    {t:'CLIENTE',         w:28},
+    {t:'OC',              w:20},
+    {t:'PAPEL',           w:16},
+    {t:'MEDIDA',          w:30},
+    {t:'PALETE',          w:16},
+    {t:'QTD. PRODUZIDA',  w:22},
+    {t:'QTD. PEDIDO',     w:22},
+    {t:'X',               w:W-(16+28+20+16+30+16+22+22)}
   ];
   const rowH = 8, headH = 10;
   let y = top;
@@ -1348,7 +1349,7 @@ function gerarRomaneioPDF(){
     g.paletes.forEach(p => {
       if(y + rowH > PH - bottom) novaPagina();
       let x = left;
-      const valores = [g.of, g.oc, g.papelao, g.medida, p.numPalete, String(p.chapas), String(g.qtdePedido||''), ''];
+      const valores = [g.of, g.cliente, g.oc, g.papelao, g.medida, p.numPalete, String(p.chapas), String(g.qtdePedido||''), ''];
       doc.setFont('helvetica','normal');
       valores.forEach((v,i) => {
         const c = cols[i];
