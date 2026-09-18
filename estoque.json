@@ -9635,7 +9635,29 @@
       "observacoes": "",
       "fotos": 0,
       "recebidoEm": "2026-09-18T18:32:34"
+    },
+    {
+      "data": "18/09/2026",
+      "hora": "16:56",
+      "of": "262560",
+      "chave": "262560§0,494 X 1,560§CARPELL LTDA",
+      "ofCentral": "1195",
+      "oc": "1290",
+      "cliente": "CARPELL LTDA",
+      "papelao": "P25B",
+      "medida": "0,494 X 1,560",
+      "qtdePedido": "500",
+      "referencia": "x",
+      "numPalete": "01",
+      "chapas": 575,
+      "gramatura": "",
+      "peso": 141.8,
+      "coluna": "",
+      "resultado": "OK",
+      "observacoes": "",
+      "fotos": 0,
+      "recebidoEm": "2026-09-18T18:39:28"
     }
   ],
-  "atualizadoEm": "2026-09-18T18:35:08"
+  "atualizadoEm": "2026-09-18T18:39:31"
 }
