@@ -10735,7 +10735,29 @@
       "observacoes": "",
       "fotos": 0,
       "recebidoEm": "2026-09-21T11:52:38"
+    },
+    {
+      "data": "21/09/2026",
+      "hora": "13:24",
+      "of": "262626",
+      "chave": "262626§0,545 X 1,800§RM Embalagens",
+      "ofCentral": "1209",
+      "oc": "4",
+      "cliente": "RM Embalagens",
+      "papelao": "P45B",
+      "medida": "0,545 X 1,800",
+      "qtdePedido": "5500",
+      "referencia": "130x285x130",
+      "numPalete": "02",
+      "chapas": 715,
+      "gramatura": "",
+      "peso": 256.02,
+      "coluna": "",
+      "resultado": "OK",
+      "observacoes": "",
+      "fotos": 0,
+      "recebidoEm": "2026-09-21T13:24:55"
     }
   ],
-  "atualizadoEm": "2026-09-21T13:20:09"
+  "atualizadoEm": "2026-09-21T13:25:00"
 }
