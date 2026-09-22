@@ -70,6 +70,8 @@ input.big{font-size:22px;font-weight:700;text-align:center;color:var(--ok)}
 /* BOTÃO EXPORTAR — dois botões lado a lado */
 .export-row{display:none;margin-bottom:10px}
 .export-row.visible{display:block}
+.aviso-pend{display:none;background:#5a3d00;border:1px solid var(--warn);color:#ffd27f;border-radius:8px;padding:9px 11px;margin-bottom:10px;font-size:13px;line-height:1.4}
+.aviso-pend.visible{display:block}
 .btn-export{width:100%;background:linear-gradient(135deg,#2e7d32,#1b5e20);color:#fff;font-size:15px;padding:15px;border-radius:10px;border:none;font-weight:900;cursor:pointer;letter-spacing:.3px}
 .btn-export:disabled{opacity:.5;cursor:default}
 
@@ -290,6 +292,9 @@ input.big{font-size:22px;font-weight:700;text-align:center;color:var(--ok)}
     <button class="btn btn-ok" id="btnRegistrar" onclick="registrarPalete(false)">✔ Registrar Palete</button>
     <button class="btn btn-primary" id="btnRegistrarImprimir" onclick="registrarPalete(true)">🖨 Registrar + Imprimir Etiqueta</button>
     <div id="msgResult" class="msg"></div>
+    <!-- Fica à vista enquanto houver palete que ainda não chegou no servidor.
+         Antes disso o operador não tinha como saber que algo ficou pra trás. -->
+    <div class="aviso-pend"></div>
 
     <!-- Botões exportar na aba Registro -->
     <div class="export-row" id="exportRowReg">
@@ -303,6 +308,8 @@ input.big{font-size:22px;font-weight:700;text-align:center;color:var(--ok)}
   <div id="tab-historico" class="section">
 
     <button class="btn-voltar" onclick="voltarRegistro()">← Voltar</button>
+
+    <div class="aviso-pend"></div>
 
     <div id="historicoContent"></div>
 
@@ -885,59 +892,114 @@ function salvarRegistros(regs){
 
 // ── ENVIO EM TEMPO REAL PARA O N8N (dashboard) ──────────────────
 // Melhor esforço: nunca bloqueia nem atrasa o registro/impressão da etiqueta.
-// Se falhar (wifi caiu, n8n fora do ar, ou o túnel respondeu com erro tipo
-// 530), guarda pra reenviar depois. O servidor descarta duplicata sozinho
-// (chave OF+palete), então é seguro reenviar sem checar antes.
+// O palete entra na fila ANTES de tentar enviar, e só sai da fila quando o
+// servidor confirma. Antes era o contrário (só entrava na fila dentro do
+// .catch do fetch) -- e aí bastava o callback nunca rodar pra o palete sumir
+// sem ninguém perceber: no Android, abrir a folha de compartilhamento pra
+// imprimir a etiqueta manda o app pro segundo plano e o Chrome congela (ou
+// descarta) a página, matando o callback do fetch pendente. Foi assim que a
+// produção da noite de 21/09/2026 se perdeu com o n8n fora do ar: 20 paletes
+// registrados, só o primeiro entrou na fila.
+// O servidor descarta duplicata sozinho (chave OF+palete), então o pior caso
+// desse desenho é reenviar algo que já chegou -- nunca perder.
 function enviarParaN8n(registro){
   const payload = {...registro, fotos: (registro.fotos||[]).length};
-  fetch(N8N_WEBHOOK_URL, {
-    method: 'POST',
-    headers: {'Content-Type':'application/json'},
-    body: JSON.stringify(payload),
-    keepalive: true
-  }).then(resp => {
-    if (!resp.ok) guardarPendente(payload);
-  }).catch(()=>{
-    guardarPendente(payload);
-  });
+  guardarPendente(payload);
+  postarPalete(payload).then(ok => { if (ok) removerPendente(payload); });
 }
 
+// POST único, com timeout. Sem timeout, uma conexão pendurada (túnel fora do
+// ar respondendo devagar) deixa a promise presa pra sempre e o retry trava.
+async function postarPalete(payload, timeoutMs = 15000){
+  const ctrl = new AbortController();
+  const t = setTimeout(() => ctrl.abort(), timeoutMs);
+  try{
+    const resp = await fetch(N8N_WEBHOOK_URL, {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify(payload),
+      keepalive: true,
+      signal: ctrl.signal
+    });
+    return resp.ok;
+  }catch(e){
+    return false;
+  }finally{
+    clearTimeout(t);
+  }
+}
+
+// ── FILA DE PENDENTES ────────────────────────────────
+// Mesma chave de dedup do servidor (OP + OC + número do palete): uma OP pode
+// ter mais de um OC e cada OC numera os paletes dele do 01 em diante.
+function chavePendente(p){
+  return [p.of, p.oc, p.numPalete, p.data].join('|');
+}
+function lerPendentes(){
+  try{ return JSON.parse(localStorage.getItem('pendentes_n8n')||'[]'); }catch{ return []; }
+}
+// Toda alteração na fila lê o estado atual na hora e grava em seguida. Antes
+// a sincronização gravava de volta um snapshot tirado no início do loop, e
+// todo palete registrado no meio de uma sincronização era apagado junto.
+function mutarPendentes(fn){
+  const novo = fn(lerPendentes()) || [];
+  localStorage.setItem('pendentes_n8n', JSON.stringify(novo));
+  atualizarBadge();
+  return novo;
+}
 function guardarPendente(payload){
-  const pendentes = JSON.parse(localStorage.getItem('pendentes_n8n')||'[]');
-  pendentes.push(payload);
-  localStorage.setItem('pendentes_n8n', JSON.stringify(pendentes));
+  const k = chavePendente(payload);
+  mutarPendentes(lista => lista.some(p => chavePendente(p) === k) ? lista : lista.concat([payload]));
+}
+function removerPendente(payload){
+  const k = chavePendente(payload);
+  mutarPendentes(lista => lista.filter(p => chavePendente(p) !== k));
 }
 
 // Tenta reenviar a fila de pendentes (falhas anteriores) e, opcionalmente,
 // TODOS os registros salvos localmente no aparelho — útil pra recuperar
 // paletes que "pareciam entregues" mas não chegaram por causa de uma
 // instabilidade no servidor (não só falha de rede).
+let sincronizando = false;
 async function sincronizarComServidor(reenviarTudo, silencioso=false){
+  // Sem essa trava, o gatilho de 5 em 5 minutos empilhava sincronizações
+  // sobrepostas enquanto o servidor estava fora do ar.
+  if (sincronizando){
+    if(!silencioso) mostrarToast('Sincronização já em andamento...');
+    return;
+  }
+
   const lista = reenviarTudo
     ? getRegistros().map(r => ({...r, fotos:(r.fotos||[]).length}))
-    : JSON.parse(localStorage.getItem('pendentes_n8n')||'[]');
+    : lerPendentes();
 
   if (!lista.length){
     if(!silencioso) mostrarToast(reenviarTudo ? 'Nada salvo neste aparelho.' : 'Nenhum pendente.');
     return;
   }
 
+  sincronizando = true;
   if(!silencioso) mostrarToast(`Sincronizando ${lista.length} registro(s)...`);
-  const aindaPendentes = [];
-  for (const payload of lista){
-    try{
-      const resp = await fetch(N8N_WEBHOOK_URL, {
-        method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(payload)
-      });
-      if (!resp.ok) aindaPendentes.push(payload);
-    }catch(e){
-      aindaPendentes.push(payload);
+  let sincronizados = 0, falharam = 0;
+  try{
+    for (const payload of lista){
+      if (await postarPalete(payload)){
+        removerPendente(payload);
+        sincronizados++;
+      }else{
+        // No modo "reenviar tudo" o que falhar entra na fila pra o retry
+        // automático continuar tentando sozinho depois.
+        if (reenviarTudo) guardarPendente(payload);
+        falharam++;
+      }
     }
+  } finally {
+    sincronizando = false;
+    atualizarBadge();
   }
-  localStorage.setItem('pendentes_n8n', JSON.stringify(aindaPendentes));
-  const sincronizados = lista.length - aindaPendentes.length;
+
   if(!silencioso){
-    mostrarToast(`Sincronizado: ${sincronizados} ok, ${aindaPendentes.length} falharam.`);
+    mostrarToast(`Sincronizado: ${sincronizados} ok, ${falharam} falharam.`);
   } else if (sincronizados > 0){
     // Reenvio automático (evento 'online' ou verificação periódica) só avisa
     // quando realmente conseguiu mandar algo -- senão fica pipocando toast
@@ -1458,7 +1520,7 @@ function renderHistorico(){
   const regs=getRegistros();
   const cont=document.getElementById('historicoContent');
   const temRegs = regs.length > 0;
-  document.getElementById('exportRowHist').classList.toggle('visible', temRegs);
+  document.getElementById('exportRowHist').classList.toggle('visible', temRegs || lerPendentes().length > 0);
   document.getElementById('btnClear').style.display=temRegs?'block':'none';
 
   if(!regs.length){
@@ -1522,6 +1584,16 @@ function deletarRegistro(idx){
 }
 
 function limparDia(){
+  // O histórico local é a última cópia dos paletes que ainda não chegaram no
+  // servidor -- apagar o dia com fila pendente destrói a única chance de
+  // recuperar sem redigitar tudo.
+  const pend = lerPendentes().length;
+  if(pend){
+    alert('Não dá pra apagar agora: ' + pend + ' palete(s) ainda não chegaram no servidor.\n\n'
+      + 'Toque em "🔄 Sincronizar com servidor" e espere o aviso laranja sumir. '
+      + 'Se o servidor estiver fora do ar, deixe o app instalado e tente de novo mais tarde.');
+    return;
+  }
   if(!confirm('Apagar TODOS os registros do dia? Exporte antes!')) return;
   localStorage.removeItem(STORAGE_KEY);
   renderHistorico();
@@ -1695,7 +1767,21 @@ function atualizarBadge(){
   const n=getRegistros().length;
   document.querySelectorAll('.tab')[1].textContent='📋 Histórico'+(n?' ('+n+')':'');
   const temRegs = n > 0;
-  document.getElementById('exportRowReg').classList.toggle('visible', temRegs);
+  const pend = lerPendentes().length;
+
+  document.querySelectorAll('.aviso-pend').forEach(el => {
+    el.classList.toggle('visible', pend > 0);
+    el.textContent = pend > 0
+      ? '⏳ ' + pend + ' palete(s) ainda não chegaram no servidor. O app reenvia sozinho '
+        + 'quando o servidor voltar — NÃO apague os registros do dia até este aviso sumir.'
+      : '';
+  });
+
+  // Os botões de exportar/sincronizar também aparecem quando só existe fila
+  // pendente (ex.: o dia já foi apagado mas ficou coisa pra mandar).
+  const mostrarBotoes = temRegs || pend > 0;
+  document.getElementById('exportRowReg').classList.toggle('visible', mostrarBotoes);
+  document.getElementById('exportRowHist').classList.toggle('visible', mostrarBotoes);
 }
 setInterval(atualizarBadge, 2000);
 atualizarBadge();
@@ -1767,8 +1853,7 @@ if ('serviceWorker' in navigator) {
 // pendente de uma sessão anterior (falha de rede ou instabilidade do
 // servidor). Não bloqueia nem avisa nada se não tiver pendente.
 window.addEventListener('load', () => {
-  const pendentes = JSON.parse(localStorage.getItem('pendentes_n8n')||'[]');
-  if (pendentes.length) sincronizarComServidor(false);
+  if (lerPendentes().length) sincronizarComServidor(false);
 });
 
 // Antes, a fila de pendentes (madrugada com PC/n8n desligado, por exemplo)
@@ -1779,12 +1864,18 @@ window.addEventListener('load', () => {
 // histórico local, sem depender dessa fila). Os dois gatilhos abaixo cobrem
 // esse caso sem exigir reabrir o app.
 window.addEventListener('online', () => {
-  const pendentes = JSON.parse(localStorage.getItem('pendentes_n8n')||'[]');
-  if (pendentes.length) sincronizarComServidor(false, true);
+  if (lerPendentes().length) sincronizarComServidor(false, true);
+});
+// Voltar pro primeiro plano é o momento mais comum de recuperar: o Android
+// congela a página enquanto a folha de compartilhamento da etiqueta está
+// aberta ou o celular fica no bolso, e nada roda até o app aparecer de novo.
+document.addEventListener('visibilitychange', () => {
+  if (document.visibilityState === 'visible' && lerPendentes().length){
+    sincronizarComServidor(false, true);
+  }
 });
 setInterval(() => {
-  const pendentes = JSON.parse(localStorage.getItem('pendentes_n8n')||'[]');
-  if (pendentes.length) sincronizarComServidor(false, true);
+  if (lerPendentes().length) sincronizarComServidor(false, true);
 }, 5 * 60 * 1000);
 </script>
 </body>
