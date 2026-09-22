@@ -11769,7 +11769,29 @@
       "observacoes": "",
       "fotos": 0,
       "recebidoEm": "2026-09-22T11:35:35"
+    },
+    {
+      "data": "21/09/2026",
+      "hora": "21:34",
+      "of": "262487",
+      "chave": "262487§0,595 X 0,786§Z4A EMBALAGENS LTDA",
+      "ofCentral": "1182",
+      "oc": "2117",
+      "cliente": "Z4A EMBALAGENS LTDA",
+      "papelao": "P40B",
+      "medida": "0,595 X 0,786",
+      "qtdePedido": "8250",
+      "referencia": "x",
+      "numPalete": "05",
+      "chapas": 1165,
+      "gramatura": "",
+      "peso": 193.42,
+      "coluna": "",
+      "resultado": "OK",
+      "observacoes": "",
+      "fotos": 0,
+      "recebidoEm": "2026-09-22T11:35:48"
     }
   ],
-  "atualizadoEm": "2026-09-22T11:35:38"
+  "atualizadoEm": "2026-09-22T11:35:52"
 }
