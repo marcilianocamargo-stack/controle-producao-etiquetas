@@ -1395,24 +1395,28 @@ function renderRomaneioPreview(nokExcluidos){
   document.getElementById('expResultado').style.display = 'block';
 }
 
-// ── ROMANEIO PDF (pronto pra imprimir — grade OP/CLIENTE/OC/PAPEL/MEDIDA/QTD PEDIDO/TOTAL OP/PALETE/QTD PALETE/X) ──
+// ── ROMANEIO PDF (pronto pra imprimir — grade CLIENTE/OC/PAPEL/OP/MEDIDA/QTD PEDIDO/TOTAL OP/PALETE/QTD PALETE/X) ──
+// Pra mudar a ordem das colunas é só reordenar este array (cada linha é
+// montada pela chave `k`, não pela posição).
 function gerarRomaneioPDF(){
   if(!romaneioGrupos.length) return;
 
   const doc = new jsPDF({unit:'mm', format:'a4', orientation:'portrait'});
   const PW=210, PH=297, left=10, top=14, right=10, bottom=14;
   const W = PW-left-right;
+  const AZUL = [26,86,160];        // quantidade produzida (mesmo azul do app)
+  const VERDE_CLARO = [210,227,218]; // fundo alternado por OP (tom claro do verde Piquiri das etiquetas)
   const cols = [
-    {t:'OP',                    w:14},
-    {t:'CLIENTE',               w:32},
-    {t:'OC',                    w:16},
-    {t:'PAPEL',                 w:12},
-    {t:'MEDIDA',                w:24},
-    {t:'QTD. PEDIDO',           w:20},
-    {t:'TOTAL PRODUZIDO OP',    w:20},
-    {t:'PALETE',                w:12},
-    {t:'QTD. PALETE',           w:20},
-    {t:'X',                     w:W-(14+32+16+12+24+20+20+12+20)}
+    {k:'cliente',   t:'CLIENTE',            w:32},
+    {k:'oc',        t:'OC',                 w:16},
+    {k:'papel',     t:'PAPEL',              w:12},
+    {k:'op',        t:'OP',                 w:14},
+    {k:'medida',    t:'MEDIDA',             w:24},
+    {k:'pedido',    t:'QTD. PEDIDO',        w:20, bold:true},
+    {k:'produzido', t:'TOTAL PRODUZIDO OP', w:20, cor:AZUL},
+    {k:'palete',    t:'PALETE',             w:12},
+    {k:'qtdPalete', t:'QTD. PALETE',        w:20},
+    {k:'x',         t:'X',                  w:W-(32+16+12+14+24+20+20+12+20)}
   ];
   const rowH = 8, headH = 10;
   let y = top;
@@ -1448,14 +1452,22 @@ function gerarRomaneioPDF(){
     desenharCabecalhoPagina();
   }
 
-  function desenharLinha(valores){
+  // `reg` traz os valores por chave de coluna; `fundo` (opcional) é o RGB do
+  // fundo da linha — usado pra alternar cor entre uma OP e outra.
+  function desenharLinha(reg, fundo){
     if(y + rowH > PH - bottom) novaPagina();
     let x = left;
-    doc.setFont('helvetica','normal');
-    valores.forEach((v,i) => {
-      const c = cols[i];
-      doc.rect(x, y, c.w, rowH);
+    cols.forEach(c => {
+      const v = reg[c.k];
+      if(fundo){
+        doc.setFillColor(...fundo);
+        doc.rect(x, y, c.w, rowH, 'FD');
+      } else {
+        doc.rect(x, y, c.w, rowH);
+      }
       if(v){
+        doc.setFont('helvetica', c.bold ? 'bold' : 'normal');
+        doc.setTextColor(...(c.cor || [0,0,0]));
         let sz = 9.5;
         doc.setFontSize(sz);
         const maxW = c.w-2;
@@ -1482,11 +1494,15 @@ function gerarRomaneioPDF(){
 
   desenharCabecalhoPagina();
 
-  romaneioGrupos.forEach(g => {
+  romaneioGrupos.forEach((g, gi) => {
     const totalGrupo = g.produzido != null ? g.produzido : g.paletes.reduce((s,pp)=>s+pp.chapas,0);
+    // Fundo alterna entre uma OP e outra (verde claro / branco) pra o operador
+    // não misturar os paletes de OPs diferentes na hora de somar o carregamento.
+    const fundo = (gi % 2 === 0) ? VERDE_CLARO : null;
+    const base = {op:g.of, cliente:g.cliente, oc:g.oc, papel:g.papelao, medida:g.medida, pedido:String(g.qtdePedido||'')};
 
     g.paletes.forEach(p => {
-      desenharLinha([g.of, g.cliente, g.oc, g.papelao, g.medida, String(g.qtdePedido||''), String(totalGrupo), p.numPalete, String(p.chapas), '']);
+      desenharLinha({...base, produzido:String(totalGrupo), palete:p.numPalete, qtdPalete:String(p.chapas)}, fundo);
     });
 
     // Paletes que ainda faltam produzir: linhas em branco pro operador
@@ -1494,10 +1510,10 @@ function gerarRomaneioPDF(){
     // propósito — só se sabe depois que produzir).
     if(g.linhasVazias > 0){
       for(let k=0; k<g.linhasVazias; k++){
-        desenharLinha([g.of, g.cliente, g.oc, g.papelao, g.medida, String(g.qtdePedido||''), '', '', '', '']);
+        desenharLinha(base, fundo);
       }
     } else if(g.avisoSemDados){
-      desenharLinha([g.of, g.cliente, g.oc, g.papelao, g.medida, String(g.qtdePedido||''), '', 'a definir', 'faltam ' + (g.restante||0), '']);
+      desenharLinha({...base, palete:'a definir', qtdPalete:'faltam ' + (g.restante||0)}, fundo);
     }
   });
 
