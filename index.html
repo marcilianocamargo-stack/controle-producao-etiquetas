@@ -1408,11 +1408,11 @@ function gerarRomaneioPDF(){
     {t:'OC',                    w:16},
     {t:'PAPEL',                 w:12},
     {t:'MEDIDA',                w:24},
-    {t:'PALETE',                w:12},
-    {t:'QTD. PRODUZIDA PALETE', w:20},
-    {t:'TOTAL PRODUZIDO OP',    w:20},
     {t:'QTD. PEDIDO',           w:20},
-    {t:'X',                     w:W-(14+32+16+12+24+12+20+20+20)}
+    {t:'TOTAL PRODUZIDO OP',    w:20},
+    {t:'PALETE',                w:12},
+    {t:'QTD PALETE',            w:20},
+    {t:'X',                     w:W-(14+32+16+12+24+20+20+12+20)}
   ];
   const rowH = 8, headH = 10;
   let y = top;
@@ -1486,7 +1486,7 @@ function gerarRomaneioPDF(){
     const totalGrupo = g.produzido != null ? g.produzido : g.paletes.reduce((s,pp)=>s+pp.chapas,0);
 
     g.paletes.forEach(p => {
-      desenharLinha([g.of, g.cliente, g.oc, g.papelao, g.medida, p.numPalete, String(p.chapas), String(totalGrupo), String(g.qtdePedido||''), '']);
+      desenharLinha([g.of, g.cliente, g.oc, g.papelao, g.medida, String(g.qtdePedido||''), String(totalGrupo), p.numPalete, String(p.chapas), '']);
     });
 
     // Paletes que ainda faltam produzir: linhas em branco pro operador
@@ -1494,10 +1494,10 @@ function gerarRomaneioPDF(){
     // propósito — só se sabe depois que produzir).
     if(g.linhasVazias > 0){
       for(let k=0; k<g.linhasVazias; k++){
-        desenharLinha([g.of, g.cliente, g.oc, g.papelao, g.medida, '', '', '', String(g.qtdePedido||''), '']);
+        desenharLinha([g.of, g.cliente, g.oc, g.papelao, g.medida, String(g.qtdePedido||''), '', '', '', '']);
       }
     } else if(g.avisoSemDados){
-      desenharLinha([g.of, g.cliente, g.oc, g.papelao, g.medida, 'a definir', 'faltam ' + (g.restante||0), '', String(g.qtdePedido||''), '']);
+      desenharLinha([g.of, g.cliente, g.oc, g.papelao, g.medida, String(g.qtdePedido||''), '', 'a definir', 'faltam ' + (g.restante||0), '']);
     }
   });
 
