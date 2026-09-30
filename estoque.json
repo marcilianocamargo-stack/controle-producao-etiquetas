@@ -1737,7 +1737,29 @@
       "observacoes": "",
       "fotos": 0,
       "recebidoEm": "2026-09-30T18:21:58"
+    },
+    {
+      "data": "30/09/2026",
+      "hora": "18:26",
+      "of": "262788",
+      "chave": "262788§0,279 X 1,002§ANSELMO E FILHOS LTDA.",
+      "ofCentral": "1239",
+      "oc": "75",
+      "cliente": "ANSELMO E FILHOS LTDA.",
+      "papelao": "P25B",
+      "medida": "0,279 X 1,002",
+      "qtdePedido": "4000",
+      "referencia": "87x105x87",
+      "numPalete": "02",
+      "chapas": 1555,
+      "gramatura": "",
+      "peso": 139.11,
+      "coluna": "",
+      "resultado": "OK",
+      "observacoes": "",
+      "fotos": 0,
+      "recebidoEm": "2026-09-30T18:26:05"
     }
   ],
-  "atualizadoEm": "2026-09-30T18:25:06"
+  "atualizadoEm": "2026-09-30T18:26:07"
 }
