@@ -1869,7 +1869,29 @@
       "observacoes": "",
       "fotos": 0,
       "recebidoEm": "2026-09-30T19:01:31"
+    },
+    {
+      "data": "30/09/2026",
+      "hora": "19:09",
+      "of": "262821",
+      "chave": "262821§0,544 X 0,875§Renovapel Reciclagem de Papeis Ltda",
+      "ofCentral": "1242",
+      "oc": "009",
+      "cliente": "Renovapel Reciclagem de Papeis Ltda",
+      "papelao": "P45B",
+      "medida": "0,544 X 0,875",
+      "qtdePedido": "1000",
+      "referencia": "x",
+      "numPalete": "01",
+      "chapas": 1115,
+      "gramatura": "",
+      "peso": 193.72,
+      "coluna": "",
+      "resultado": "OK",
+      "observacoes": "",
+      "fotos": 0,
+      "recebidoEm": "2026-09-30T19:09:20"
     }
   ],
-  "atualizadoEm": "2026-09-30T19:05:06"
+  "atualizadoEm": "2026-09-30T19:09:22"
 }
