@@ -1913,7 +1913,29 @@
       "observacoes": "",
       "fotos": 0,
       "recebidoEm": "2026-09-30T19:23:16"
+    },
+    {
+      "data": "30/09/2026",
+      "hora": "20:19",
+      "of": "262720",
+      "chave": "262720§0,400 X 0,810§HARMONY EMBALAGENS",
+      "ofCentral": "1231",
+      "oc": "23-09-26",
+      "cliente": "HARMONY EMBALAGENS",
+      "papelao": "P25B",
+      "medida": "0,400 X 0,810",
+      "qtdePedido": "1000",
+      "referencia": "x",
+      "numPalete": "01",
+      "chapas": 1240,
+      "gramatura": "",
+      "peso": 128.56,
+      "coluna": "",
+      "resultado": "OK",
+      "observacoes": "",
+      "fotos": 0,
+      "recebidoEm": "2026-09-30T20:19:31"
     }
   ],
-  "atualizadoEm": "2026-09-30T20:15:06"
+  "atualizadoEm": "2026-09-30T20:19:32"
 }
