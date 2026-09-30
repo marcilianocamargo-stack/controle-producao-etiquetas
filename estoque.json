@@ -1253,7 +1253,29 @@
       "observacoes": "",
       "fotos": 0,
       "recebidoEm": "2026-09-30T15:26:19"
+    },
+    {
+      "data": "30/09/2026",
+      "hora": "15:29",
+      "of": "262637",
+      "chave": "262637§0,566 X 1,463§PCBOX EMBALAGENS LTDA",
+      "ofCentral": "1212",
+      "oc": "1745",
+      "cliente": "PCBOX EMBALAGENS LTDA",
+      "papelao": "P55D",
+      "medida": "0,566 X 1,463",
+      "qtdePedido": "500",
+      "referencia": "x",
+      "numPalete": "02",
+      "chapas": 165,
+      "gramatura": "",
+      "peso": 77.61,
+      "coluna": "",
+      "resultado": "OK",
+      "observacoes": "",
+      "fotos": 0,
+      "recebidoEm": "2026-09-30T15:29:20"
     }
   ],
-  "atualizadoEm": "2026-09-30T15:26:21"
+  "atualizadoEm": "2026-09-30T15:29:22"
 }
