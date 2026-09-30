@@ -1781,7 +1781,29 @@
       "observacoes": "",
       "fotos": 0,
       "recebidoEm": "2026-09-30T18:37:17"
+    },
+    {
+      "data": "30/09/2026",
+      "hora": "18:42",
+      "of": "262783",
+      "chave": "262783§0,580 X 1,000§FAVINCO",
+      "ofCentral": "1239",
+      "oc": "076",
+      "cliente": "FAVINCO",
+      "papelao": "P25B",
+      "medida": "0,580 X 1,000",
+      "qtdePedido": "1000",
+      "referencia": "x",
+      "numPalete": "01",
+      "chapas": 775,
+      "gramatura": "",
+      "peso": 143.84,
+      "coluna": "",
+      "resultado": "OK",
+      "observacoes": "",
+      "fotos": 0,
+      "recebidoEm": "2026-09-30T18:42:49"
     }
   ],
-  "atualizadoEm": "2026-09-30T18:40:06"
+  "atualizadoEm": "2026-09-30T18:42:51"
 }
