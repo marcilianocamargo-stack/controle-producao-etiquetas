@@ -4,10 +4,10 @@
   "chapasHoje": 30106,
   "paletes": 42,
   "turnoDiaFechado": {
-    "data": "01/10/2026",
-    "peso": 6883.03,
-    "chapas": 11220,
-    "paletes": 28
+    "data": "02/10/2026",
+    "peso": 5259.3,
+    "chapas": 30106,
+    "paletes": 42
   },
   "turnoNoiteFechado": {
     "data": "01/10/2026",
@@ -16,11 +16,11 @@
     "paletes": 48
   },
   "turnoAtual": {
-    "tipo": "dia",
+    "tipo": "noite",
     "data": "02/10/2026",
-    "peso": 5259.3,
-    "chapas": 30106,
-    "paletes": 42
+    "peso": 0.0,
+    "chapas": 0,
+    "paletes": 0
   },
-  "atualizadoEm": "2026-10-02T17:57:52"
+  "atualizadoEm": "2026-10-02T18:00:04"
 }
