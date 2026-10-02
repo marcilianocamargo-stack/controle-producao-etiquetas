@@ -2969,7 +2969,29 @@
       "observacoes": "",
       "fotos": 0,
       "recebidoEm": "2026-10-02T15:27:14"
+    },
+    {
+      "data": "02/10/2026",
+      "hora": "17:01",
+      "of": "262805",
+      "chave": "262805§0,512 X 1,375§Renovapel Reciclagem de Papeis Ltda",
+      "ofCentral": "1242",
+      "oc": "009",
+      "cliente": "Renovapel Reciclagem de Papeis Ltda",
+      "papelao": "P70C",
+      "medida": "0,512 X 1,375",
+      "qtdePedido": "600",
+      "referencia": "131x250x131",
+      "numPalete": "01",
+      "chapas": 580,
+      "gramatura": "",
+      "peso": 191.91,
+      "coluna": "",
+      "resultado": "OK",
+      "observacoes": "",
+      "fotos": 0,
+      "recebidoEm": "2026-10-02T17:02:01"
     }
   ],
-  "atualizadoEm": "2026-10-02T17:00:06"
+  "atualizadoEm": "2026-10-02T17:02:04"
 }
