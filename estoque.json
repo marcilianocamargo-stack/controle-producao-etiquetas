@@ -4421,7 +4421,29 @@
       "observacoes": "",
       "fotos": 0,
       "recebidoEm": "2026-10-02T11:08:45"
+    },
+    {
+      "data": "02/10/2026",
+      "hora": "11:27",
+      "of": "262829",
+      "chave": "262829§0,540 X 1,610§ANSELMO E FILHOS LTDA.",
+      "ofCentral": "1243",
+      "oc": "81",
+      "cliente": "ANSELMO E FILHOS LTDA.",
+      "papelao": "P40B",
+      "medida": "0,540 X 1,610",
+      "qtdePedido": "2000",
+      "referencia": "155x230x155",
+      "numPalete": "01",
+      "chapas": 400,
+      "gramatura": "",
+      "peso": 123.45,
+      "coluna": "",
+      "resultado": "OK",
+      "observacoes": "",
+      "fotos": 0,
+      "recebidoEm": "2026-10-02T11:27:17"
     }
   ],
-  "atualizadoEm": "2026-10-02T11:25:06"
+  "atualizadoEm": "2026-10-02T11:27:19"
 }
