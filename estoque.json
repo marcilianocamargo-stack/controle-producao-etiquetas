@@ -2133,7 +2133,29 @@
       "observacoes": "",
       "fotos": 0,
       "recebidoEm": "2026-10-05T14:43:09"
+    },
+    {
+      "data": "05/10/2026",
+      "hora": "14:45",
+      "of": "262680",
+      "chave": "262680§0,730 X 1,980§PROGRAMAÇÃO ONDULADEIRA - FORBOX Soluções em Caixas de Papelão LTDA",
+      "ofCentral": "1220",
+      "oc": "1755",
+      "cliente": "PROGRAMAÇÃO ONDULADEIRA - FORBOX Soluções em Caixas de Papelão LTDA",
+      "papelao": "P50D",
+      "medida": "0,730 X 1,980",
+      "qtdePedido": "400",
+      "referencia": "x",
+      "numPalete": "01",
+      "chapas": 175,
+      "gramatura": "",
+      "peso": 136.08,
+      "coluna": "",
+      "resultado": "OK",
+      "observacoes": "",
+      "fotos": 0,
+      "recebidoEm": "2026-10-05T14:45:11"
     }
   ],
-  "atualizadoEm": "2026-10-05T14:45:06"
+  "atualizadoEm": "2026-10-05T14:45:13"
 }
