@@ -1979,7 +1979,29 @@
       "observacoes": "",
       "fotos": 0,
       "recebidoEm": "2026-10-05T11:13:12"
+    },
+    {
+      "data": "05/10/2026",
+      "hora": "11:43",
+      "of": "262732",
+      "chave": "262732§0,750 X 0,750§PCBOX EMBALAGENS LTDA",
+      "ofCentral": "1233",
+      "oc": "1776",
+      "cliente": "PCBOX EMBALAGENS LTDA",
+      "papelao": "P60C",
+      "medida": "0,750 X 0,750",
+      "qtdePedido": "1500",
+      "referencia": "x",
+      "numPalete": "03",
+      "chapas": 545,
+      "gramatura": "",
+      "peso": 134.89,
+      "coluna": "",
+      "resultado": "OK",
+      "observacoes": "",
+      "fotos": 0,
+      "recebidoEm": "2026-10-05T11:43:32"
     }
   ],
-  "atualizadoEm": "2026-10-05T11:40:06"
+  "atualizadoEm": "2026-10-05T11:43:34"
 }
