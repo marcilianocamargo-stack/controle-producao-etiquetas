@@ -2111,7 +2111,29 @@
       "observacoes": "",
       "fotos": 0,
       "recebidoEm": "2026-10-05T13:59:30"
+    },
+    {
+      "data": "05/10/2026",
+      "hora": "14:43",
+      "of": "262864",
+      "chave": "262864§1,300 X 1,600§IPE EMBALAGENS LTDA",
+      "ofCentral": "1233",
+      "oc": "1798",
+      "cliente": "IPE EMBALAGENS LTDA",
+      "papelao": "P25B",
+      "medida": "1,300 X 1,600",
+      "qtdePedido": "2000",
+      "referencia": "x",
+      "numPalete": "06",
+      "chapas": 120,
+      "gramatura": "",
+      "peso": 79.87,
+      "coluna": "",
+      "resultado": "OK",
+      "observacoes": "",
+      "fotos": 0,
+      "recebidoEm": "2026-10-05T14:43:09"
     }
   ],
-  "atualizadoEm": "2026-10-05T14:40:06"
+  "atualizadoEm": "2026-10-05T14:43:11"
 }
