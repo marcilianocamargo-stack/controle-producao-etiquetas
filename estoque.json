@@ -2529,7 +2529,29 @@
       "observacoes": "",
       "fotos": 0,
       "recebidoEm": "2026-10-05T18:05:07"
+    },
+    {
+      "data": "05/10/2026",
+      "hora": "18:05",
+      "of": "262669",
+      "chave": "262669§1,119 X 1,670§FORBOX Soluções em Caixas de Papelão LTDA",
+      "ofCentral": "1220",
+      "oc": "SN",
+      "cliente": "FORBOX Soluções em Caixas de Papelão LTDA",
+      "papelao": "P55D",
+      "medida": "1,119 X 1,670",
+      "qtdePedido": "3100",
+      "referencia": "318x483x318",
+      "numPalete": "12",
+      "chapas": 165,
+      "gramatura": "",
+      "peso": 175.14,
+      "coluna": "",
+      "resultado": "OK",
+      "observacoes": "",
+      "fotos": 0,
+      "recebidoEm": "2026-10-05T18:05:21"
     }
   ],
-  "atualizadoEm": "2026-10-05T18:05:10"
+  "atualizadoEm": "2026-10-05T18:05:23"
 }
