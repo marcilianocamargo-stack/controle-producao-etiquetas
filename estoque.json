@@ -4289,7 +4289,29 @@
       "observacoes": "",
       "fotos": 0,
       "recebidoEm": "2026-10-07T10:13:39"
+    },
+    {
+      "data": "07/10/2026",
+      "hora": "10:16",
+      "of": "262725",
+      "chave": "262725§0,930 X 1,210§RM Embalagens ( Daiane Marques Canossa ME )",
+      "ofCentral": "1232",
+      "oc": "7",
+      "cliente": "RM Embalagens ( Daiane Marques Canossa ME )",
+      "papelao": "P45B",
+      "medida": "0,930 X 1,210",
+      "qtdePedido": "550",
+      "referencia": "x",
+      "numPalete": "01",
+      "chapas": 275,
+      "gramatura": "",
+      "peso": 112.95,
+      "coluna": "",
+      "resultado": "OK",
+      "observacoes": "",
+      "fotos": 0,
+      "recebidoEm": "2026-10-07T10:16:55"
     }
   ],
-  "atualizadoEm": "2026-10-07T10:15:06"
+  "atualizadoEm": "2026-10-07T10:16:57"
 }
