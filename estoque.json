@@ -2727,7 +2727,29 @@
       "observacoes": "",
       "fotos": 0,
       "recebidoEm": "2026-10-08T17:30:00"
+    },
+    {
+      "data": "08/10/2026",
+      "hora": "18:05",
+      "of": "262932",
+      "chave": "262932§0,567 X 1,662§FAVINCO.",
+      "ofCentral": "1252",
+      "oc": "087",
+      "cliente": "FAVINCO.",
+      "papelao": "P60C",
+      "medida": "0,567 X 1,662",
+      "qtdePedido": "450",
+      "referencia": "163x241x163",
+      "numPalete": "01",
+      "chapas": 465,
+      "gramatura": "",
+      "peso": 192.81,
+      "coluna": "",
+      "resultado": "OK",
+      "observacoes": "",
+      "fotos": 0,
+      "recebidoEm": "2026-10-08T18:05:36"
     }
   ],
-  "atualizadoEm": "2026-10-08T18:05:07"
+  "atualizadoEm": "2026-10-08T18:05:38"
 }
