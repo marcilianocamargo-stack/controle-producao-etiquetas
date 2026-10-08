@@ -5411,7 +5411,29 @@
       "observacoes": "",
       "fotos": 0,
       "recebidoEm": "2026-10-07T22:42:33"
+    },
+    {
+      "data": "07/10/2026",
+      "hora": "22:49",
+      "of": "262883",
+      "chave": "262883§0,720 X 0,850§CARTOMIL EMBALAGENS LTDA",
+      "ofCentral": "1258",
+      "oc": "061026",
+      "cliente": "CARTOMIL EMBALAGENS LTDA",
+      "papelao": "P25B",
+      "medida": "0,720 X 0,850",
+      "qtdePedido": "1600",
+      "referencia": "x",
+      "numPalete": "02",
+      "chapas": 935,
+      "gramatura": "",
+      "peso": 183.11,
+      "coluna": "",
+      "resultado": "OK",
+      "observacoes": "",
+      "fotos": 0,
+      "recebidoEm": "2026-10-07T22:49:12"
     }
   ],
-  "atualizadoEm": "2026-10-07T22:45:06"
+  "atualizadoEm": "2026-10-07T22:49:14"
 }
