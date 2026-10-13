@@ -354,50 +354,6 @@
     },
     {
       "data": "02/10/2026",
-      "hora": "12:01",
-      "of": "262809",
-      "chave": "262809§0,322 X 1,145§Renovapel Reciclagem de Papeis Ltda",
-      "ofCentral": "1242",
-      "oc": "009",
-      "cliente": "Renovapel Reciclagem de Papeis Ltda",
-      "papelao": "P45B",
-      "medida": "0,322 X 1,145",
-      "qtdePedido": "300",
-      "referencia": "116x90x116",
-      "numPalete": "02",
-      "chapas": 1150,
-      "gramatura": "",
-      "peso": 154.76,
-      "coluna": "",
-      "resultado": "OK",
-      "observacoes": "",
-      "fotos": 0,
-      "recebidoEm": "2026-10-02T12:01:56"
-    },
-    {
-      "data": "02/10/2026",
-      "hora": "17:02",
-      "of": "262805",
-      "chave": "262805§0,512 X 1,375§Renovapel Reciclagem de Papeis Ltda",
-      "ofCentral": "1242",
-      "oc": "009",
-      "cliente": "Renovapel Reciclagem de Papeis Ltda",
-      "papelao": "P70C",
-      "medida": "0,512 X 1,375",
-      "qtdePedido": "600",
-      "referencia": "131x250x131",
-      "numPalete": "02",
-      "chapas": 580,
-      "gramatura": "",
-      "peso": 191.91,
-      "coluna": "",
-      "resultado": "OK",
-      "observacoes": "",
-      "fotos": 0,
-      "recebidoEm": "2026-10-02T17:02:14"
-    },
-    {
-      "data": "02/10/2026",
       "hora": "17:57",
       "of": "262737",
       "chave": "262737§0,470 X 1,787§PCBOX EMBALAGENS LTDA",
@@ -1893,5 +1849,5 @@
       "recebidoEm": "2026-10-13T09:05:37"
     }
   ],
-  "atualizadoEm": "2026-10-13T09:05:39"
+  "atualizadoEm": "2026-10-13T09:07:33"
 }
