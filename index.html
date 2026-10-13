@@ -1545,10 +1545,17 @@ function montarRomaneioCliente(cli, pref){
     }
     return (a.ts - b.ts) || cmpNatural(a.oc, b.oc);
   });
+  // Total da OP (soma dos paletes dela em estoque) — repete em cada linha da
+  // OP, como no romaneio por OF. Só conta o que ainda está em estoque.
+  const totalOp = new Map();
+  ocs.forEach(o => o.paletes.forEach(p => {
+    const k = p.op + '§' + p.medida;
+    totalOp.set(k, (totalOp.get(k) || 0) + p.chapas);
+  }));
   let seq = 0;
   ocs.forEach(o => {
     o.paletes.sort((a,b) => cmpNatural(a.op, b.op) || cmpNatural(a.numPalete, b.numPalete));
-    o.paletes.forEach(p => { p.seq = ++seq; });
+    o.paletes.forEach(p => { p.seq = ++seq; p.totalOp = totalOp.get(p.op + '§' + p.medida); });
     o.total = o.paletes.reduce((s,p) => s + p.chapas, 0);
   });
   return {
@@ -1725,12 +1732,12 @@ function gerarRomaneioClientePDF(){
     {k:'op',        t:'OP',           w:16},
     {k:'medida',    t:'MEDIDA',       w:28},
     {k:'pedido',    t:'QTD. PEDIDO',  w:20, bold:true},
-    {k:'data',      t:'PRODUZIDO EM', w:22},
+    {k:'totalOp',   t:'TOTAL PRODUZIDO OP', w:22, cor:AZUL},
     {k:'palete',    t:'PALETE',       w:14},
-    {k:'qtdPalete', t:'QTD. PALETE',  w:22, cor:AZUL},
+    {k:'qtdPalete', t:'QTD. PALETE',  w:22},
     {k:'x',         t:'X',            w:W-(11+22+14+16+28+20+22+14+22)}
   ];
-  const rowH = 8, headH = 10;
+  const rowH = 8, headH = 12;
   let y = top;
 
   function desenharCabecalhoTabela(){
@@ -1807,7 +1814,7 @@ function gerarRomaneioClientePDF(){
     o.paletes.forEach(p => {
       desenharLinha({
         ord:String(p.seq), oc:o.oc || 'sem OC', papel:p.papel, op:p.op, medida:p.medida,
-        pedido:p.pedido, data:p.data, palete:p.numPalete, qtdPalete:String(p.chapas)
+        pedido:p.pedido, totalOp:String(p.totalOp), palete:p.numPalete, qtdPalete:String(p.chapas)
       }, fundo);
     });
   });
