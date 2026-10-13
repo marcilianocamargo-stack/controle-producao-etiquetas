@@ -55,6 +55,13 @@ input.big{font-size:22px;font-weight:700;text-align:center;color:var(--ok)}
 .busca-row{display:flex;gap:8px;margin-bottom:8px}
 .busca-row input{flex:1}
 .busca-row button{padding:9px 13px;border-radius:6px;border:none;background:var(--surface2);color:var(--muted);font-weight:700;font-size:13px;cursor:pointer}
+.modo-seg{display:flex;gap:6px;margin-bottom:10px}
+.modo-seg button{flex:1;padding:9px 6px;border-radius:6px;border:1.5px solid var(--border);background:var(--surface2);color:var(--muted);font-weight:700;font-size:12px;cursor:pointer}
+.modo-seg button.on{background:var(--accent);border-color:var(--accent);color:#fff}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:4px}
+.chip{padding:7px 11px;border-radius:16px;border:1.5px solid var(--border);background:var(--surface2);color:var(--text);font-size:12px;font-weight:700;cursor:pointer}
+.chip small{color:var(--muted);font-weight:600}
+.chip:active{border-color:var(--accent)}
 
 .preview-box{background:var(--surface2);border:1px solid var(--border);border-radius:7px;padding:10px 12px;font-size:12px;line-height:1.9;margin-top:8px;display:none}
 .preview-box span{color:var(--muted)}
@@ -356,16 +363,40 @@ input.big{font-size:22px;font-weight:700;text-align:center;color:var(--ok)}
   <button class="btn-voltar" onclick="voltarRegistro()">← Voltar</button>
 
   <div class="card">
-    <div class="step">Romaneio de Expedição · buscar por OF</div>
-    <div class="busca-row">
-      <input type="text" id="expOfInput" placeholder="Nº da OF (ex: 1158)" inputmode="numeric" onkeydown="if(event.key==='Enter'){event.preventDefault();buscarRomaneio();}">
-      <button onclick="buscarRomaneio()">🔎 Buscar</button>
+    <div class="step">Romaneio de Expedição</div>
+    <div class="modo-seg">
+      <button id="expModoCliente" class="on" onclick="setModoRomaneio('cliente')">👤 Por cliente</button>
+      <button id="expModoOf" onclick="setModoRomaneio('of')">🔢 Por OF</button>
     </div>
+
+    <div id="expPainelCliente">
+      <div class="busca-row">
+        <input type="text" id="expClienteInput" placeholder="Nome do cliente (ex: PCBOX)" autocomplete="off" onkeydown="if(event.key==='Enter'){event.preventDefault();buscarRomaneioCliente();}">
+        <button onclick="buscarRomaneioCliente()">🔎 Buscar</button>
+      </div>
+      <div id="expClienteChips" class="chips"></div>
+      <div id="expEstoqueInfo" style="font-size:11px;color:var(--muted);margin-top:8px"></div>
+    </div>
+
+    <div id="expPainelOf" style="display:none">
+      <div class="busca-row">
+        <input type="text" id="expOfInput" placeholder="Nº da OF (ex: 1158)" inputmode="numeric" onkeydown="if(event.key==='Enter'){event.preventDefault();buscarRomaneio();}">
+        <button onclick="buscarRomaneio()">🔎 Buscar</button>
+      </div>
+    </div>
+
     <div id="expStatus" class="status-auto info" style="display:none;margin-top:8px"></div>
   </div>
 
   <div id="expResultado" style="display:none">
     <div class="card">
+      <div id="expOrdemBox" style="display:none;margin-bottom:10px">
+        <div class="step" style="margin-bottom:6px">Ordem de carregamento (de cima para baixo)</div>
+        <div class="modo-seg" style="margin-bottom:0">
+          <button id="expOrdOc" class="on" onclick="setOrdemRomaneio('oc')">OC mais antiga primeiro</button>
+          <button id="expOrdProd" onclick="setOrdemRomaneio('producao')">Data de produção</button>
+        </div>
+      </div>
       <div class="resumo-linha" style="border-radius:8px">
         <span>Paletes encontrados</span><strong id="expTotalPaletes">0</strong>
       </div>
@@ -373,6 +404,7 @@ input.big{font-size:22px;font-weight:700;text-align:center;color:var(--ok)}
         <span>Total de chapas produzidas</span><strong id="expTotalChapas">0</strong>
       </div>
       <div id="expAvisoNok" class="status-auto err" style="display:none;margin-top:8px;line-height:1.5"></div>
+      <div id="expAvisoOrdem" class="status-auto err" style="display:none;margin-top:8px;line-height:1.5"></div>
     </div>
     <div id="expGrupos"></div>
     <button class="btn btn-primary" id="btnGerarRomaneio" style="display:block" onclick="gerarRomaneioPDF()">📄 Gerar PDF do Romaneio</button>
@@ -452,6 +484,7 @@ function mudarTab(tab) {
   document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
   document.getElementById('tab-' + tab).classList.add('active');
   if (tab === 'historico') renderHistorico();
+  if (tab === 'expedicao') abrirExpedicao();
 }
 
 // Voltar do Histórico/Chapas: sempre retorna para os campos a preencher (Registrar palete)
@@ -1361,6 +1394,9 @@ function calcularLinhasVazias(grupos){
 }
 
 function renderRomaneioPreview(nokExcluidos){
+  romaneioResultadoModo = 'of';
+  document.getElementById('expOrdemBox').style.display = 'none';
+  document.getElementById('expAvisoOrdem').style.display = 'none';
   const totalPaletes = romaneioGrupos.reduce((s,g)=>s+g.paletes.length,0);
   const totalChapas = romaneioGrupos.reduce((s,g)=>s+g.paletes.reduce((s2,p)=>s2+p.chapas,0),0);
   document.getElementById('expTotalPaletes').textContent = totalPaletes;
@@ -1395,10 +1431,412 @@ function renderRomaneioPreview(nokExcluidos){
   document.getElementById('expResultado').style.display = 'block';
 }
 
+// ── ROMANEIO POR CLIENTE (ordem de carregamento: OC mais antiga primeiro) ──
+// O expedidor digita só o cliente: o app junta TODOS os paletes que estão em
+// estoque (estoque.json já não traz o que foi embarcado) e ordena pela OC mais
+// antiga, pra carregar de cima para baixo. Cada cliente numera a OC de um
+// jeito (número, data, número/ano, letras+número) — ver ocTipoValor().
+let romaneioResultadoModo = 'of';   // 'of' | 'cliente' — qual busca alimentou a tela/PDF
+let romaneioModoUI = 'cliente';
+let romaneioOrdemPref = 'oc';       // 'oc' | 'producao'
+let estoqueRomaneio = null;         // {paletes, atualizadoEm}
+let clientesRomaneio = [];          // clientes com estoque, nomes já agrupados
+let romaneioCliente = null;         // resultado da última busca por cliente
+
+// Palavras que não distinguem um cliente do outro ("PCBOX EMBALAGENS" = "PCBOX EMBALAGENS LTDA").
+const CLIENTE_PALAVRAS_IGNORADAS = new Set(['LTDA','ME','EPP','EIRELI','SA','S','A','E','DE','DA','DO','DOS','DAS','EMBALAGEM','EMBALAGENS','COMERCIO','INDUSTRIA','IND','COM']);
+
+// Chave de agrupamento do nome: sem acento, sem "( ... )" (inclusive parêntese
+// que ficou aberto), sem sufixos legais e sem letra repetida por digitação
+// (CARPELL → CARPEL). Se um dia agrupar errado, é aqui que se corrige.
+function chaveCliente(nome){
+  let s = String(nome||'').normalize('NFD').replace(/[̀-ͯ]/g,'').toUpperCase();
+  s = s.replace(/\([^)]*\)?/g,' ').replace(/[^A-Z0-9]+/g,' ').trim();
+  const k = s.split(' ').filter(w => w && !CLIENTE_PALAVRAS_IGNORADAS.has(w)).join(' ').replace(/([A-Z])\1+/g,'$1');
+  return k || s;
+}
+function nomeClienteLimpo(nome){
+  return String(nome||'').replace(/\([^)]*\)?/g,' ').replace(/\s+/g,' ').trim();
+}
+
+// Junta os paletes (sem NOK) por cliente. O nome exibido é a versão mais completa.
+function agruparClientesEstoque(paletes){
+  const mapa = new Map();
+  paletes.forEach(p => {
+    if(String(p.resultado||'').toUpperCase() === 'NOK') return;
+    const k = chaveCliente(p.cliente);
+    if(!mapa.has(k)) mapa.set(k, {chave:k, paletes:[], nomes:new Map()});
+    const g = mapa.get(k);
+    g.paletes.push(p);
+    const n = nomeClienteLimpo(p.cliente);
+    g.nomes.set(n, (g.nomes.get(n)||0) + 1);
+  });
+  return [...mapa.values()].map(g => {
+    const nomes = [...g.nomes.entries()].sort((a,b)=> (b[0].length - a[0].length) || (b[1] - a[1]));
+    return {
+      chave:g.chave,
+      nome:(nomes[0] && nomes[0][0]) || '(sem cliente)',
+      nomesOriginais:[...new Set(g.paletes.map(p => String(p.cliente||'').trim()))],
+      paletes:g.paletes
+    };
+  }).sort((a,b)=> a.nome.localeCompare(b.nome,'pt-BR'));
+}
+
+// Interpreta a OC pra poder ordenar. tipo: NUM | DATA | NUMANO | ALFA | ?
+function ocTipoValor(oc){
+  const s = String(oc||'').trim();
+  if(!s) return {tipo:'?', val:0};
+  let m = s.match(/^(\d{2})(\d{2})(20\d{2})$/) || s.match(/^(\d{1,2})[-\/.](\d{1,2})[-\/.](\d{4}|\d{2})$/);
+  if(m){
+    const d = +m[1], mo = +m[2], a = m[3].length === 2 ? 2000 + (+m[3]) : +m[3];
+    if(d>=1 && d<=31 && mo>=1 && mo<=12) return {tipo:'DATA', val:a*10000 + mo*100 + d};
+  }
+  m = s.match(/^(\d+)\/(20\d{2})$/);
+  if(m) return {tipo:'NUMANO', val:(+m[2])*100000 + (+m[1])};
+  if(/^\d+$/.test(s)) return {tipo:'NUM', val:parseInt(s,10)};
+  if(/^[A-Za-z]+\d+[A-Za-z0-9]*$/.test(s)) return {tipo:'ALFA', val:0};
+  return {tipo:'?', val:0};
+}
+
+function tsPalete(p){
+  const m = String(p.data||'').match(/^(\d{2})\/(\d{2})\/(\d{4})$/);
+  const h = String(p.hora||'').match(/^(\d{1,2}):(\d{2})/);
+  if(m) return new Date(+m[3], +m[2]-1, +m[1], h?+h[1]:0, h?+h[2]:0).getTime();
+  const r = Date.parse(p.recebidoEm || '');
+  return isNaN(r) ? 9e15 : r;
+}
+
+const cmpNatural = (a,b) => String(a).localeCompare(String(b),'pt-BR',{numeric:true,sensitivity:'base'});
+
+// Monta o romaneio de um cliente: OCs na ordem de carregamento + avisos.
+function montarRomaneioCliente(cli, pref){
+  const mapa = new Map();
+  cli.paletes.forEach(p => {
+    const oc = String(p.oc||'').trim();
+    if(!mapa.has(oc)) mapa.set(oc, Object.assign({oc, ts:Infinity, paletes:[]}, ocTipoValor(oc)));
+    const g = mapa.get(oc);
+    g.paletes.push({
+      op:String(p.of||''), medida:p.medida||'', papel:p.papelao||'', pedido:String(p.qtdePedido||''),
+      numPalete:String(p.numPalete||''), chapas:Number(p.chapas)||0, data:p.data||'', ts:tsPalete(p)
+    });
+    g.ts = Math.min(g.ts, tsPalete(p));
+  });
+  const ocs = [...mapa.values()];
+  const avisos = [];
+  const tipos = new Set(ocs.map(o => o.tipo));
+  const misto = ocs.length > 1 && (tipos.size > 1 || tipos.has('?'));
+  let ordem = pref;
+
+  if(misto){
+    ordem = 'producao';
+    avisos.push('As OCs deste cliente estão em formatos diferentes ('+ocs.map(o=>o.oc||'sem OC').sort(cmpNatural).join(', ')+'), então não dá pra comparar pelo número. Ordenado por data de produção — confira a ordem antes de carregar.');
+  } else if(ocs.length > 1 && tipos.has('NUM')){
+    const vals = ocs.map(o => o.val).filter(v => v > 0);
+    if(vals.length > 1 && Math.max(...vals) / Math.min(...vals) > 10){
+      avisos.push('A numeração das OCs tem um salto grande ('+ocs.map(o=>o.oc).sort(cmpNatural).join(', ')+'). Pode ser OC digitada errada ou numeração reiniciada pelo cliente — confira a ordem.');
+    }
+  }
+  if(pref === 'producao') ordem = 'producao';
+
+  ocs.sort((a,b) => {
+    if(ordem === 'oc'){
+      const d = (a.tipo === 'ALFA') ? cmpNatural(a.oc, b.oc) : (a.val - b.val);
+      if(d) return d;
+    }
+    return (a.ts - b.ts) || cmpNatural(a.oc, b.oc);
+  });
+  let seq = 0;
+  ocs.forEach(o => {
+    o.paletes.sort((a,b) => cmpNatural(a.op, b.op) || cmpNatural(a.numPalete, b.numPalete));
+    o.paletes.forEach(p => { p.seq = ++seq; });
+    o.total = o.paletes.reduce((s,p) => s + p.chapas, 0);
+  });
+  return {
+    nome:cli.nome, chave:cli.chave, nomesOriginais:cli.nomesOriginais, ordem, avisos, ocs,
+    totalPaletes:seq, totalChapas:ocs.reduce((s,o) => s + o.total, 0)
+  };
+}
+
+async function carregarEstoqueRomaneio(){
+  const resp = await fetch(ESTOQUE_URL + '?t=' + Date.now(), {cache:'no-store'});
+  if(!resp.ok) throw new Error('sem arquivo');
+  const dados = await resp.json();
+  estoqueRomaneio = {paletes:(dados && dados.paletes) || [], atualizadoEm:(dados && dados.atualizadoEm) || ''};
+  clientesRomaneio = agruparClientesEstoque(estoqueRomaneio.paletes);
+  return estoqueRomaneio;
+}
+
+function fmtAtualizadoEm(iso){
+  const m = String(iso||'').match(/^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2})/);
+  return m ? (m[3]+'/'+m[2]+' '+m[4]+':'+m[5]) : '';
+}
+
+function renderChipsClientes(){
+  const box = document.getElementById('expClienteChips');
+  const info = document.getElementById('expEstoqueInfo');
+  if(!clientesRomaneio.length){
+    box.innerHTML = '';
+    info.textContent = estoqueRomaneio ? 'Nenhum palete em estoque no momento.' : '';
+    return;
+  }
+  box.innerHTML = clientesRomaneio.map((c,i) =>
+    '<button class="chip" onclick="escolherClienteRomaneio('+i+')">'+esc(c.nome)+' <small>· '+c.paletes.length+' pal.</small></button>'
+  ).join('');
+  const quando = fmtAtualizadoEm(estoqueRomaneio.atualizadoEm);
+  info.textContent = 'Estoque atualizado em ' + (quando || '—') + ' · toque no cliente ou digite o nome.';
+}
+
+async function abrirExpedicao(){
+  if(romaneioModoUI !== 'cliente') return;
+  try{
+    await carregarEstoqueRomaneio();
+    renderChipsClientes();
+  }catch(err){
+    document.getElementById('expEstoqueInfo').textContent = '⚠ Não foi possível carregar o estoque agora. Confira a conexão e toque em Buscar.';
+  }
+}
+
+function setModoRomaneio(modo){
+  romaneioModoUI = modo;
+  document.getElementById('expModoCliente').classList.toggle('on', modo === 'cliente');
+  document.getElementById('expModoOf').classList.toggle('on', modo === 'of');
+  document.getElementById('expPainelCliente').style.display = modo === 'cliente' ? '' : 'none';
+  document.getElementById('expPainelOf').style.display = modo === 'of' ? '' : 'none';
+  document.getElementById('expStatus').style.display = 'none';
+  document.getElementById('expResultado').style.display = 'none';
+  if(modo === 'cliente') abrirExpedicao();
+}
+
+function setOrdemRomaneio(pref){
+  romaneioOrdemPref = pref;
+  if(romaneioCliente) mostrarRomaneioCliente(clientesRomaneio.find(c => c.chave === romaneioCliente.chave));
+}
+
+function escolherClienteRomaneio(i){
+  const c = clientesRomaneio[i];
+  if(c) mostrarRomaneioCliente(c);
+}
+
+async function buscarRomaneioCliente(){
+  const texto = document.getElementById('expClienteInput').value.trim();
+  const status = document.getElementById('expStatus');
+  document.getElementById('expResultado').style.display = 'none';
+  if(!texto){
+    status.className = 'status-auto err';
+    status.textContent = '⚠ Digite o nome do cliente (ou toque em um dos clientes abaixo).';
+    status.style.display = 'block';
+    return;
+  }
+  status.className = 'status-auto info';
+  status.textContent = '⏳ Buscando paletes em estoque de "' + texto + '"...';
+  status.style.display = 'block';
+  try{
+    await carregarEstoqueRomaneio();
+    renderChipsClientes();
+  }catch(err){
+    status.className = 'status-auto err';
+    status.textContent = '⚠ Não foi possível buscar os dados publicados agora. Confira a conexão e tente novamente.';
+    return;
+  }
+  const semAcento = s => String(s||'').normalize('NFD').replace(/[̀-ͯ]/g,'').toUpperCase().replace(/[^A-Z0-9]+/g,' ').trim();
+  const q = semAcento(texto), qk = chaveCliente(texto);
+  // Do mais certo pro mais frouxo: nome igual → início de palavra → em qualquer
+  // parte (assim "rm" acha RM e não HARMONY).
+  const nomesDe = c => [c.nome].concat(c.nomesOriginais).map(semAcento);
+  const tiers = [
+    c => qk && c.chave === qk,
+    c => nomesDe(c).some(n => (' '+n).includes(' '+q)) || (qk && (' '+c.chave).includes(' '+qk)),
+    c => nomesDe(c).some(n => n.includes(q)) || (qk && c.chave.includes(qk))
+  ];
+  let achados = [];
+  for(const t of tiers){ achados = clientesRomaneio.filter(t); if(achados.length) break; }
+  if(!achados.length){
+    status.className = 'status-auto err';
+    status.textContent = '⚠ Nenhum cliente com estoque corresponde a "' + texto + '". Toque em um dos clientes abaixo.';
+    return;
+  }
+  if(achados.length > 1){
+    status.className = 'status-auto info';
+    status.textContent = '"' + texto + '" bate com mais de um cliente — toque no certo:';
+    document.getElementById('expClienteChips').innerHTML = achados.map(c =>
+      '<button class="chip" onclick="escolherClienteRomaneio('+clientesRomaneio.indexOf(c)+')">'+esc(c.nome)+' <small>· '+c.paletes.length+' pal.</small></button>').join('');
+    return;
+  }
+  mostrarRomaneioCliente(achados[0]);
+}
+
+function mostrarRomaneioCliente(cli){
+  if(!cli) return;
+  romaneioCliente = montarRomaneioCliente(cli, romaneioOrdemPref);
+  romaneioResultadoModo = 'cliente';
+  renderChipsClientes();
+  const r = romaneioCliente;
+  document.getElementById('expStatus').style.display = 'none';
+  document.getElementById('expTotalPaletes').textContent = r.totalPaletes;
+  document.getElementById('expTotalChapas').textContent = r.totalChapas.toLocaleString('pt-BR');
+  document.getElementById('expAvisoNok').style.display = 'none';
+
+  document.getElementById('expOrdemBox').style.display = 'block';
+  document.getElementById('expOrdOc').classList.toggle('on', romaneioOrdemPref === 'oc');
+  document.getElementById('expOrdProd').classList.toggle('on', romaneioOrdemPref === 'producao');
+
+  const av = document.getElementById('expAvisoOrdem');
+  if(r.avisos.length){
+    av.innerHTML = r.avisos.map(a => '⚠ ' + esc(a)).join('<br>');
+    av.style.display = 'block';
+  } else {
+    av.style.display = 'none';
+  }
+
+  const outrosNomes = r.nomesOriginais.length > 1
+    ? '<div class="of-cli" style="margin:0 2px 8px">Nomes agrupados: ' + r.nomesOriginais.map(esc).join(' · ') + '</div>' : '';
+  document.getElementById('expGrupos').innerHTML =
+    '<div class="of-header" style="border-radius:8px;margin-bottom:8px"><div><div class="of-num">'+esc(r.nome)+'</div>'
+    + '<div class="of-cli">'+(r.ordem === 'oc' ? 'OC mais antiga primeiro' : 'Por data de produção')+' · carregar de cima para baixo</div></div>'
+    + '<div class="of-total">'+r.totalPaletes+' pal. · '+r.totalChapas.toLocaleString('pt-BR')+'</div></div>'
+    + outrosNomes
+    + r.ocs.map((o, i) => {
+        const quando = o.paletes.length ? o.paletes.reduce((m,p) => p.ts < m.ts ? p : m).data : '';
+        return '<div class="of-grupo">'
+          + '<div class="of-header"><div><div class="of-num">'+(i+1)+'ª · OC '+esc(o.oc || 'sem OC')+'</div>'
+          + '<div class="of-cli">1ª produção em '+esc(quando)+'</div></div>'
+          + '<div class="of-total">'+o.paletes.length+' pal. · '+o.total.toLocaleString('pt-BR')+'</div></div>'
+          + o.paletes.map(p => '<div class="palete-row"><span class="p-num">'+p.seq+'º</span>'
+              + '<span class="p-chapas">pal. '+esc(p.numPalete)+' · '+p.chapas.toLocaleString('pt-BR')+' chapas</span>'
+              + '<span class="p-hora">OP '+esc(p.op)+' · '+esc(p.medida)+'</span></div>').join('')
+          + '</div>';
+      }).join('');
+  document.getElementById('expResultado').style.display = 'block';
+}
+
+function gerarRomaneioClientePDF(){
+  const r = romaneioCliente;
+  if(!r || !r.totalPaletes) return;
+
+  const doc = new jsPDF({unit:'mm', format:'a4', orientation:'portrait'});
+  const PW=210, PH=297, left=10, top=14, right=10, bottom=14;
+  const W = PW-left-right;
+  const AZUL = [26,86,160];
+  const VERDE_CLARO = [210,227,218];   // alterna por OC, pra não misturar uma OC com outra
+  const cols = [
+    {k:'ord',       t:'ORD',          w:11, bold:true},
+    {k:'oc',        t:'OC',           w:22},
+    {k:'papel',     t:'PAPEL',        w:14},
+    {k:'op',        t:'OP',           w:16},
+    {k:'medida',    t:'MEDIDA',       w:28},
+    {k:'pedido',    t:'QTD. PEDIDO',  w:20, bold:true},
+    {k:'data',      t:'PRODUZIDO EM', w:22},
+    {k:'palete',    t:'PALETE',       w:14},
+    {k:'qtdPalete', t:'QTD. PALETE',  w:22, cor:AZUL},
+    {k:'x',         t:'X',            w:W-(11+22+14+16+28+20+22+14+22)}
+  ];
+  const rowH = 8, headH = 10;
+  let y = top;
+
+  function desenharCabecalhoTabela(){
+    let x = left;
+    doc.setFont('helvetica','bold'); doc.setFontSize(8.5);
+    doc.setFillColor(230,230,230);
+    doc.rect(left, y, W, headH, 'F');
+    doc.setTextColor(0,0,0);
+    cols.forEach(c => {
+      doc.rect(x, y, c.w, headH);
+      const linhas = doc.splitTextToSize(c.t, c.w-2);
+      doc.text(linhas, x+c.w/2, y+headH/2 - (linhas.length-1)*1.4, {align:'center'});
+      x += c.w;
+    });
+    y += headH;
+  }
+
+  function desenharCabecalhoPagina(){
+    doc.setFont('helvetica','bold'); doc.setFontSize(13);
+    doc.setTextColor(0,0,0);
+    doc.text('ROMANEIO DE EXPEDIÇÃO', left, y);
+    doc.setFontSize(11);
+    doc.text('CLIENTE: ' + r.nome, left, y+6);
+    doc.setFontSize(8.5); doc.setFont('helvetica','normal');
+    doc.text((r.ordem === 'oc' ? 'Carregar na ordem ORD (de cima para baixo) — OC mais antiga primeiro' : 'Carregar na ordem ORD (de cima para baixo) — por data de produção')
+      + '   ·   Gerado em ' + new Date().toLocaleString('pt-BR'), left, y+11);
+    y += 15;
+    if(r.avisos.length){
+      doc.setFont('helvetica','bold'); doc.setFontSize(8); doc.setTextColor(198,40,40);
+      doc.text('ATENÇÃO: confira a ordem das OCs (numeração fora do padrão) — ver aviso na tela.', left, y);
+      doc.setTextColor(0,0,0);
+      y += 4.5;
+    }
+    desenharCabecalhoTabela();
+  }
+
+  function novaPagina(){
+    doc.addPage();
+    y = top;
+    desenharCabecalhoPagina();
+  }
+
+  function desenharLinha(reg, fundo){
+    if(y + rowH > PH - bottom) novaPagina();
+    let x = left;
+    cols.forEach(c => {
+      const v = reg[c.k];
+      if(fundo){
+        doc.setFillColor(...fundo);
+        doc.rect(x, y, c.w, rowH, 'FD');
+      } else {
+        doc.rect(x, y, c.w, rowH);
+      }
+      if(v){
+        doc.setFont('helvetica', c.bold ? 'bold' : 'normal');
+        doc.setTextColor(...(c.cor || [0,0,0]));
+        let sz = 9.5;
+        doc.setFontSize(sz);
+        const maxW = c.w-2;
+        let texto = String(v);
+        while(doc.getTextWidth(texto) > maxW && sz > 6){ sz--; doc.setFontSize(sz); }
+        while(doc.getTextWidth(texto) > maxW && texto.length > 1){ texto = texto.slice(0, -1); }
+        doc.text(texto, x+c.w/2, y+rowH/2+1.2, {align:'center'});
+      }
+      x += c.w;
+    });
+    y += rowH;
+  }
+
+  desenharCabecalhoPagina();
+
+  r.ocs.forEach((o, oi) => {
+    const fundo = (oi % 2 === 0) ? VERDE_CLARO : null;
+    o.paletes.forEach(p => {
+      desenharLinha({
+        ord:String(p.seq), oc:o.oc || 'sem OC', papel:p.papel, op:p.op, medida:p.medida,
+        pedido:p.pedido, data:p.data, palete:p.numPalete, qtdPalete:String(p.chapas)
+      }, fundo);
+    });
+  });
+
+  if(y + 10 > PH - bottom) novaPagina();
+  y += 3;
+  doc.setFont('helvetica','bold'); doc.setFontSize(10); doc.setTextColor(0,0,0);
+  doc.text('TOTAL: ' + r.totalPaletes + ' paletes  ·  ' + r.totalChapas.toLocaleString('pt-BR') + ' chapas', left, y+4);
+
+  const hojeArq = new Date();
+  const dataArq = String(hojeArq.getDate()).padStart(2,'0')+'-'+String(hojeArq.getMonth()+1).padStart(2,'0');
+  const slug = r.nome.normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^A-Za-z0-9]+/g,'_').replace(/^_+|_+$/g,'');
+  const fileName = 'romaneio_' + slug + '_' + dataArq + '.pdf';
+  const blob = doc.output('blob');
+
+  if(navigator.share && navigator.canShare && navigator.canShare({files:[new File([blob], fileName, {type:'application/pdf'})]})){
+    const file = new File([blob], fileName, {type:'application/pdf'});
+    navigator.share({files:[file], title:fileName}).catch(()=>{});
+  } else {
+    const url = URL.createObjectURL(blob);
+    window.open(url, '_blank');
+  }
+}
+
 // ── ROMANEIO PDF (pronto pra imprimir — grade CLIENTE/OC/PAPEL/OP/MEDIDA/QTD PEDIDO/TOTAL OP/PALETE/QTD PALETE/X) ──
 // Pra mudar a ordem das colunas é só reordenar este array (cada linha é
 // montada pela chave `k`, não pela posição).
 function gerarRomaneioPDF(){
+  if(romaneioResultadoModo === 'cliente') return gerarRomaneioClientePDF();
   if(!romaneioGrupos.length) return;
 
   const doc = new jsPDF({unit:'mm', format:'a4', orientation:'portrait'});
