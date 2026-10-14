@@ -2375,7 +2375,29 @@
       "observacoes": "",
       "fotos": 0,
       "recebidoEm": "2026-10-13T23:18:40"
+    },
+    {
+      "data": "13/10/2026",
+      "hora": "23:39",
+      "of": "262931",
+      "chave": "262931§0,480 X 1,250§PROGRAMAÇÃO ONDULADEIRA - Tolecaixas Indústria e Comércio Ltda",
+      "ofCentral": "1264",
+      "oc": "71026",
+      "cliente": "PROGRAMAÇÃO ONDULADEIRA - Tolecaixas Indústria e Comércio Ltda",
+      "papelao": "PW40B",
+      "medida": "0,480 X 1,250",
+      "qtdePedido": "2283",
+      "referencia": "x",
+      "numPalete": "01",
+      "chapas": 1555,
+      "gramatura": "",
+      "peso": 340.55,
+      "coluna": "",
+      "resultado": "OK",
+      "observacoes": "",
+      "fotos": 0,
+      "recebidoEm": "2026-10-13T23:39:18"
     }
   ],
-  "atualizadoEm": "2026-10-13T23:35:06"
+  "atualizadoEm": "2026-10-13T23:39:20"
 }
