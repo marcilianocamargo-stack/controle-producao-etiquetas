@@ -3739,7 +3739,51 @@
       "observacoes": "",
       "fotos": 0,
       "recebidoEm": "2026-10-15T16:02:02"
+    },
+    {
+      "data": "15/10/2026",
+      "hora": "16:40",
+      "of": "262867",
+      "chave": "262867§0,680 X 1,000§RR STELLA",
+      "ofCentral": "1253",
+      "oc": "1130",
+      "cliente": "RR STELLA",
+      "papelao": "PW50B",
+      "medida": "0,680 X 1,000",
+      "qtdePedido": "7000",
+      "referencia": "x",
+      "numPalete": "01",
+      "chapas": 760,
+      "gramatura": "",
+      "peso": 206.72,
+      "coluna": "",
+      "resultado": "OK",
+      "observacoes": "",
+      "fotos": 0,
+      "recebidoEm": "2026-10-15T16:40:07"
+    },
+    {
+      "data": "15/10/2026",
+      "hora": "16:44",
+      "of": "262914",
+      "chave": "262914§0,670 X 0,890§Tolecaixas Indústria e Comércio Ltda",
+      "ofCentral": "1264",
+      "oc": "71026",
+      "cliente": "Tolecaixas Indústria e Comércio Ltda",
+      "papelao": "PW40B",
+      "medida": "0,670 X 0,890",
+      "qtdePedido": "1378",
+      "referencia": "x",
+      "numPalete": "01",
+      "chapas": 760,
+      "gramatura": "",
+      "peso": 165.41,
+      "coluna": "",
+      "resultado": "OK",
+      "observacoes": "",
+      "fotos": 0,
+      "recebidoEm": "2026-10-15T16:44:57"
     }
   ],
-  "atualizadoEm": "2026-10-15T16:40:09"
+  "atualizadoEm": "2026-10-15T16:45:00"
 }
