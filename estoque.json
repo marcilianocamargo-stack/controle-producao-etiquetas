@@ -3453,7 +3453,29 @@
       "observacoes": "",
       "fotos": 0,
       "recebidoEm": "2026-10-15T11:55:04"
+    },
+    {
+      "data": "15/10/2026",
+      "hora": "11:56",
+      "of": "262975",
+      "chave": "262975§0,445 X 0,870§VÔ CHICO",
+      "ofCentral": "1280",
+      "oc": "551014",
+      "cliente": "VÔ CHICO",
+      "papelao": "PW40B",
+      "medida": "0,445 X 0,870",
+      "qtdePedido": "500",
+      "referencia": "x",
+      "numPalete": "01",
+      "chapas": 695,
+      "gramatura": "",
+      "peso": 98.21,
+      "coluna": "",
+      "resultado": "OK",
+      "observacoes": "",
+      "fotos": 0,
+      "recebidoEm": "2026-10-15T11:56:56"
     }
   ],
-  "atualizadoEm": "2026-10-15T11:55:08"
+  "atualizadoEm": "2026-10-15T11:56:58"
 }
