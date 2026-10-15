@@ -1724,7 +1724,7 @@ function gerarRomaneioClientePDF(){
   const PW=210, PH=297, left=10, top=14, right=10, bottom=14;
   const W = PW-left-right;
   const AZUL = [26,86,160];
-  const VERDE_CLARO = [210,227,218];   // alterna por OC, pra não misturar uma OC com outra
+  const VERDE_CLARO = [210,227,218];   // alterna por OP, pra não misturar uma OP com outra
   const cols = [
     {k:'ord',       t:'ORD',          w:11, bold:true},
     {k:'oc',        t:'OC',           w:22},
@@ -1809,9 +1809,14 @@ function gerarRomaneioClientePDF(){
 
   desenharCabecalhoPagina();
 
-  r.ocs.forEach((o, oi) => {
-    const fundo = (oi % 2 === 0) ? VERDE_CLARO : null;
+  // Fundo alterna a cada OP diferente (como no romaneio por OF), não por OC.
+  // Os paletes já vêm agrupados por OP dentro da OC; se a mesma OP continua na
+  // OC seguinte, mantém a mesma cor.
+  let opAnterior = null, idxOp = -1;
+  r.ocs.forEach(o => {
     o.paletes.forEach(p => {
+      if(p.op !== opAnterior){ idxOp++; opAnterior = p.op; }
+      const fundo = (idxOp % 2 === 0) ? VERDE_CLARO : null;
       desenharLinha({
         ord:String(p.seq), oc:o.oc || 'sem OC', papel:p.papel, op:p.op, medida:p.medida,
         pedido:p.pedido, totalOp:String(p.totalOp), palete:p.numPalete, qtdPalete:String(p.chapas)
