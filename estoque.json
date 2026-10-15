@@ -3629,7 +3629,29 @@
       "observacoes": "",
       "fotos": 0,
       "recebidoEm": "2026-10-15T14:01:37"
+    },
+    {
+      "data": "15/10/2026",
+      "hora": "14:32",
+      "of": "262978",
+      "chave": "262978§0,553 X 1,095§VÔ CHICO",
+      "ofCentral": "1280",
+      "oc": "551014",
+      "cliente": "VÔ CHICO",
+      "papelao": "PW50B",
+      "medida": "0,553 X 1,095",
+      "qtdePedido": "600",
+      "referencia": "x",
+      "numPalete": "01",
+      "chapas": 665,
+      "gramatura": "",
+      "peso": 161.07,
+      "coluna": "",
+      "resultado": "OK",
+      "observacoes": "",
+      "fotos": 0,
+      "recebidoEm": "2026-10-15T14:32:35"
     }
   ],
-  "atualizadoEm": "2026-10-15T14:30:06"
+  "atualizadoEm": "2026-10-15T14:32:37"
 }
