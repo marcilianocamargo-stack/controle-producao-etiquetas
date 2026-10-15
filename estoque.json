@@ -3981,7 +3981,29 @@
       "observacoes": "",
       "fotos": 0,
       "recebidoEm": "2026-10-15T20:23:08"
+    },
+    {
+      "data": "15/10/2026",
+      "hora": "20:29",
+      "of": "262971",
+      "chave": "262971§0,660 X 1,695§PCBOX EMBALAGENS",
+      "ofCentral": "1278",
+      "oc": "1825",
+      "cliente": "PCBOX EMBALAGENS",
+      "papelao": "P25B",
+      "medida": "0,660 X 1,695",
+      "qtdePedido": "500",
+      "referencia": "x",
+      "numPalete": "02",
+      "chapas": 205,
+      "gramatura": "",
+      "peso": 73.39,
+      "coluna": "",
+      "resultado": "OK",
+      "observacoes": "",
+      "fotos": 0,
+      "recebidoEm": "2026-10-15T20:29:13"
     }
   ],
-  "atualizadoEm": "2026-10-15T20:25:06"
+  "atualizadoEm": "2026-10-15T20:29:15"
 }
