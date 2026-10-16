@@ -4135,7 +4135,29 @@
       "observacoes": "",
       "fotos": 0,
       "recebidoEm": "2026-10-16T19:33:11"
+    },
+    {
+      "data": "16/10/2026",
+      "hora": "19:36",
+      "of": "262918",
+      "chave": "262918§0,560 X 0,910§Tolecaixas Indústria e Comércio Ltda",
+      "ofCentral": "1264",
+      "oc": "71026",
+      "cliente": "Tolecaixas Indústria e Comércio Ltda",
+      "papelao": "P40B",
+      "medida": "0,560 X 0,910",
+      "qtdePedido": "2764",
+      "referencia": "x",
+      "numPalete": "03",
+      "chapas": 775,
+      "gramatura": "",
+      "peso": 140.2,
+      "coluna": "",
+      "resultado": "OK",
+      "observacoes": "",
+      "fotos": 0,
+      "recebidoEm": "2026-10-16T19:36:13"
     }
   ],
-  "atualizadoEm": "2026-10-16T19:35:06"
+  "atualizadoEm": "2026-10-16T19:36:17"
 }
