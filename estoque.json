@@ -4399,7 +4399,29 @@
       "observacoes": "",
       "fotos": 0,
       "recebidoEm": "2026-10-16T22:55:54"
+    },
+    {
+      "data": "16/10/2026",
+      "hora": "23:01",
+      "of": "263013",
+      "chave": "263013§0,500 X 0,990§RR STELLA",
+      "ofCentral": "1253",
+      "oc": "1138",
+      "cliente": "RR STELLA",
+      "papelao": "PW50B",
+      "medida": "0,500 X 0,990",
+      "qtdePedido": "2000",
+      "referencia": "x",
+      "numPalete": "02",
+      "chapas": 775,
+      "gramatura": "",
+      "peso": 153.45,
+      "coluna": "",
+      "resultado": "OK",
+      "observacoes": "",
+      "fotos": 0,
+      "recebidoEm": "2026-10-16T23:01:44"
     }
   ],
-  "atualizadoEm": "2026-10-16T23:00:07"
+  "atualizadoEm": "2026-10-16T23:01:46"
 }
