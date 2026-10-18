@@ -4839,7 +4839,29 @@
       "observacoes": "",
       "fotos": 0,
       "recebidoEm": "2026-10-18T09:36:43"
+    },
+    {
+      "data": "18/10/2026",
+      "hora": "09:50",
+      "of": "263002",
+      "chave": "263002§0,410 X 0,820§DR EMBALAGENS",
+      "ofCentral": "1282",
+      "oc": "1014",
+      "cliente": "DR EMBALAGENS",
+      "papelao": "PW40B",
+      "medida": "0,410 X 0,820",
+      "qtdePedido": "2000",
+      "referencia": "x",
+      "numPalete": "01",
+      "chapas": 760,
+      "gramatura": "",
+      "peso": 93.26,
+      "coluna": "",
+      "resultado": "OK",
+      "observacoes": "",
+      "fotos": 0,
+      "recebidoEm": "2026-10-18T09:50:13"
     }
   ],
-  "atualizadoEm": "2026-10-18T09:50:06"
+  "atualizadoEm": "2026-10-18T09:50:15"
 }
