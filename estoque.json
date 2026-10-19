@@ -6269,7 +6269,29 @@
       "observacoes": "",
       "fotos": 0,
       "recebidoEm": "2026-10-19T19:51:17"
+    },
+    {
+      "data": "19/10/2026",
+      "hora": "20:09",
+      "of": "263000",
+      "chave": "263000§0,844 X 1,807§RENOVAPEL",
+      "ofCentral": "1286",
+      "oc": "10",
+      "cliente": "RENOVAPEL",
+      "papelao": "P70C",
+      "medida": "0,844 X 1,807",
+      "qtdePedido": "1500",
+      "referencia": "203x438x203",
+      "numPalete": "01",
+      "chapas": 285,
+      "gramatura": "",
+      "peso": 204.29,
+      "coluna": "",
+      "resultado": "OK",
+      "observacoes": "",
+      "fotos": 0,
+      "recebidoEm": "2026-10-19T20:09:43"
     }
   ],
-  "atualizadoEm": "2026-10-19T20:05:06"
+  "atualizadoEm": "2026-10-19T20:09:45"
 }
