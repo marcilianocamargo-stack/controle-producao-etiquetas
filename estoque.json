@@ -5631,7 +5631,29 @@
       "observacoes": "",
       "fotos": 0,
       "recebidoEm": "2026-10-19T14:24:00"
+    },
+    {
+      "data": "19/10/2026",
+      "hora": "14:37",
+      "of": "263018",
+      "chave": "263018§0,426 X 1,560§FAVINCO EMBALAGENS",
+      "ofCentral": "1293",
+      "oc": "094",
+      "cliente": "FAVINCO EMBALAGENS",
+      "papelao": "P50D",
+      "medida": "0,426 X 1,560",
+      "qtdePedido": "1000",
+      "referencia": "128x170x128",
+      "numPalete": "01",
+      "chapas": 255,
+      "gramatura": "",
+      "peso": 91.17,
+      "coluna": "",
+      "resultado": "OK",
+      "observacoes": "",
+      "fotos": 0,
+      "recebidoEm": "2026-10-19T14:37:30"
     }
   ],
-  "atualizadoEm": "2026-10-19T14:35:06"
+  "atualizadoEm": "2026-10-19T14:37:32"
 }
