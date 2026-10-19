@@ -5477,7 +5477,29 @@
       "observacoes": "",
       "fotos": 0,
       "recebidoEm": "2026-10-19T11:39:27"
+    },
+    {
+      "data": "19/10/2026",
+      "hora": "11:44",
+      "of": "263005",
+      "chave": "263005§0,550 X 1,100§SÃO MIGUEL",
+      "ofCentral": "1288",
+      "oc": "551015",
+      "cliente": "SÃO MIGUEL",
+      "papelao": "P25B",
+      "medida": "0,550 X 1,100",
+      "qtdePedido": "3000",
+      "referencia": "x",
+      "numPalete": "04",
+      "chapas": 795,
+      "gramatura": "",
+      "peso": 153.91,
+      "coluna": "",
+      "resultado": "OK",
+      "observacoes": "",
+      "fotos": 0,
+      "recebidoEm": "2026-10-19T11:44:09"
     }
   ],
-  "atualizadoEm": "2026-10-19T11:40:07"
+  "atualizadoEm": "2026-10-19T11:44:11"
 }
