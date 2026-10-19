@@ -5279,7 +5279,29 @@
       "observacoes": "",
       "fotos": 0,
       "recebidoEm": "2026-10-19T10:19:24"
+    },
+    {
+      "data": "19/10/2026",
+      "hora": "10:40",
+      "of": "262998",
+      "chave": "262998§0,430 X 0,870§RENOVAPEL",
+      "ofCentral": "1286",
+      "oc": "10",
+      "cliente": "RENOVAPEL",
+      "papelao": "P35B",
+      "medida": "0,430 X 0,870",
+      "qtdePedido": "500",
+      "referencia": "x",
+      "numPalete": "01",
+      "chapas": 512,
+      "gramatura": "",
+      "peso": 66.08,
+      "coluna": "",
+      "resultado": "OK",
+      "observacoes": "",
+      "fotos": 0,
+      "recebidoEm": "2026-10-19T10:40:16"
     }
   ],
-  "atualizadoEm": "2026-10-19T10:40:07"
+  "atualizadoEm": "2026-10-19T10:40:19"
 }
