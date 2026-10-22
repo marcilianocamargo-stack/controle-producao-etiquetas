@@ -6929,7 +6929,29 @@
       "observacoes": "",
       "fotos": 0,
       "recebidoEm": "2026-10-22T15:12:03"
+    },
+    {
+      "data": "22/10/2026",
+      "hora": "15:16",
+      "of": "263095",
+      "chave": "263095§0,304 X 0,840§CARPEL",
+      "ofCentral": "1307",
+      "oc": "1021",
+      "cliente": "CARPEL",
+      "papelao": "P25B",
+      "medida": "0,304 X 0,840",
+      "qtdePedido": "1000",
+      "referencia": "102x100x102",
+      "numPalete": "01",
+      "chapas": 1095,
+      "gramatura": "",
+      "peso": 89.48,
+      "coluna": "",
+      "resultado": "OK",
+      "observacoes": "",
+      "fotos": 0,
+      "recebidoEm": "2026-10-22T15:16:04"
     }
   ],
-  "atualizadoEm": "2026-10-22T15:15:07"
+  "atualizadoEm": "2026-10-22T15:16:09"
 }
