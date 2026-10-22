@@ -6599,7 +6599,29 @@
       "observacoes": "",
       "fotos": 0,
       "recebidoEm": "2026-10-22T09:24:52"
+    },
+    {
+      "data": "22/10/2026",
+      "hora": "09:32",
+      "of": "263105",
+      "chave": "263105§0,460 X 0,910§CARPEL",
+      "ofCentral": "1307",
+      "oc": "1021",
+      "cliente": "CARPEL",
+      "papelao": "PW40B",
+      "medida": "0,460 X 0,910",
+      "qtdePedido": "1000",
+      "referencia": "x",
+      "numPalete": "01",
+      "chapas": 1050,
+      "gramatura": "",
+      "peso": 160.43,
+      "coluna": "",
+      "resultado": "OK",
+      "observacoes": "",
+      "fotos": 0,
+      "recebidoEm": "2026-10-22T09:33:00"
     }
   ],
-  "atualizadoEm": "2026-10-22T09:30:07"
+  "atualizadoEm": "2026-10-22T09:33:02"
 }
