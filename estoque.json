@@ -6203,7 +6203,29 @@
       "observacoes": "",
       "fotos": 0,
       "recebidoEm": "2026-10-21T23:55:05"
+    },
+    {
+      "data": "22/10/2026",
+      "hora": "00:00",
+      "of": "263056",
+      "chave": "263056§1,474 X 1,555§HARMONY EMBALAGENS",
+      "ofCentral": "1301",
+      "oc": "20-10-26",
+      "cliente": "HARMONY EMBALAGENS",
+      "papelao": "P50D",
+      "medida": "1,474 X 1,555",
+      "qtdePedido": "300",
+      "referencia": "220x1034x220",
+      "numPalete": "02",
+      "chapas": 135,
+      "gramatura": "",
+      "peso": 166.47,
+      "coluna": "",
+      "resultado": "OK",
+      "observacoes": "",
+      "fotos": 0,
+      "recebidoEm": "2026-10-22T00:00:55"
     }
   ],
-  "atualizadoEm": "2026-10-22T00:00:08"
+  "atualizadoEm": "2026-10-22T00:00:59"
 }
