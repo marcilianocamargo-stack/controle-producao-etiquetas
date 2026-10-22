@@ -6665,7 +6665,29 @@
       "observacoes": "",
       "fotos": 0,
       "recebidoEm": "2026-10-22T10:21:55"
+    },
+    {
+      "data": "22/10/2026",
+      "hora": "10:41",
+      "of": "263121",
+      "chave": "263121§0,798 X 1,155§CAIXAS",
+      "ofCentral": "1312",
+      "oc": "SN",
+      "cliente": "CAIXAS",
+      "papelao": "P25B",
+      "medida": "0,798 X 1,155",
+      "qtdePedido": "300",
+      "referencia": "141x516x141",
+      "numPalete": "01",
+      "chapas": 315,
+      "gramatura": "",
+      "peso": 92.91,
+      "coluna": "",
+      "resultado": "OK",
+      "observacoes": "",
+      "fotos": 0,
+      "recebidoEm": "2026-10-22T10:41:18"
     }
   ],
-  "atualizadoEm": "2026-10-22T10:40:07"
+  "atualizadoEm": "2026-10-22T10:41:21"
 }
