@@ -7809,7 +7809,29 @@
       "observacoes": "",
       "fotos": 0,
       "recebidoEm": "2026-10-23T12:06:50"
+    },
+    {
+      "data": "23/10/2026",
+      "hora": "13:51",
+      "of": "263123",
+      "chave": "263123§0,644 X 1,595§RENOVAPEL",
+      "ofCentral": "1306",
+      "oc": "14",
+      "cliente": "RENOVAPEL",
+      "papelao": "P70D",
+      "medida": "0,644 X 1,595",
+      "qtdePedido": "200",
+      "referencia": "162x320x162",
+      "numPalete": "01",
+      "chapas": 240,
+      "gramatura": "",
+      "peso": 155.8,
+      "coluna": "",
+      "resultado": "OK",
+      "observacoes": "",
+      "fotos": 0,
+      "recebidoEm": "2026-10-23T13:51:11"
     }
   ],
-  "atualizadoEm": "2026-10-23T13:50:07"
+  "atualizadoEm": "2026-10-23T13:51:14"
 }
