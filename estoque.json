@@ -3541,7 +3541,29 @@
       "observacoes": "",
       "fotos": 0,
       "recebidoEm": "2026-10-24T11:39:02"
+    },
+    {
+      "data": "24/10/2026",
+      "hora": "11:42",
+      "of": "263132",
+      "chave": "263132§0,630 X 1,000§FAVINCO EMBALAGENS",
+      "ofCentral": "1314",
+      "oc": "097",
+      "cliente": "FAVINCO EMBALAGENS",
+      "papelao": "P25B",
+      "medida": "0,630 X 1,000",
+      "qtdePedido": "880",
+      "referencia": "x",
+      "numPalete": "02",
+      "chapas": 560,
+      "gramatura": "",
+      "peso": 112.9,
+      "coluna": "",
+      "resultado": "OK",
+      "observacoes": "",
+      "fotos": 0,
+      "recebidoEm": "2026-10-24T11:42:38"
     }
   ],
-  "atualizadoEm": "2026-10-24T11:40:06"
+  "atualizadoEm": "2026-10-24T11:42:39"
 }
