@@ -1319,7 +1319,29 @@
       "observacoes": "",
       "fotos": 0,
       "recebidoEm": "2026-10-26T19:41:22"
+    },
+    {
+      "data": "26/10/2026",
+      "hora": "19:44",
+      "of": "263079",
+      "chave": "263079§1,400 X 2,000§SEDAMED",
+      "ofCentral": "1304",
+      "oc": "AMOSTRA",
+      "cliente": "SEDAMED",
+      "papelao": "P55D",
+      "medida": "1,400 X 2,000",
+      "qtdePedido": "50",
+      "referencia": "x",
+      "numPalete": "01",
+      "chapas": 70,
+      "gramatura": "",
+      "peso": 111.33,
+      "coluna": "",
+      "resultado": "OK",
+      "observacoes": "",
+      "fotos": 0,
+      "recebidoEm": "2026-10-26T19:44:31"
     }
   ],
-  "atualizadoEm": "2026-10-26T19:41:25"
+  "atualizadoEm": "2026-10-26T19:44:33"
 }
