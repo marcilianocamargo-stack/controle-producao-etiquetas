@@ -1253,7 +1253,29 @@
       "observacoes": "",
       "fotos": 0,
       "recebidoEm": "2026-10-26T18:41:55"
+    },
+    {
+      "data": "26/10/2026",
+      "hora": "18:44",
+      "of": "263080",
+      "chave": "263080§1,500 X 2,000§SEDAMED",
+      "ofCentral": "1304",
+      "oc": "AMOSTRA",
+      "cliente": "SEDAMED",
+      "papelao": "P40B",
+      "medida": "1,500 X 2,000",
+      "qtdePedido": "50",
+      "referencia": "x",
+      "numPalete": "01",
+      "chapas": 90,
+      "gramatura": "",
+      "peso": 95.85,
+      "coluna": "",
+      "resultado": "OK",
+      "observacoes": "",
+      "fotos": 0,
+      "recebidoEm": "2026-10-26T18:44:48"
     }
   ],
-  "atualizadoEm": "2026-10-26T18:41:57"
+  "atualizadoEm": "2026-10-26T18:44:50"
 }
