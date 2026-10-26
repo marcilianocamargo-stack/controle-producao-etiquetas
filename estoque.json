@@ -3959,7 +3959,29 @@
       "observacoes": "",
       "fotos": 0,
       "recebidoEm": "2026-10-26T11:14:30"
+    },
+    {
+      "data": "26/10/2026",
+      "hora": "11:19",
+      "of": "263009",
+      "chave": "263009§0,879 X 1,480§FORBOX",
+      "ofCentral": "1319",
+      "oc": "1410",
+      "cliente": "FORBOX",
+      "papelao": "P55D",
+      "medida": "0,879 X 1,480",
+      "qtdePedido": "1395",
+      "referencia": "253x373x253",
+      "numPalete": "08",
+      "chapas": 180,
+      "gramatura": "",
+      "peso": 133.01,
+      "coluna": "",
+      "resultado": "OK",
+      "observacoes": "",
+      "fotos": 0,
+      "recebidoEm": "2026-10-26T11:19:38"
     }
   ],
-  "atualizadoEm": "2026-10-26T11:15:07"
+  "atualizadoEm": "2026-10-26T11:19:40"
 }
