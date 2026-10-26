@@ -1297,7 +1297,29 @@
       "observacoes": "",
       "fotos": 0,
       "recebidoEm": "2026-10-26T19:17:01"
+    },
+    {
+      "data": "26/10/2026",
+      "hora": "19:41",
+      "of": "263077",
+      "chave": "263077§1,400 X 2,000§INTERNACIONAL COUROS",
+      "ofCentral": "1304",
+      "oc": "AMOSTRA",
+      "cliente": "INTERNACIONAL COUROS",
+      "papelao": "P55D",
+      "medida": "1,400 X 2,000",
+      "qtdePedido": "50",
+      "referencia": "150x1100x150",
+      "numPalete": "01",
+      "chapas": 75,
+      "gramatura": "",
+      "peso": 119.28,
+      "coluna": "",
+      "resultado": "OK",
+      "observacoes": "",
+      "fotos": 0,
+      "recebidoEm": "2026-10-26T19:41:22"
     }
   ],
-  "atualizadoEm": "2026-10-26T19:40:06"
+  "atualizadoEm": "2026-10-26T19:41:25"
 }
