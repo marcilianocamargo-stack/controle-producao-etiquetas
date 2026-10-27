@@ -2749,7 +2749,29 @@
       "observacoes": "",
       "fotos": 0,
       "recebidoEm": "2026-10-27T19:12:55"
+    },
+    {
+      "data": "27/10/2026",
+      "hora": "19:32",
+      "of": "263165",
+      "chave": "263165§0,390 X 0,610§DR EMBALAGENS",
+      "ofCentral": "1326",
+      "oc": "22102026",
+      "cliente": "DR EMBALAGENS",
+      "papelao": "P25B",
+      "medida": "0,390 X 0,610",
+      "qtdePedido": "2000",
+      "referencia": "x",
+      "numPalete": "01",
+      "chapas": 1555,
+      "gramatura": "",
+      "peso": 118.38,
+      "coluna": "",
+      "resultado": "OK",
+      "observacoes": "",
+      "fotos": 0,
+      "recebidoEm": "2026-10-27T19:32:50"
     }
   ],
-  "atualizadoEm": "2026-10-27T19:30:07"
+  "atualizadoEm": "2026-10-27T19:32:52"
 }
