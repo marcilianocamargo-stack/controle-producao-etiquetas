@@ -1649,7 +1649,29 @@
       "observacoes": "",
       "fotos": 0,
       "recebidoEm": "2026-10-26T22:15:54"
+    },
+    {
+      "data": "26/10/2026",
+      "hora": "22:31",
+      "of": "263152",
+      "chave": "263152§1,050 X 2,537§PCBOX EMBALAGENS",
+      "ofCentral": "1316",
+      "oc": "1864",
+      "cliente": "PCBOX EMBALAGENS",
+      "papelao": "P50D",
+      "medida": "1,050 X 2,537",
+      "qtdePedido": "1000",
+      "referencia": "195x660x195",
+      "numPalete": "06",
+      "chapas": 130,
+      "gramatura": "",
+      "peso": 186.31,
+      "coluna": "",
+      "resultado": "OK",
+      "observacoes": "",
+      "fotos": 0,
+      "recebidoEm": "2026-10-26T22:31:51"
     }
   ],
-  "atualizadoEm": "2026-10-26T22:30:06"
+  "atualizadoEm": "2026-10-26T22:31:53"
 }
