@@ -2529,7 +2529,29 @@
       "observacoes": "",
       "fotos": 0,
       "recebidoEm": "2026-10-27T14:09:15"
+    },
+    {
+      "data": "27/10/2026",
+      "hora": "14:14",
+      "of": "263062",
+      "chave": "263062§0,946 X 1,480§RM EMBALAGENS",
+      "ofCentral": "1303",
+      "oc": "19",
+      "cliente": "RM EMBALAGENS",
+      "papelao": "P55D",
+      "medida": "0,946 X 1,480",
+      "qtdePedido": "380",
+      "referencia": "103x740x103",
+      "numPalete": "01",
+      "chapas": 190,
+      "gramatura": "",
+      "peso": 151.1,
+      "coluna": "",
+      "resultado": "OK",
+      "observacoes": "",
+      "fotos": 0,
+      "recebidoEm": "2026-10-27T14:14:16"
     }
   ],
-  "atualizadoEm": "2026-10-27T14:10:08"
+  "atualizadoEm": "2026-10-27T14:14:18"
 }
