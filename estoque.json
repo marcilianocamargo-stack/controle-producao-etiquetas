@@ -3519,7 +3519,25 @@
       "observacoes": "",
       "fotos": 0,
       "recebidoEm": "2026-10-29T10:08:14"
+    },
+    {
+      "data": "07/06/2026",
+      "hora": "20:03",
+      "of": "261313",
+      "cliente": "VZ Embalagens",
+      "papelao": "P25B",
+      "medida": "0,390 X 0,650",
+      "qtdePedido": "1000",
+      "referencia": "x",
+      "numPalete": "01",
+      "chapas": 800,
+      "gramatura": "",
+      "coluna": "",
+      "resultado": "OK",
+      "observacoes": "",
+      "fotos": 0,
+      "recebidoEm": "2026-10-29T10:15:56"
     }
   ],
-  "atualizadoEm": "2026-10-29T10:15:07"
+  "atualizadoEm": "2026-10-29T10:16:00"
 }
