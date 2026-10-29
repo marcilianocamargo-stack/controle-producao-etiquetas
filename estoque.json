@@ -4175,7 +4175,29 @@
       "observacoes": "",
       "fotos": 0,
       "recebidoEm": "2026-10-29T17:14:14"
+    },
+    {
+      "data": "29/10/2026",
+      "hora": "17:21",
+      "of": "263216",
+      "chave": "263216§0,720 X 0,920§TOLECAIXAS",
+      "ofCentral": "1337",
+      "oc": "281026",
+      "cliente": "TOLECAIXAS",
+      "papelao": "PW40B",
+      "medida": "0,720 X 0,920",
+      "qtdePedido": "2068",
+      "referencia": "x",
+      "numPalete": "03",
+      "chapas": 550,
+      "gramatura": "",
+      "peso": 132.98,
+      "coluna": "",
+      "resultado": "OK",
+      "observacoes": "",
+      "fotos": 0,
+      "recebidoEm": "2026-10-29T17:21:33"
     }
   ],
-  "atualizadoEm": "2026-10-29T17:20:07"
+  "atualizadoEm": "2026-10-29T17:21:36"
 }
