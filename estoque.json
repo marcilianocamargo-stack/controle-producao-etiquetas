@@ -4945,7 +4945,29 @@
       "observacoes": "",
       "fotos": 0,
       "recebidoEm": "2026-10-30T00:32:38"
+    },
+    {
+      "data": "30/10/2026",
+      "hora": "00:43",
+      "of": "263219",
+      "chave": "263219§0,560 X 0,910§TOLECAIXAS",
+      "ofCentral": "1337",
+      "oc": "281026",
+      "cliente": "TOLECAIXAS",
+      "papelao": "P40B",
+      "medida": "0,560 X 0,910",
+      "qtdePedido": "3869",
+      "referencia": "x",
+      "numPalete": "02",
+      "chapas": 1165,
+      "gramatura": "",
+      "peso": 210.76,
+      "coluna": "",
+      "resultado": "OK",
+      "observacoes": "",
+      "fotos": 0,
+      "recebidoEm": "2026-10-30T00:43:42"
     }
   ],
-  "atualizadoEm": "2026-10-30T00:40:06"
+  "atualizadoEm": "2026-10-30T00:43:44"
 }
