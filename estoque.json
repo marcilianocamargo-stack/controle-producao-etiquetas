@@ -3933,7 +3933,29 @@
       "observacoes": "",
       "fotos": 0,
       "recebidoEm": "2026-10-30T15:03:39"
+    },
+    {
+      "data": "30/10/2026",
+      "hora": "15:03",
+      "of": "263189",
+      "chave": "263189§0,352 X 1,035§RENOVAPEL",
+      "ofCentral": "1332",
+      "oc": "15",
+      "cliente": "RENOVAPEL",
+      "papelao": "PW50C",
+      "medida": "0,352 X 1,035",
+      "qtdePedido": "1000",
+      "referencia": "101x150x101",
+      "numPalete": "02",
+      "chapas": 720,
+      "gramatura": "",
+      "peso": 110.17,
+      "coluna": "",
+      "resultado": "OK",
+      "observacoes": "",
+      "fotos": 0,
+      "recebidoEm": "2026-10-30T15:03:52"
     }
   ],
-  "atualizadoEm": "2026-10-30T15:03:43"
+  "atualizadoEm": "2026-10-30T15:03:54"
 }
