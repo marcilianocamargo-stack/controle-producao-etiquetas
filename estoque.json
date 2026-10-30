@@ -3449,7 +3449,29 @@
       "observacoes": "",
       "fotos": 0,
       "recebidoEm": "2026-10-30T09:31:42"
+    },
+    {
+      "data": "30/10/2026",
+      "hora": "09:51",
+      "of": "263240",
+      "chave": "263240§0,320 X 0,820§FAVINCO EMBALAGENS",
+      "ofCentral": "1344",
+      "oc": "37",
+      "cliente": "FAVINCO EMBALAGENS",
+      "papelao": "P70D",
+      "medida": "0,320 X 0,820",
+      "qtdePedido": "1150",
+      "referencia": "x",
+      "numPalete": "02",
+      "chapas": 840,
+      "gramatura": "",
+      "peso": 139.3,
+      "coluna": "",
+      "resultado": "OK",
+      "observacoes": "",
+      "fotos": 0,
+      "recebidoEm": "2026-10-30T09:51:37"
     }
   ],
-  "atualizadoEm": "2026-10-30T09:50:06"
+  "atualizadoEm": "2026-10-30T09:51:40"
 }
