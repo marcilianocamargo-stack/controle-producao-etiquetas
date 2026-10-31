@@ -10,17 +10,17 @@
     "paletes": 44
   },
   "turnoNoiteFechado": {
-    "data": "29/10/2026",
-    "peso": 5129.65,
-    "chapas": 39340,
-    "paletes": 39
-  },
-  "turnoAtual": {
-    "tipo": "noite",
     "data": "30/10/2026",
     "peso": 4274.48,
     "chapas": 8170,
     "paletes": 27
   },
-  "atualizadoEm": "2026-10-31T05:55:04"
+  "turnoAtual": {
+    "tipo": "dia",
+    "data": "31/10/2026",
+    "peso": 0.0,
+    "chapas": 0,
+    "paletes": 0
+  },
+  "atualizadoEm": "2026-10-31T06:00:04"
 }
