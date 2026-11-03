@@ -4,7 +4,7 @@
   "chapasHoje": 0,
   "paletes": 0,
   "turnoDiaFechado": {
-    "data": "02/11/2026",
+    "data": "03/11/2026",
     "peso": 0.0,
     "chapas": 0,
     "paletes": 0
@@ -16,11 +16,11 @@
     "paletes": 5
   },
   "turnoAtual": {
-    "tipo": "dia",
+    "tipo": "noite",
     "data": "03/11/2026",
     "peso": 0.0,
     "chapas": 0,
     "paletes": 0
   },
-  "atualizadoEm": "2026-11-03T17:55:04"
+  "atualizadoEm": "2026-11-03T18:00:04"
 }
