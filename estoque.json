@@ -5253,7 +5253,29 @@
       "observacoes": "",
       "fotos": 0,
       "recebidoEm": "2026-11-06T13:53:32"
+    },
+    {
+      "data": "06/11/2026",
+      "hora": "13:55",
+      "of": "263302",
+      "chave": "263302§1,000 X 1,200§AMOSTRA",
+      "ofCentral": "1350",
+      "oc": "SN",
+      "cliente": "AMOSTRA",
+      "papelao": "P70D",
+      "medida": "1,000 X 1,200",
+      "qtdePedido": "",
+      "referencia": "x",
+      "numPalete": "01",
+      "chapas": 20,
+      "gramatura": "",
+      "peso": 15.17,
+      "coluna": "",
+      "resultado": "OK",
+      "observacoes": "",
+      "fotos": 0,
+      "recebidoEm": "2026-11-06T13:55:32"
     }
   ],
-  "atualizadoEm": "2026-11-06T13:55:07"
+  "atualizadoEm": "2026-11-06T13:55:34"
 }
