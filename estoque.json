@@ -5297,7 +5297,29 @@
       "observacoes": "",
       "fotos": 0,
       "recebidoEm": "2026-11-06T13:57:27"
+    },
+    {
+      "data": "06/11/2026",
+      "hora": "13:57",
+      "of": "263307",
+      "chave": "263307§1,000 X 1,200§AMOSTRA",
+      "ofCentral": "1350",
+      "oc": "SN",
+      "cliente": "AMOSTRA",
+      "papelao": "P40C",
+      "medida": "1,000 X 1,200",
+      "qtdePedido": "",
+      "referencia": "x",
+      "numPalete": "01",
+      "chapas": 20,
+      "gramatura": "",
+      "peso": 8.76,
+      "coluna": "",
+      "resultado": "OK",
+      "observacoes": "",
+      "fotos": 0,
+      "recebidoEm": "2026-11-06T13:57:54"
     }
   ],
-  "atualizadoEm": "2026-11-06T13:57:29"
+  "atualizadoEm": "2026-11-06T13:57:56"
 }
