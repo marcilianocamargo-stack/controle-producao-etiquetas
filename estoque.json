@@ -4945,7 +4945,29 @@
       "observacoes": "",
       "fotos": 0,
       "recebidoEm": "2026-11-07T00:24:08"
+    },
+    {
+      "data": "07/11/2026",
+      "hora": "00:34",
+      "of": "263350",
+      "chave": "263350§0,430 X 1,160§VÔ CHICO",
+      "ofCentral": "1356",
+      "oc": "061126",
+      "cliente": "VÔ CHICO",
+      "papelao": "P25B",
+      "medida": "0,430 X 1,160",
+      "qtdePedido": "600",
+      "referencia": "x",
+      "numPalete": "01",
+      "chapas": 980,
+      "gramatura": "",
+      "peso": 156.42,
+      "coluna": "",
+      "resultado": "OK",
+      "observacoes": "",
+      "fotos": 0,
+      "recebidoEm": "2026-11-07T00:33:58"
     }
   ],
-  "atualizadoEm": "2026-11-07T00:30:07"
+  "atualizadoEm": "2026-11-07T00:34:01"
 }
