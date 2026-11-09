@@ -3537,7 +3537,29 @@
       "observacoes": "",
       "fotos": 0,
       "recebidoEm": "2026-11-09T13:35:39"
+    },
+    {
+      "data": "09/11/2026",
+      "hora": "13:36",
+      "of": "263347",
+      "chave": "263347§0,330 X 0,670§RENOVAPEL",
+      "ofCentral": "1355",
+      "oc": "16",
+      "cliente": "RENOVAPEL",
+      "papelao": "P50D",
+      "medida": "0,330 X 0,670",
+      "qtdePedido": "900",
+      "referencia": "x",
+      "numPalete": "02",
+      "chapas": 300,
+      "gramatura": "",
+      "peso": 35.69,
+      "coluna": "",
+      "resultado": "OK",
+      "observacoes": "",
+      "fotos": 0,
+      "recebidoEm": "2026-11-09T13:36:19"
     }
   ],
-  "atualizadoEm": "2026-11-09T13:35:42"
+  "atualizadoEm": "2026-11-09T13:36:23"
 }
