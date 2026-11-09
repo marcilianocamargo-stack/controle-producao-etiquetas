@@ -1472,28 +1472,6 @@
     },
     {
       "data": "29/10/2026",
-      "hora": "15:24",
-      "of": "263174",
-      "chave": "263174§0,951 X 2,060§RM EMBALAGENS",
-      "ofCentral": "1330",
-      "oc": "21",
-      "cliente": "RM EMBALAGENS",
-      "papelao": "P50D",
-      "medida": "0,951 X 2,060",
-      "qtdePedido": "550",
-      "referencia": "218x40x475x218",
-      "numPalete": "03",
-      "chapas": 500,
-      "gramatura": "",
-      "peso": 526.99,
-      "coluna": "",
-      "resultado": "OK",
-      "observacoes": "",
-      "fotos": 0,
-      "recebidoEm": "2026-10-29T15:24:19"
-    },
-    {
-      "data": "29/10/2026",
       "hora": "16:01",
       "of": "263217",
       "chave": "263217§0,480 X 1,250§TOLECAIXAS",
@@ -1780,28 +1758,6 @@
     },
     {
       "data": "29/10/2026",
-      "hora": "20:08",
-      "of": "263177",
-      "chave": "263177§0,378 X 0,840§RM EMBALAGENS",
-      "ofCentral": "1330",
-      "oc": "21",
-      "cliente": "RM EMBALAGENS",
-      "papelao": "P25B",
-      "medida": "0,378 X 0,840",
-      "qtdePedido": "3000",
-      "referencia": "90x198x90",
-      "numPalete": "02",
-      "chapas": 1490,
-      "gramatura": "",
-      "peso": 151.39,
-      "coluna": "",
-      "resultado": "OK",
-      "observacoes": "",
-      "fotos": 0,
-      "recebidoEm": "2026-10-29T20:08:19"
-    },
-    {
-      "data": "29/10/2026",
       "hora": "20:29",
       "of": "263178",
       "chave": "263178§0,354 X 1,000§RM EMBALAGENS",
@@ -1909,28 +1865,6 @@
       "observacoes": "",
       "fotos": 0,
       "recebidoEm": "2026-10-29T21:24:42"
-    },
-    {
-      "data": "29/10/2026",
-      "hora": "22:24",
-      "of": "263202",
-      "chave": "263202§0,820 X 1,200§RM EMBALAGENS",
-      "ofCentral": "1334",
-      "oc": "22",
-      "cliente": "RM EMBALAGENS",
-      "papelao": "P25B",
-      "medida": "0,820 X 1,200",
-      "qtdePedido": "1000",
-      "referencia": "x",
-      "numPalete": "02",
-      "chapas": 385,
-      "gramatura": "",
-      "peso": 121.23,
-      "coluna": "",
-      "resultado": "OK",
-      "observacoes": "",
-      "fotos": 0,
-      "recebidoEm": "2026-10-29T22:24:26"
     },
     {
       "data": "30/10/2026",
@@ -4177,5 +4111,5 @@
       "recebidoEm": "2026-11-09T10:15:33"
     }
   ],
-  "atualizadoEm": "2026-11-09T10:20:07"
+  "atualizadoEm": "2026-11-09T10:21:58"
 }
