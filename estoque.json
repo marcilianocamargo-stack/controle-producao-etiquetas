@@ -4219,7 +4219,29 @@
       "observacoes": "",
       "fotos": 0,
       "recebidoEm": "2026-11-10T18:57:45"
+    },
+    {
+      "data": "10/11/2026",
+      "hora": "19:08",
+      "of": "263376",
+      "chave": "263376§1,050 X 2,537§IPE EMBALAGENS",
+      "ofCentral": "1361",
+      "oc": "1912",
+      "cliente": "IPE EMBALAGENS",
+      "papelao": "P50D",
+      "medida": "1,050 X 2,537",
+      "qtdePedido": "1500",
+      "referencia": "195x660x195",
+      "numPalete": "02",
+      "chapas": 175,
+      "gramatura": "",
+      "peso": 250.8,
+      "coluna": "",
+      "resultado": "OK",
+      "observacoes": "",
+      "fotos": 0,
+      "recebidoEm": "2026-11-10T19:08:45"
     }
   ],
-  "atualizadoEm": "2026-11-10T19:05:07"
+  "atualizadoEm": "2026-11-10T19:08:48"
 }
