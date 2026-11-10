@@ -4637,7 +4637,29 @@
       "observacoes": "",
       "fotos": 0,
       "recebidoEm": "2026-11-10T14:35:45"
+    },
+    {
+      "data": "10/11/2026",
+      "hora": "15:22",
+      "of": "263365",
+      "chave": "263365§1,410 X 1,200§J FER",
+      "ofCentral": "1360",
+      "oc": "",
+      "cliente": "J FER",
+      "papelao": "P25B",
+      "medida": "1,410 X 1,200",
+      "qtdePedido": "500",
+      "referencia": "x",
+      "numPalete": "01",
+      "chapas": 250,
+      "gramatura": "",
+      "peso": 135.36,
+      "coluna": "",
+      "resultado": "OK",
+      "observacoes": "",
+      "fotos": 0,
+      "recebidoEm": "2026-11-10T15:22:16"
     }
   ],
-  "atualizadoEm": "2026-11-10T15:20:08"
+  "atualizadoEm": "2026-11-10T15:22:18"
 }
