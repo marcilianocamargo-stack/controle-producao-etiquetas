@@ -4373,7 +4373,29 @@
       "observacoes": "",
       "fotos": 0,
       "recebidoEm": "2026-11-12T16:53:09"
+    },
+    {
+      "data": "12/11/2026",
+      "hora": "17:38",
+      "of": "263416",
+      "chave": "263416§1,180 X 2,589§ABAPEL EMBALAGENS",
+      "ofCentral": "1373",
+      "oc": "8410",
+      "cliente": "ABAPEL EMBALAGENS",
+      "papelao": "P50D",
+      "medida": "1,180 X 2,589",
+      "qtdePedido": "1980",
+      "referencia": "255x670x255",
+      "numPalete": "01",
+      "chapas": 180,
+      "gramatura": "",
+      "peso": 295.85,
+      "coluna": "",
+      "resultado": "OK",
+      "observacoes": "",
+      "fotos": 0,
+      "recebidoEm": "2026-11-12T17:38:42"
     }
   ],
-  "atualizadoEm": "2026-11-12T17:35:07"
+  "atualizadoEm": "2026-11-12T17:38:44"
 }
