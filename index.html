@@ -119,6 +119,16 @@ input.big{font-size:22px;font-weight:700;text-align:center;color:var(--ok)}
 .palete-row .p-hora{color:var(--muted);font-size:11px}
 .palete-row .p-obs{color:var(--muted);font-size:10px;flex:1;text-align:right;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .palete-row .p-del{background:none;border:none;color:var(--danger);cursor:pointer;font-size:14px;padding:0 4px}
+/* Romaneio por cliente: marcar o que foi carregado e corrigir a quantidade real */
+.palete-row.rom{flex-wrap:wrap}
+.palete-row .p-chk{display:flex;align-items:center;gap:8px;cursor:pointer;min-height:32px}
+.palete-row .p-chk input{width:22px;height:22px;accent-color:var(--ok)}
+.palete-row.carregado{background:rgba(46,125,50,.10)}
+.palete-row .p-qtd{display:none;width:84px;padding:5px 6px;border:1px solid var(--border);border-radius:6px;font-size:14px;font-weight:700;text-align:right}
+.palete-row.carregado .p-qtd{display:inline-block}
+#expConfirmar .conf-aviso{font-size:12px;color:var(--muted);line-height:1.5;margin:4px 0 10px}
+#expConfirmar .conf-botoes{display:flex;gap:8px;margin:10px 0}
+#expConfirmar .conf-botoes button{flex:1;padding:10px;border-radius:6px;border:none;background:var(--surface2);color:var(--muted);font-weight:700;font-size:13px;cursor:pointer}
 .resumo-linha{background:rgba(46,125,50,.07);border:1px solid rgba(46,125,50,.2);border-top:none;border-radius:0 0 8px 8px;padding:8px 12px;font-size:12px;display:flex;justify-content:space-between}
 .resumo-linha span{color:var(--muted)}
 .resumo-linha strong{color:var(--ok)}
@@ -408,6 +418,22 @@ input.big{font-size:22px;font-weight:700;text-align:center;color:var(--ok)}
     </div>
     <div id="expGrupos"></div>
     <button class="btn btn-primary" id="btnGerarRomaneio" style="display:block" onclick="gerarRomaneioPDF()">📄 Gerar PDF do Romaneio</button>
+
+    <div class="card" id="expConfirmar" style="display:none;margin-top:14px">
+      <div class="step" style="margin-bottom:6px">✅ Confirmar carregamento</div>
+      <div class="conf-aviso">Depois de carregar, marque aqui os paletes que <b>realmente foram no caminhão</b> (no lugar do X do papel). Se a quantidade de um palete estiver diferente da etiqueta, corrija no campo que aparece. A baixa no estoque só acontece quando a nota fiscal sair e bater com o que foi marcado.</div>
+      <div class="resumo-linha" style="border-radius:8px"><span>Marcados</span><strong id="expConfQtd">0 pal. · 0 chapas</strong></div>
+      <div class="busca-row" style="margin-top:10px">
+        <input type="text" id="expPlaca" placeholder="Placa (opcional)" maxlength="20" autocapitalize="characters">
+        <input type="text" id="expMotorista" placeholder="Motorista (opcional)" maxlength="60">
+      </div>
+      <div class="conf-botoes">
+        <button type="button" onclick="romMarcarTodos(true)">Marcar todos</button>
+        <button type="button" onclick="romMarcarTodos(false)">Limpar</button>
+      </div>
+      <button class="btn btn-primary" id="btnConfirmarCarga" style="display:block" onclick="confirmarCarregamento()">✅ Confirmar carregamento</button>
+      <div id="expConfStatus" class="status-auto info" style="display:none;margin-top:8px"></div>
+    </div>
   </div>
 </div>
 
@@ -1397,6 +1423,7 @@ function renderRomaneioPreview(nokExcluidos){
   romaneioResultadoModo = 'of';
   document.getElementById('expOrdemBox').style.display = 'none';
   document.getElementById('expAvisoOrdem').style.display = 'none';
+  document.getElementById('expConfirmar').style.display = 'none';   // confirmação de carga é só do romaneio por cliente
   const totalPaletes = romaneioGrupos.reduce((s,g)=>s+g.paletes.length,0);
   const totalChapas = romaneioGrupos.reduce((s,g)=>s+g.paletes.reduce((s2,p)=>s2+p.chapas,0),0);
   document.getElementById('expTotalPaletes').textContent = totalPaletes;
@@ -1678,6 +1705,10 @@ function mostrarRomaneioCliente(cli){
   romaneioResultadoModo = 'cliente';
   renderChipsClientes();
   const r = romaneioCliente;
+  if(romConf.chave !== r.chave){            // outro cliente: zera as marcas de "carregado"
+    romConf = {chave:r.chave, marcas:new Map(), enviado:false};
+    document.getElementById('expConfStatus').style.display = 'none';
+  }
   document.getElementById('expStatus').style.display = 'none';
   document.getElementById('expTotalPaletes').textContent = r.totalPaletes;
   document.getElementById('expTotalChapas').textContent = r.totalChapas.toLocaleString('pt-BR');
@@ -1708,12 +1739,146 @@ function mostrarRomaneioCliente(cli){
           + '<div class="of-header"><div><div class="of-num">'+(i+1)+'ª · OC '+esc(o.oc || 'sem OC')+'</div>'
           + '<div class="of-cli">1ª produção em '+esc(quando)+'</div></div>'
           + '<div class="of-total">'+o.paletes.length+' pal. · '+o.total.toLocaleString('pt-BR')+'</div></div>'
-          + o.paletes.map(p => '<div class="palete-row"><span class="p-num">'+p.seq+'º</span>'
-              + '<span class="p-chapas">pal. '+esc(p.numPalete)+' · '+p.chapas.toLocaleString('pt-BR')+' chapas</span>'
-              + '<span class="p-hora">OP '+esc(p.op)+' · '+esc(p.medida)+'</span></div>').join('')
+          + o.paletes.map(p => {
+              const k = chaveRomPal(p.op, p.numPalete), m = romConf.marcas.get(k);
+              const marcado = !!(m && m.c);
+              const qtd = (m && m.q != null) ? m.q : p.chapas;
+              return '<div class="palete-row rom'+(marcado ? ' carregado' : '')+'" data-k="'+esc(k)+'">'
+                + '<label class="p-chk"><input type="checkbox"'+(marcado ? ' checked' : '')+' onchange="romMarcar(this)" aria-label="Palete '+esc(p.numPalete)+' carregado"><span class="p-num">'+p.seq+'º</span></label>'
+                + '<span class="p-chapas">pal. '+esc(p.numPalete)+' · '+p.chapas.toLocaleString('pt-BR')+' chapas</span>'
+                + '<input type="number" inputmode="numeric" class="p-qtd" min="0" value="'+qtd+'" onchange="romQtd(this)" aria-label="Quantidade real carregada">'
+                + '<span class="p-hora">OP '+esc(p.op)+' · '+esc(p.medida)+'</span></div>';
+            }).join('')
           + '</div>';
       }).join('');
   document.getElementById('expResultado').style.display = 'block';
+  document.getElementById('expConfirmar').style.display = r.totalPaletes ? 'block' : 'none';
+  romAtualizarResumo(false);
+}
+
+// ── CONFIRMAÇÃO DE CARREGAMENTO ────────────────────────────────────
+// O expedidor marca no app o que realmente foi no caminhão (no lugar do X de
+// papel) e, se preciso, corrige a quantidade real do palete. Isso só é GUARDADO
+// no servidor; a baixa no estoque acontece depois, quando a nota fiscal sai e
+// fecha com o que foi marcado (ver baixar_confirmados.py na VPS). Falha de rede
+// nunca perde nada: fica numa fila no aparelho e reenvia sozinha.
+const ROMANEIO_API_URL = 'https://n8n.mcamargo.uk/onduladeira/romaneio';
+let romConf = {chave:null, marcas:new Map(), enviado:false};
+const chaveRomPal = (op, num) => op + '§' + num;
+
+function romResumo(){
+  let n = 0, ch = 0;
+  if(romaneioCliente) romaneioCliente.ocs.forEach(o => o.paletes.forEach(p => {
+    const m = romConf.marcas.get(chaveRomPal(p.op, p.numPalete));
+    if(m && m.c){ n++; ch += (m.q != null ? m.q : p.chapas); }
+  }));
+  return {n, ch};
+}
+function romAtualizarResumo(zerarEnviado = true){
+  const r = romResumo();
+  document.getElementById('expConfQtd').textContent = r.n + ' pal. · ' + r.ch.toLocaleString('pt-BR') + ' chapas';
+  if(zerarEnviado){
+    romConf.enviado = false;
+    document.getElementById('btnConfirmarCarga').textContent = '✅ Confirmar carregamento';
+  }
+}
+function romMarcar(el){
+  const row = el.closest('.palete-row'), k = row.dataset.k;
+  const m = romConf.marcas.get(k) || {c:false, q:null};
+  m.c = el.checked;
+  if(m.c && m.q == null){ const inp = row.querySelector('.p-qtd'); m.q = inp ? Number(inp.value) : null; }
+  romConf.marcas.set(k, m);
+  row.classList.toggle('carregado', el.checked);
+  romAtualizarResumo();
+}
+function romQtd(el){
+  const row = el.closest('.palete-row'), k = row.dataset.k;
+  const m = romConf.marcas.get(k) || {c:true, q:null};
+  const v = el.value === '' ? null : Math.max(0, Math.round(Number(el.value)));
+  if(v === null){ el.value = ''; }
+  m.q = v; romConf.marcas.set(k, m);
+  romAtualizarResumo();
+}
+function romMarcarTodos(valor){
+  document.querySelectorAll('#expGrupos .palete-row.rom').forEach(row => {
+    const cb = row.querySelector('input[type=checkbox]');
+    if(cb && cb.checked !== valor){ cb.checked = valor; romMarcar(cb); }
+  });
+}
+
+// Fila local de romaneios que não chegaram ao servidor.
+function lerPendRomaneio(){ try{ return JSON.parse(localStorage.getItem('pendentes_romaneio')||'[]'); }catch{ return []; } }
+function gravarPendRomaneio(lista){ try{ localStorage.setItem('pendentes_romaneio', JSON.stringify(lista)); }catch{} }
+async function postarRomaneio(payload){
+  try{
+    const resp = await fetch(ROMANEIO_API_URL, {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(payload)});
+    if(resp.ok) return 'ok';
+    return (resp.status >= 400 && resp.status < 500) ? 'invalido' : 'falha';
+  }catch(e){ return 'falha'; }
+}
+async function enviarRomaneio(payload){
+  payload._idLocal = payload._idLocal || (Date.now() + '-' + Math.random().toString(36).slice(2, 8));
+  const r = await postarRomaneio(payload);
+  if(r === 'falha') gravarPendRomaneio(lerPendRomaneio().filter(x => x._idLocal !== payload._idLocal).concat([payload]));
+  return r;
+}
+let reenviandoRomaneios = false;
+async function reenviarRomaneiosPendentes(){
+  if(reenviandoRomaneios) return;
+  reenviandoRomaneios = true;
+  try{
+    for(const p of lerPendRomaneio()){
+      const r = await postarRomaneio(p);
+      if(r === 'ok' || r === 'invalido') gravarPendRomaneio(lerPendRomaneio().filter(x => x._idLocal !== p._idLocal));
+    }
+  } finally { reenviandoRomaneios = false; }
+}
+
+function romPayloadBase(tipo, r){
+  return {tipo, cliente:r.nome, chave:r.chave, ordem:r.ordem, geradoEm:new Date().toISOString(),
+          estoqueAtualizadoEm:(estoqueRomaneio && estoqueRomaneio.atualizadoEm) || ''};
+}
+// Chamado ao gerar o PDF: avisa o servidor da lista impressa (não bloqueia nada).
+function registrarRomaneioGerado(r){
+  try{
+    const paletes = [];
+    r.ocs.forEach(o => o.paletes.forEach(p => paletes.push({op:p.op, palete:p.numPalete, qtd:p.chapas, oc:o.oc, medida:p.medida, papel:p.papel, ord:p.seq})));
+    if(paletes.length) enviarRomaneio(Object.assign(romPayloadBase('gerado', r), {paletes}));
+  }catch(e){ /* nunca atrapalha a impressão */ }
+}
+
+async function confirmarCarregamento(){
+  const r = romaneioCliente, st = document.getElementById('expConfStatus'), btn = document.getElementById('btnConfirmarCarga');
+  if(!r) return;
+  const mostrar = (cls, txt) => { st.className = 'status-auto ' + cls; st.textContent = txt; st.style.display = 'block'; };
+  const res = romResumo();
+  if(!res.n){ mostrar('err', '⚠ Marque pelo menos um palete que foi carregado.'); return; }
+  if(romConf.enviado){ mostrar('info', 'Este carregamento já foi enviado. Mude uma marca para enviar de novo.'); return; }
+  const ficam = r.totalPaletes - res.n;
+  if(!confirm('Confirmar o carregamento de ' + r.nome + '?\n\n' + res.n + ' palete(s) · ' + res.ch.toLocaleString('pt-BR') + ' chapas vão no caminhão'
+      + (ficam ? '\n' + ficam + ' palete(s) ficam no estoque' : '') + '\n\nA baixa no estoque acontece quando a nota fiscal sair.')) return;
+  const paletes = [];
+  r.ocs.forEach(o => o.paletes.forEach(p => {
+    const m = romConf.marcas.get(chaveRomPal(p.op, p.numPalete)) || {};
+    const carregado = !!m.c;
+    paletes.push({op:p.op, palete:p.numPalete, qtd:p.chapas, qtdReal:(carregado && m.q != null) ? m.q : p.chapas,
+                  carregado, oc:o.oc, medida:p.medida, papel:p.papel, ord:p.seq});
+  }));
+  const payload = Object.assign(romPayloadBase('confirmado', r), {
+    placa:(document.getElementById('expPlaca').value || '').trim(), motorista:(document.getElementById('expMotorista').value || '').trim(), paletes});
+  btn.disabled = true; btn.textContent = '⏳ Enviando...';
+  const resp = await enviarRomaneio(payload);
+  btn.disabled = false;
+  if(resp === 'ok'){
+    romConf.enviado = true; btn.textContent = '✔ Carregamento enviado';
+    mostrar('ok', '✓ Carregamento registrado (' + res.n + ' paletes · ' + res.ch.toLocaleString('pt-BR') + ' chapas). A baixa no estoque acontece quando a nota fiscal sair.');
+  } else if(resp === 'falha'){
+    romConf.enviado = true; btn.textContent = '✔ Guardado no aparelho';
+    mostrar('info', '⏳ Sem conexão com o servidor. O carregamento ficou guardado neste aparelho e será enviado sozinho quando a internet voltar.');
+  } else {
+    btn.textContent = '✅ Confirmar carregamento';
+    mostrar('err', '⚠ O servidor recusou o envio. Confira as quantidades e tente de novo; se repetir, avise o responsável.');
+  }
 }
 
 function gerarRomaneioClientePDF(){
@@ -1834,6 +1999,7 @@ function gerarRomaneioClientePDF(){
   const slug = r.nome.normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^A-Za-z0-9]+/g,'_').replace(/^_+|_+$/g,'');
   const fileName = 'romaneio_' + slug + '_' + dataArq + '.pdf';
   const blob = doc.output('blob');
+  registrarRomaneioGerado(r);   // avisa o servidor da lista impressa (nunca bloqueia a impressão)
 
   if(navigator.share && navigator.canShare && navigator.canShare({files:[new File([blob], fileName, {type:'application/pdf'})]})){
     const file = new File([blob], fileName, {type:'application/pdf'});
@@ -2320,6 +2486,7 @@ if ('serviceWorker' in navigator) {
 // servidor). Não bloqueia nem avisa nada se não tiver pendente.
 window.addEventListener('load', () => {
   if (lerPendentes().length) sincronizarComServidor(false);
+  if (lerPendRomaneio().length) reenviarRomaneiosPendentes();
 });
 
 // Antes, a fila de pendentes (madrugada com PC/n8n desligado, por exemplo)
@@ -2331,6 +2498,7 @@ window.addEventListener('load', () => {
 // esse caso sem exigir reabrir o app.
 window.addEventListener('online', () => {
   if (lerPendentes().length) sincronizarComServidor(false, true);
+  if (lerPendRomaneio().length) reenviarRomaneiosPendentes();
 });
 // Voltar pro primeiro plano é o momento mais comum de recuperar: o Android
 // congela a página enquanto a folha de compartilhamento da etiqueta está
@@ -2342,6 +2510,7 @@ document.addEventListener('visibilitychange', () => {
 });
 setInterval(() => {
   if (lerPendentes().length) sincronizarComServidor(false, true);
+  if (lerPendRomaneio().length) reenviarRomaneiosPendentes();
 }, 5 * 60 * 1000);
 </script>
 </body>
