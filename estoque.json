@@ -4351,7 +4351,29 @@
       "observacoes": "",
       "fotos": 0,
       "recebidoEm": "2026-11-13T19:46:52"
+    },
+    {
+      "data": "13/11/2026",
+      "hora": "19:49",
+      "of": "263487",
+      "chave": "263487§0,342 X 1,225§RENOVAPEL",
+      "ofCentral": "1378",
+      "oc": "18",
+      "cliente": "RENOVAPEL",
+      "papelao": "P45B",
+      "medida": "0,342 X 1,225",
+      "qtdePedido": "300",
+      "referencia": "81x180x81",
+      "numPalete": "01",
+      "chapas": 445,
+      "gramatura": "",
+      "peso": 68.05,
+      "coluna": "",
+      "resultado": "OK",
+      "observacoes": "",
+      "fotos": 0,
+      "recebidoEm": "2026-11-13T19:49:19"
     }
   ],
-  "atualizadoEm": "2026-11-13T19:46:55"
+  "atualizadoEm": "2026-11-13T19:49:21"
 }
