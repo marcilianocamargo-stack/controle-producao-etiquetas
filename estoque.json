@@ -5099,7 +5099,29 @@
       "observacoes": "",
       "fotos": 0,
       "recebidoEm": "2026-11-12T23:49:51"
+    },
+    {
+      "data": "13/11/2026",
+      "hora": "00:02",
+      "of": "263390",
+      "chave": "263390§0,720 X 1,260§CARPEL",
+      "ofCentral": "1368",
+      "oc": "1913",
+      "cliente": "CARPEL",
+      "papelao": "P50D",
+      "medida": "0,720 X 1,260",
+      "qtdePedido": "300",
+      "referencia": "x",
+      "numPalete": "01",
+      "chapas": 315,
+      "gramatura": "",
+      "peso": 153.74,
+      "coluna": "",
+      "resultado": "OK",
+      "observacoes": "",
+      "fotos": 0,
+      "recebidoEm": "2026-11-13T00:02:13"
     }
   ],
-  "atualizadoEm": "2026-11-13T00:00:09"
+  "atualizadoEm": "2026-11-13T00:02:16"
 }
