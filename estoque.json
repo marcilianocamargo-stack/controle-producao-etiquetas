@@ -5429,7 +5429,29 @@
       "observacoes": "",
       "fotos": 0,
       "recebidoEm": "2026-11-16T11:57:15"
+    },
+    {
+      "data": "16/11/2026",
+      "hora": "13:14",
+      "of": "263284",
+      "chave": "263284§1,000 X 1,200§AMOSTRA",
+      "ofCentral": "1350",
+      "oc": "SN",
+      "cliente": "AMOSTRA",
+      "papelao": "P35B",
+      "medida": "1,000 X 1,200",
+      "qtdePedido": "",
+      "referencia": "x",
+      "numPalete": "01",
+      "chapas": 30,
+      "gramatura": "",
+      "peso": 12.42,
+      "coluna": "",
+      "resultado": "OK",
+      "observacoes": "",
+      "fotos": 0,
+      "recebidoEm": "2026-11-16T13:14:56"
     }
   ],
-  "atualizadoEm": "2026-11-16T13:10:07"
+  "atualizadoEm": "2026-11-16T13:14:59"
 }
