@@ -1560,50 +1560,6 @@
     },
     {
       "data": "11/11/2026",
-      "hora": "21:17",
-      "of": "263380",
-      "chave": "263380§0,564 X 2,160§CARPEL",
-      "ofCentral": "1366",
-      "oc": "SN",
-      "cliente": "CARPEL",
-      "papelao": "P35B",
-      "medida": "0,564 X 2,160",
-      "qtdePedido": "1000",
-      "referencia": "197x170x197",
-      "numPalete": "01",
-      "chapas": 775,
-      "gramatura": "",
-      "peso": 325.73,
-      "coluna": "",
-      "resultado": "OK",
-      "observacoes": "",
-      "fotos": 0,
-      "recebidoEm": "2026-11-11T21:17:05"
-    },
-    {
-      "data": "11/11/2026",
-      "hora": "21:17",
-      "of": "263380",
-      "chave": "263380§0,564 X 2,160§CARPEL",
-      "ofCentral": "1366",
-      "oc": "SN",
-      "cliente": "CARPEL",
-      "papelao": "P35B",
-      "medida": "0,564 X 2,160",
-      "qtdePedido": "1000",
-      "referencia": "197x170x197",
-      "numPalete": "02",
-      "chapas": 330,
-      "gramatura": "",
-      "peso": 138.7,
-      "coluna": "",
-      "resultado": "OK",
-      "observacoes": "",
-      "fotos": 0,
-      "recebidoEm": "2026-11-11T21:17:48"
-    },
-    {
-      "data": "11/11/2026",
       "hora": "21:19",
       "of": "263407",
       "chave": "263407§1,160 X 1,190§RM EMBALAGENS",
@@ -3561,5 +3517,5 @@
       "recebidoEm": "2026-11-16T14:37:34"
     }
   ],
-  "atualizadoEm": "2026-11-16T14:40:08"
+  "atualizadoEm": "2026-11-16T14:42:26"
 }
