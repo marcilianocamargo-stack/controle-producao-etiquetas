@@ -3713,7 +3713,51 @@
       "observacoes": "",
       "fotos": 0,
       "recebidoEm": "2026-11-16T15:46:20"
+    },
+    {
+      "data": "16/11/2026",
+      "hora": "15:50",
+      "of": "263506",
+      "chave": "263506§0,294 X 0,959§HARMONY EMBALAGENS",
+      "ofCentral": "1379",
+      "oc": "SN",
+      "cliente": "HARMONY EMBALAGENS",
+      "papelao": "P50D",
+      "medida": "0,294 X 0,959",
+      "qtdePedido": "15000",
+      "referencia": "80x134x80",
+      "numPalete": "06",
+      "chapas": 870,
+      "gramatura": "",
+      "peso": 131.97,
+      "coluna": "",
+      "resultado": "OK",
+      "observacoes": "",
+      "fotos": 0,
+      "recebidoEm": "2026-11-16T15:50:07"
+    },
+    {
+      "data": "16/11/2026",
+      "hora": "15:54",
+      "of": "263506",
+      "chave": "263506§0,294 X 0,959§HARMONY EMBALAGENS",
+      "ofCentral": "1379",
+      "oc": "SN",
+      "cliente": "HARMONY EMBALAGENS",
+      "papelao": "P50D",
+      "medida": "0,294 X 0,959",
+      "qtdePedido": "15000",
+      "referencia": "80x134x80",
+      "numPalete": "07",
+      "chapas": 870,
+      "gramatura": "",
+      "peso": 131.97,
+      "coluna": "",
+      "resultado": "OK",
+      "observacoes": "",
+      "fotos": 0,
+      "recebidoEm": "2026-11-16T15:54:36"
     }
   ],
-  "atualizadoEm": "2026-11-16T15:50:08"
+  "atualizadoEm": "2026-11-16T15:54:39"
 }
