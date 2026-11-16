@@ -5451,7 +5451,29 @@
       "observacoes": "",
       "fotos": 0,
       "recebidoEm": "2026-11-16T13:14:56"
+    },
+    {
+      "data": "16/11/2026",
+      "hora": "14:15",
+      "of": "263430",
+      "chave": "263430§0,856 X 2,440§RM EMBALAGENS",
+      "ofCentral": "1376",
+      "oc": "32",
+      "cliente": "RM EMBALAGENS",
+      "papelao": "P50D",
+      "medida": "0,856 X 2,440",
+      "qtdePedido": "500",
+      "referencia": "138x580x138",
+      "numPalete": "01",
+      "chapas": 180,
+      "gramatura": "",
+      "peso": 202.26,
+      "coluna": "",
+      "resultado": "OK",
+      "observacoes": "",
+      "fotos": 0,
+      "recebidoEm": "2026-11-16T14:15:08"
     }
   ],
-  "atualizadoEm": "2026-11-16T14:15:07"
+  "atualizadoEm": "2026-11-16T14:15:12"
 }
