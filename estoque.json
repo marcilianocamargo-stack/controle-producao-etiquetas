@@ -4131,7 +4131,29 @@
       "observacoes": "",
       "fotos": 0,
       "recebidoEm": "2026-11-17T16:56:58"
+    },
+    {
+      "data": "17/11/2026",
+      "hora": "16:57",
+      "of": "263507",
+      "chave": "263507§0,614 X 1,609§HARMONY EMBALAGENS",
+      "ofCentral": "1379",
+      "oc": "SN",
+      "cliente": "HARMONY EMBALAGENS",
+      "papelao": "P70C",
+      "medida": "0,614 X 1,609",
+      "qtdePedido": "3000",
+      "referencia": "138x338x138",
+      "numPalete": "03",
+      "chapas": 600,
+      "gramatura": "",
+      "peso": 278.6,
+      "coluna": "",
+      "resultado": "OK",
+      "observacoes": "",
+      "fotos": 0,
+      "recebidoEm": "2026-11-17T16:57:12"
     }
   ],
-  "atualizadoEm": "2026-11-17T16:57:01"
+  "atualizadoEm": "2026-11-17T16:57:14"
 }
