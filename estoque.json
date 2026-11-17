@@ -4417,7 +4417,29 @@
       "observacoes": "",
       "fotos": 0,
       "recebidoEm": "2026-11-17T10:35:42"
+    },
+    {
+      "data": "17/11/2026",
+      "hora": "10:36",
+      "of": "263537",
+      "chave": "263537§1,070 X 2,690§STAR VALE CARTONAGEM",
+      "ofCentral": "1381",
+      "oc": "1694/2026",
+      "cliente": "STAR VALE CARTONAGEM",
+      "papelao": "P55D",
+      "medida": "1,070 X 2,690",
+      "qtdePedido": "800",
+      "referencia": "85x900x85",
+      "numPalete": "05",
+      "chapas": 130,
+      "gramatura": "",
+      "peso": 212.53,
+      "coluna": "",
+      "resultado": "OK",
+      "observacoes": "",
+      "fotos": 0,
+      "recebidoEm": "2026-11-17T10:36:07"
     }
   ],
-  "atualizadoEm": "2026-11-17T10:35:45"
+  "atualizadoEm": "2026-11-17T10:36:11"
 }
