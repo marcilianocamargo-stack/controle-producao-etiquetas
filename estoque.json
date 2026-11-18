@@ -5275,7 +5275,29 @@
       "observacoes": "",
       "fotos": 0,
       "recebidoEm": "2026-11-18T20:24:28"
+    },
+    {
+      "data": "18/11/2026",
+      "hora": "20:41",
+      "of": "263546",
+      "chave": "263546§0,660 X 2,050§IPE EMBALAGENS",
+      "ofCentral": "1385",
+      "oc": "1928",
+      "cliente": "IPE EMBALAGENS",
+      "papelao": "P25B",
+      "medida": "0,660 X 2,050",
+      "qtdePedido": "1300",
+      "referencia": "x",
+      "numPalete": "01",
+      "chapas": 625,
+      "gramatura": "",
+      "peso": 270.6,
+      "coluna": "",
+      "resultado": "OK",
+      "observacoes": "",
+      "fotos": 0,
+      "recebidoEm": "2026-11-18T20:41:37"
     }
   ],
-  "atualizadoEm": "2026-11-18T20:40:07"
+  "atualizadoEm": "2026-11-18T20:41:40"
 }
