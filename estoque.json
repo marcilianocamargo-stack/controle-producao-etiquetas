@@ -1098,28 +1098,6 @@
     },
     {
       "data": "30/10/2026",
-      "hora": "16:20",
-      "of": "263238",
-      "chave": "263238§1,190 X 1,420§RM EMBALAGENS",
-      "ofCentral": "1343",
-      "oc": "24",
-      "cliente": "RM EMBALAGENS",
-      "papelao": "P25B",
-      "medida": "1,190 X 1,420",
-      "qtdePedido": "600",
-      "referencia": "75x1040x75",
-      "numPalete": "02",
-      "chapas": 300,
-      "gramatura": "",
-      "peso": 162.22,
-      "coluna": "",
-      "resultado": "OK",
-      "observacoes": "",
-      "fotos": 0,
-      "recebidoEm": "2026-10-30T16:20:07"
-    },
-    {
-      "data": "30/10/2026",
       "hora": "16:22",
       "of": "263243",
       "chave": "263243§0,600 X 1,020§FAVINCO EMBALAGENS",
@@ -5211,5 +5189,5 @@
       "recebidoEm": "2026-11-18T14:16:35"
     }
   ],
-  "atualizadoEm": "2026-11-18T14:16:39"
+  "atualizadoEm": "2026-11-18T14:16:58"
 }
