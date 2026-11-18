@@ -5319,7 +5319,29 @@
       "observacoes": "",
       "fotos": 0,
       "recebidoEm": "2026-11-18T20:44:25"
+    },
+    {
+      "data": "18/11/2026",
+      "hora": "20:52",
+      "of": "263573",
+      "chave": "263573§0,750 X 0,750§IPE EMBALAGENS",
+      "ofCentral": "1385",
+      "oc": "1955",
+      "cliente": "IPE EMBALAGENS",
+      "papelao": "P60C",
+      "medida": "0,750 X 0,750",
+      "qtdePedido": "1250",
+      "referencia": "x",
+      "numPalete": "02",
+      "chapas": 740,
+      "gramatura": "",
+      "peso": 183.15,
+      "coluna": "",
+      "resultado": "OK",
+      "observacoes": "",
+      "fotos": 0,
+      "recebidoEm": "2026-11-18T20:52:23"
     }
   ],
-  "atualizadoEm": "2026-11-18T20:50:07"
+  "atualizadoEm": "2026-11-18T20:52:25"
 }
