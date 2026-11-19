@@ -4,10 +4,10 @@
   "chapasHoje": 5385,
   "paletes": 11,
   "turnoDiaFechado": {
-    "data": "18/11/2026",
-    "peso": 8079.41,
-    "chapas": 16170,
-    "paletes": 44
+    "data": "19/11/2026",
+    "peso": 3184.59,
+    "chapas": 5385,
+    "paletes": 11
   },
   "turnoNoiteFechado": {
     "data": "18/11/2026",
@@ -16,11 +16,11 @@
     "paletes": 37
   },
   "turnoAtual": {
-    "tipo": "dia",
+    "tipo": "noite",
     "data": "19/11/2026",
-    "peso": 3184.59,
-    "chapas": 5385,
-    "paletes": 11
+    "peso": 0.0,
+    "chapas": 0,
+    "paletes": 0
   },
-  "atualizadoEm": "2026-11-19T17:55:04"
+  "atualizadoEm": "2026-11-19T18:00:04"
 }
