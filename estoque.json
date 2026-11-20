@@ -6353,7 +6353,29 @@
       "observacoes": "",
       "fotos": 0,
       "recebidoEm": "2026-11-20T01:00:03"
+    },
+    {
+      "data": "20/11/2026",
+      "hora": "00:59",
+      "of": "263564",
+      "chave": "263564§0,806 X 2,373§IPE EMBALAGENS",
+      "ofCentral": "1385",
+      "oc": "1947",
+      "cliente": "IPE EMBALAGENS",
+      "papelao": "P45B",
+      "medida": "0,806 X 2,373",
+      "qtdePedido": "400",
+      "referencia": "211x384x211",
+      "numPalete": "01",
+      "chapas": 415,
+      "gramatura": "",
+      "peso": 289.72,
+      "coluna": "",
+      "resultado": "OK",
+      "observacoes": "",
+      "fotos": 0,
+      "recebidoEm": "2026-11-20T01:00:15"
     }
   ],
-  "atualizadoEm": "2026-11-20T01:00:10"
+  "atualizadoEm": "2026-11-20T01:00:18"
 }
