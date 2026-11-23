@@ -7651,7 +7651,29 @@
       "observacoes": "",
       "fotos": 0,
       "recebidoEm": "2026-11-23T19:55:09"
+    },
+    {
+      "data": "23/11/2026",
+      "hora": "19:55",
+      "of": "263569",
+      "chave": "263569§0,490 X 1,335§RENOVAPEL",
+      "ofCentral": "1386",
+      "oc": "19",
+      "cliente": "RENOVAPEL",
+      "papelao": "P80D",
+      "medida": "0,490 X 1,335",
+      "qtdePedido": "1600",
+      "referencia": "145x200x145",
+      "numPalete": "03",
+      "chapas": 355,
+      "gramatura": "",
+      "peso": 153.73,
+      "coluna": "",
+      "resultado": "OK",
+      "observacoes": "",
+      "fotos": 0,
+      "recebidoEm": "2026-11-23T19:55:52"
     }
   ],
-  "atualizadoEm": "2026-11-23T19:55:12"
+  "atualizadoEm": "2026-11-23T19:55:55"
 }
