@@ -1,8 +1,8 @@
 {
   "data": "23/11/2026",
-  "pesoHoje": 4502.39,
-  "chapasHoje": 17603,
-  "paletes": 30,
+  "pesoHoje": 4723.98,
+  "chapasHoje": 17703,
+  "paletes": 31,
   "turnoDiaFechado": {
     "data": "23/11/2026",
     "peso": 3566.34,
@@ -18,9 +18,9 @@
   "turnoAtual": {
     "tipo": "noite",
     "data": "23/11/2026",
-    "peso": 936.05,
-    "chapas": 2430,
-    "paletes": 6
+    "peso": 1157.64,
+    "chapas": 2530,
+    "paletes": 7
   },
-  "atualizadoEm": "2026-11-23T18:45:04"
+  "atualizadoEm": "2026-11-23T18:46:25"
 }
