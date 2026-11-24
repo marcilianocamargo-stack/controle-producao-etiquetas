@@ -8685,7 +8685,29 @@
       "observacoes": "",
       "fotos": 0,
       "recebidoEm": "2026-11-24T10:02:11"
+    },
+    {
+      "data": "24/11/2026",
+      "hora": "10:38",
+      "of": "263649",
+      "chave": "263649§0,400 X 2,000§RM EMBALAGENS",
+      "ofCentral": "1394",
+      "oc": "38",
+      "cliente": "RM EMBALAGENS",
+      "papelao": "P50D",
+      "medida": "0,400 X 2,000",
+      "qtdePedido": "750",
+      "referencia": "100x200x100",
+      "numPalete": "01",
+      "chapas": 540,
+      "gramatura": "",
+      "peso": 232.42,
+      "coluna": "",
+      "resultado": "OK",
+      "observacoes": "",
+      "fotos": 0,
+      "recebidoEm": "2026-11-24T10:38:19"
     }
   ],
-  "atualizadoEm": "2026-11-24T10:35:07"
+  "atualizadoEm": "2026-11-24T10:38:22"
 }
