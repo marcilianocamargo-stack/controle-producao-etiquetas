@@ -8421,7 +8421,29 @@
       "observacoes": "",
       "fotos": 0,
       "recebidoEm": "2026-11-24T08:31:27"
+    },
+    {
+      "data": "24/11/2026",
+      "hora": "08:39",
+      "of": "263619",
+      "chave": "263619§0,830 X 0,945§ABAPEL EMBALAGENS",
+      "ofCentral": "1393",
+      "oc": "8430",
+      "cliente": "ABAPEL EMBALAGENS",
+      "papelao": "P25B",
+      "medida": "0,830 X 0,945",
+      "qtdePedido": "5000",
+      "referencia": "x",
+      "numPalete": "02",
+      "chapas": 380,
+      "gramatura": "",
+      "peso": 95.38,
+      "coluna": "",
+      "resultado": "OK",
+      "observacoes": "",
+      "fotos": 0,
+      "recebidoEm": "2026-11-24T08:39:41"
     }
   ],
-  "atualizadoEm": "2026-11-24T08:35:08"
+  "atualizadoEm": "2026-11-24T08:39:44"
 }
