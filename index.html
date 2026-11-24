@@ -992,7 +992,9 @@ async function postarPalete(payload, timeoutMs = 15000){
 // Mesma chave de dedup do servidor (OP + OC + número do palete): uma OP pode
 // ter mais de um OC e cada OC numera os paletes dele do 01 em diante.
 function chavePendente(p){
-  return [p.of, p.oc, p.numPalete, p.data].join('|');
+  // Inclui hora e chapas: sem isso, o palete refeito com o mesmo número no
+  // mesmo dia era tomado como "já está na fila" e nunca era enviado.
+  return [p.of, p.oc, p.numPalete, p.data, p.hora, p.chapas].join('|');
 }
 function lerPendentes(){
   try{ return JSON.parse(localStorage.getItem('pendentes_n8n')||'[]'); }catch{ return []; }
@@ -1121,15 +1123,21 @@ function registrarPalete(imprimirEtiqueta=false){
   // MESMO OC). Confere só o que já está salvo NESTE aparelho (checagem
   // local, instantânea, não atrasa a impressão).
   const numPaleteFmt = String(parseInt(numPalete)).padStart(2,'0');
-  const duplicado = getRegistros().find(r => r.of === o.of && (r.oc || '') === (o.oc || '') && r.numPalete === numPaleteFmt);
+  const duplicado = getRegistros().filter(r => r.of === o.of && (r.oc || '') === (o.oc || '') && r.numPalete === numPaleteFmt).pop();
+  // Se o operador confirmar, este palete SUBSTITUI o anterior (errou o
+  // preenchimento, imprimiu e refez a etiqueta com o mesmo número): o antigo
+  // sai do histórico do aparelho, da fila de envio e, via campo "substitui",
+  // do histórico do servidor -- pra não contar o palete em dobro.
+  let substitui = null;
   if (duplicado) {
     const continuar = confirm(
-      `⚠ A OP ${o.of}${o.oc ? ' (OC ' + o.oc + ')' : ''} já tem um Palete ${numPaleteFmt} registrado neste aparelho ` +
+      `⚠ A OP ${o.of}${o.oc ? ' (OC ' + o.oc + ')' : ''} já tem um Palete ${numPaleteFmt} registrado ` +
       `(${duplicado.chapas} chapas, às ${duplicado.hora}).\n\n` +
-      `Isso normalmente é erro de digitação no número do palete.\n\n` +
-      `Quer continuar mesmo assim e registrar outro palete com o MESMO número?`
+      `OK = este novo palete SUBSTITUI o anterior (o anterior é apagado dos registros, não fica duplicado).\n` +
+      `Cancelar = volta pra corrigir o número do palete.`
     );
     if (!continuar) { document.getElementById('numPalete').focus(); return; }
+    substitui = {data: duplicado.data, hora: duplicado.hora, chapas: duplicado.chapas};
   }
 
   const registro={
@@ -1154,7 +1162,17 @@ function registrarPalete(imprimirEtiqueta=false){
     fotos: fotosAtuais.map(f=>({name:f.name,b64:f.b64})),
   };
 
-  const regs=getRegistros();
+  let regs=getRegistros();
+  if (substitui) {
+    registro.substitui = substitui;
+    const velho = duplicado;
+    // Tira o palete errado do histórico local (mesma identidade exata) e da
+    // fila de envio, caso ainda não tenha chegado no servidor.
+    regs = regs.filter(r => !(r.of === velho.of && (r.oc||'') === (velho.oc||'') && r.numPalete === velho.numPalete
+                              && r.data === velho.data && r.hora === velho.hora && r.chapas === velho.chapas));
+    mutarPendentes(lista => lista.filter(p => !(p.of === velho.of && (p.oc||'') === (velho.oc||'') && p.numPalete === velho.numPalete
+                              && p.data === velho.data && p.hora === velho.hora && p.chapas === velho.chapas)));
+  }
   regs.push(registro);
   salvarRegistros(regs);
 
