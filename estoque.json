@@ -7409,7 +7409,29 @@
       "observacoes": "",
       "fotos": 0,
       "recebidoEm": "2026-11-24T14:41:57"
+    },
+    {
+      "data": "24/11/2026",
+      "hora": "14:48",
+      "of": "263653",
+      "chave": "263653§0,396 X 0,816§ABAPEL EMBALAGENS",
+      "ofCentral": "1396",
+      "oc": "8436",
+      "cliente": "ABAPEL EMBALAGENS",
+      "papelao": "P25C",
+      "medida": "0,396 X 0,816",
+      "qtdePedido": "16000",
+      "referencia": "56x284x56",
+      "numPalete": "15",
+      "chapas": 400,
+      "gramatura": "",
+      "peso": 42.65,
+      "coluna": "",
+      "resultado": "OK",
+      "observacoes": "",
+      "fotos": 0,
+      "recebidoEm": "2026-11-24T14:48:17"
     }
   ],
-  "atualizadoEm": "2026-11-24T14:45:08"
+  "atualizadoEm": "2026-11-24T14:48:19"
 }
