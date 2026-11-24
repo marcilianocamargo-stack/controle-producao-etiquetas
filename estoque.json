@@ -7563,7 +7563,29 @@
       "observacoes": "",
       "fotos": 0,
       "recebidoEm": "2026-11-24T13:44:50"
+    },
+    {
+      "data": "24/11/2026",
+      "hora": "13:48",
+      "of": "263666",
+      "chave": "263666§1,570 X 2,000§DAL PICOLI",
+      "ofCentral": "1398",
+      "oc": "8945",
+      "cliente": "DAL PICOLI",
+      "papelao": "P35B",
+      "medida": "1,570 X 2,000",
+      "qtdePedido": "350",
+      "referencia": "x",
+      "numPalete": "01",
+      "chapas": 385,
+      "gramatura": "",
+      "peso": 417.07,
+      "coluna": "",
+      "resultado": "OK",
+      "observacoes": "",
+      "fotos": 0,
+      "recebidoEm": "2026-11-24T13:48:53"
     }
   ],
-  "atualizadoEm": "2026-11-24T13:45:07"
+  "atualizadoEm": "2026-11-24T13:48:56"
 }
