@@ -7519,7 +7519,29 @@
       "observacoes": "",
       "fotos": 0,
       "recebidoEm": "2026-11-24T13:27:38"
+    },
+    {
+      "data": "24/11/2026",
+      "hora": "13:44",
+      "of": "263665",
+      "chave": "263665§1,570 X 2,000§DAL PICOLI",
+      "ofCentral": "1398",
+      "oc": "8945",
+      "cliente": "DAL PICOLI",
+      "papelao": "P70D",
+      "medida": "1,570 X 2,000",
+      "qtdePedido": "350",
+      "referencia": "x",
+      "numPalete": "01",
+      "chapas": 180,
+      "gramatura": "",
+      "peso": 357.21,
+      "coluna": "",
+      "resultado": "OK",
+      "observacoes": "",
+      "fotos": 0,
+      "recebidoEm": "2026-11-24T13:44:02"
     }
   ],
-  "atualizadoEm": "2026-11-24T13:40:07"
+  "atualizadoEm": "2026-11-24T13:44:06"
 }
