@@ -6507,7 +6507,29 @@
       "observacoes": "",
       "fotos": 0,
       "recebidoEm": "2026-11-24T23:03:23"
+    },
+    {
+      "data": "24/11/2026",
+      "hora": "23:41",
+      "of": "263629",
+      "chave": "263629§0,614 X 1,400§RM EMBALAGENS",
+      "ofCentral": "1394",
+      "oc": "38",
+      "cliente": "RM EMBALAGENS",
+      "papelao": "P45B",
+      "medida": "0,614 X 1,400",
+      "qtdePedido": "1000",
+      "referencia": "197x220x197",
+      "numPalete": "01",
+      "chapas": 775,
+      "gramatura": "",
+      "peso": 243.16,
+      "coluna": "",
+      "resultado": "OK",
+      "observacoes": "",
+      "fotos": 0,
+      "recebidoEm": "2026-11-24T23:41:02"
     }
   ],
-  "atualizadoEm": "2026-11-24T23:40:07"
+  "atualizadoEm": "2026-11-24T23:41:07"
 }
