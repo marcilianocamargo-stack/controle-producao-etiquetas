@@ -6859,7 +6859,29 @@
       "observacoes": "",
       "fotos": 0,
       "recebidoEm": "2026-11-25T09:10:39"
+    },
+    {
+      "data": "25/11/2026",
+      "hora": "09:15",
+      "of": "263650",
+      "chave": "263650§0,569 X 1,320§RM EMBALAGENS",
+      "ofCentral": "1394",
+      "oc": "38",
+      "cliente": "RM EMBALAGENS",
+      "papelao": "P25B",
+      "medida": "0,569 X 1,320",
+      "qtdePedido": "3500",
+      "referencia": "137x295x137",
+      "numPalete": "03",
+      "chapas": 760,
+      "gramatura": "",
+      "peso": 182.66,
+      "coluna": "",
+      "resultado": "OK",
+      "observacoes": "",
+      "fotos": 0,
+      "recebidoEm": "2026-11-25T09:15:50"
     }
   ],
-  "atualizadoEm": "2026-11-25T09:15:07"
+  "atualizadoEm": "2026-11-25T09:15:54"
 }
