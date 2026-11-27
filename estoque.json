@@ -5913,7 +5913,29 @@
       "observacoes": "",
       "fotos": 0,
       "recebidoEm": "2026-11-27T17:40:20"
+    },
+    {
+      "data": "27/11/2026",
+      "hora": "17:49",
+      "of": "263788",
+      "chave": "263788§1,280 X 1,750§STAR VALE CARTONAGEM",
+      "ofCentral": "1419",
+      "oc": "271126",
+      "cliente": "STAR VALE CARTONAGEM",
+      "papelao": "P45B",
+      "medida": "1,280 X 1,750",
+      "qtdePedido": "2000",
+      "referencia": "200x880x200",
+      "numPalete": "03",
+      "chapas": 385,
+      "gramatura": "",
+      "peso": 314.78,
+      "coluna": "",
+      "resultado": "OK",
+      "observacoes": "",
+      "fotos": 0,
+      "recebidoEm": "2026-11-27T17:49:58"
     }
   ],
-  "atualizadoEm": "2026-11-27T17:45:07"
+  "atualizadoEm": "2026-11-27T17:50:01"
 }
