@@ -6133,7 +6133,29 @@
       "observacoes": "",
       "fotos": 0,
       "recebidoEm": "2026-11-27T19:30:18"
+    },
+    {
+      "data": "27/11/2026",
+      "hora": "19:33",
+      "of": "263785",
+      "chave": "263785§1,265 X 1,770§STAR VALE CARTONAGEM",
+      "ofCentral": "1419",
+      "oc": "271126",
+      "cliente": "STAR VALE CARTONAGEM",
+      "papelao": "P60C",
+      "medida": "1,265 X 1,770",
+      "qtdePedido": "1500",
+      "referencia": "190x885x190",
+      "numPalete": "06",
+      "chapas": 90,
+      "gramatura": "",
+      "peso": 88.67,
+      "coluna": "",
+      "resultado": "OK",
+      "observacoes": "",
+      "fotos": 0,
+      "recebidoEm": "2026-11-27T19:33:59"
     }
   ],
-  "atualizadoEm": "2026-11-27T19:30:20"
+  "atualizadoEm": "2026-11-27T19:34:01"
 }
