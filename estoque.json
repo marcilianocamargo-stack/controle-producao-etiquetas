@@ -6991,7 +6991,29 @@
       "observacoes": "",
       "fotos": 0,
       "recebidoEm": "2026-11-28T10:03:29"
+    },
+    {
+      "data": "28/11/2026",
+      "hora": "10:10",
+      "of": "263802",
+      "chave": "263802§0,900 X 0,540§SÃO MIGUEL",
+      "ofCentral": "1421",
+      "oc": "1460",
+      "cliente": "SÃO MIGUEL",
+      "papelao": "P45B",
+      "medida": "0,900 X 0,540",
+      "qtdePedido": "500",
+      "referencia": "x",
+      "numPalete": "01",
+      "chapas": 550,
+      "gramatura": "",
+      "peso": 97.56,
+      "coluna": "",
+      "resultado": "OK",
+      "observacoes": "",
+      "fotos": 0,
+      "recebidoEm": "2026-11-28T10:10:45"
     }
   ],
-  "atualizadoEm": "2026-11-28T10:10:07"
+  "atualizadoEm": "2026-11-28T10:10:48"
 }
