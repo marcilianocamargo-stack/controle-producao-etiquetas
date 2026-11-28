@@ -6331,7 +6331,29 @@
       "observacoes": "",
       "fotos": 0,
       "recebidoEm": "2026-11-27T20:55:44"
+    },
+    {
+      "data": "27/11/2026",
+      "hora": "21:48",
+      "of": "263784",
+      "chave": "263784§1,150 X 1,630§STAR VALE CARTONAGEM",
+      "ofCentral": "1419",
+      "oc": "271126",
+      "cliente": "STAR VALE CARTONAGEM",
+      "papelao": "P70C",
+      "medida": "1,150 X 1,630",
+      "qtdePedido": "1500",
+      "referencia": "80x990x80",
+      "numPalete": "01",
+      "chapas": 285,
+      "gramatura": "",
+      "peso": 251.09,
+      "coluna": "",
+      "resultado": "OK",
+      "observacoes": "",
+      "fotos": 0,
+      "recebidoEm": "2026-11-27T21:48:37"
     }
   ],
-  "atualizadoEm": "2026-11-27T21:45:07"
+  "atualizadoEm": "2026-11-27T21:48:39"
 }
